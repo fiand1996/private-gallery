@@ -1,7 +1,7 @@
 import path from "node:path";
 
 export const GALLERY_ROOT =
-  process.env.GALLERY_ROOT_PATH || path.join(process.cwd(), "gallery-storage");
+  process.env.GALLERY_ROOT_PATH || path.join(process.cwd(), "data", "gallery");
 
 export class GalleryPathError extends Error {
   constructor(

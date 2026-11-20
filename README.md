@@ -47,7 +47,6 @@ services:
       - "3000:3000"
     environment:
       - AUTH_SECRET=your-secure-random-secret-key
-      - APP_URL=http://localhost:3000
     volumes:
       - ./data:/app/data
       - /path/to/your/photos:/photos:ro
@@ -82,7 +81,6 @@ docker compose up -d
    Create a `.env` file in the root directory:
    ```env
    AUTH_SECRET="super-secret-key-change-in-production"
-   APP_URL="http://localhost:3000"
    ```
 
 4. **Run database migrations:**
