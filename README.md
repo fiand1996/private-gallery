@@ -41,7 +41,7 @@ version: '3.8'
 
 services:
   private-gallery:
-    image: ghcr.io/yourusername/private-gallery:latest
+    image: ghcr.io/fiand1996/private-gallery:latest
     container_name: private-gallery
     ports:
       - "3000:3000"
@@ -69,7 +69,7 @@ docker compose up -d
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/private-gallery.git
+   git clone https://github.com/fiand1996/private-gallery.git
    cd private-gallery
    ```
 
