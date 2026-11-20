@@ -11,7 +11,6 @@ Private Gallery is configured using environment variables defined in a `.env` fi
 | Variable | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
 | `AUTH_SECRET` | String (Required) | — | Secret key used by NextAuth.js to encrypt session tokens. Generate with `openssl rand -base64 32`. |
-| `APP_URL` | URL (Required) | `http://localhost:3000` | Base public URL of the application. |
 | `GALLERY_DATABASE_PATH` | Path | `data/gallery.sqlite` | Custom file path for the SQLite database. |
 | `PORT` | Number | `3000` | Port on which the Next.js production server listens. |
 
@@ -35,7 +34,6 @@ pnpm install
 Create a `.env` file in the project root:
 ```env
 AUTH_SECRET="your-super-secret-key-here"
-APP_URL="http://localhost:3000"
 ```
 
 ### 4. Database Setup & Migrations
@@ -68,7 +66,6 @@ services:
       - "3000:3000"
     environment:
       - AUTH_SECRET=your-secure-random-secret-key
-      - APP_URL=http://localhost:3000
     volumes:
       - ./data:/app/data
       - /path/to/your/local/photos:/photos:ro
