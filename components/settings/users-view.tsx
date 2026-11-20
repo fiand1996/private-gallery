@@ -1,0 +1,407 @@
+"use client";
+
+import {
+  CheckCircle2,
+  Loader2,
+  Shield,
+  Trash2,
+  UserPlus,
+  Users,
+  X,
+} from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { useSession } from "next-auth/react";
+
+interface UserItem {
+  id: number;
+  username: string;
+  displayName: string | null;
+  role: "admin" | "viewer";
+  createdAt: string;
+}
+
+function formatDate(value: string | null) {
+  if (!value) return "Unknown";
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
+export function UsersView() {
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.role === "admin";
+
+  const [users, setUsers] = useState<UserItem[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [newDisplayName, setNewDisplayName] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newRole, setNewRole] = useState<"admin" | "viewer">("viewer");
+  const [userModalError, setUserModalError] = useState("");
+  const [userSubmitting, setUserSubmitting] = useState(false);
+  const [userActionNotice, setUserActionNotice] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const fetchUsers = () => {
+    setRefreshKey((k) => k + 1);
+  };
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    let isMounted = true;
+    const controller = new AbortController();
+
+    fetch("/api/users", { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error("Failed to load users."))))
+      .then((data: { users?: UserItem[] }) => {
+        if (isMounted) {
+          setUsers(data.users ?? []);
+          setLoadingUsers(false);
+        }
+      })
+      .catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        if (isMounted) {
+          setLoadingUsers(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [isAdmin, refreshKey]);
+
+  const handleCreateUser = async (e: FormEvent) => {
+    e.preventDefault();
+    setUserModalError("");
+    const cleanUsername = newUsername.trim().toLowerCase();
+    if (!cleanUsername) {
+      setUserModalError("Username is required.");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setUserModalError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setUserSubmitting(true);
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: cleanUsername,
+          password: newPassword,
+          displayName: newDisplayName.trim() || undefined,
+          role: newRole,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create user.");
+      }
+
+      setAddUserModalOpen(false);
+      setNewUsername("");
+      setNewDisplayName("");
+      setNewPassword("");
+      setNewRole("viewer");
+      setUserActionNotice(`User "${cleanUsername}" created successfully.`);
+      fetchUsers();
+    } catch (err) {
+      setUserModalError(err instanceof Error ? err.message : "Failed to create user.");
+    } finally {
+      setUserSubmitting(false);
+    }
+  };
+
+  const handleDeleteUser = async (id: number, username: string) => {
+    if (!confirm(`Are you sure you want to delete user "${username}"? This cannot be undone.`)) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/users?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to delete user.");
+      }
+      setUserActionNotice(`User "${username}" was deleted.`);
+      fetchUsers();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to delete user.");
+    }
+  };
+
+  if (!isAdmin) {
+    return (
+      <div className="rounded-3xl border border-[#262626] bg-[#141414] p-8 text-center text-zinc-400">
+        <Shield size={32} className="mx-auto text-zinc-600 mb-3" />
+        <p className="text-sm font-medium text-zinc-200">Access Restricted</p>
+        <p className="text-xs text-zinc-500 mt-1">
+          Only administrators have permission to manage user accounts.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
+            <Users size={20} className="text-[#8ab4f8]" />
+            User Accounts
+          </h2>
+          <p className="text-xs text-zinc-400 mt-1">
+            Manage user credentials and access levels for Private Gallery.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setUserModalError("");
+            setAddUserModalOpen(true);
+          }}
+          className="inline-flex items-center gap-2 rounded-2xl bg-[#8ab4f8] px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] cursor-pointer"
+        >
+          <UserPlus size={15} />
+          <span>Add User</span>
+        </button>
+      </div>
+
+      {userActionNotice && (
+        <div className="flex items-center justify-between rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-xs font-medium text-emerald-400">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 size={16} className="shrink-0" />
+            <span>{userActionNotice}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setUserActionNotice("")}
+            className="text-emerald-400/80 hover:text-emerald-300 cursor-pointer"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
+      {loadingUsers ? (
+        <div className="flex items-center justify-center py-16 text-zinc-500 gap-2">
+          <Loader2 size={20} className="animate-spin text-[#8ab4f8]" />
+          <span className="text-xs">Loading user accounts...</span>
+        </div>
+      ) : users.length === 0 ? (
+        <div className="rounded-3xl border border-dashed border-[#262626] bg-[#121212]/50 p-12 text-center">
+          <Users size={32} className="mx-auto text-zinc-600 mb-3" />
+          <p className="text-sm font-medium text-zinc-300">No users found</p>
+          <p className="text-xs text-zinc-500 mt-1">
+            Add your first user to grant access to the gallery.
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-3xl border border-[#262626] bg-[#141414]">
+          <div className="divide-y divide-[#222222]">
+            {users.map((u) => {
+              const isCurrentSelf = Number(session?.user?.id) === u.id;
+              const userInitial = (u.displayName || u.username).charAt(0).toUpperCase();
+
+              return (
+                <div
+                  key={u.id}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 transition hover:bg-[#181818]"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#202020] border border-[#2e2e2e] text-sm font-bold text-[#8ab4f8]">
+                      {userInitial}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-zinc-100 truncate">
+                          {u.displayName || u.username}
+                        </span>
+                        {isCurrentSelf && (
+                          <span className="rounded-full bg-[#8ab4f8]/15 px-2 py-0.5 text-[10px] font-semibold text-[#8ab4f8]">
+                            You
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-zinc-400 mt-0.5">
+                        <span>@{u.username}</span>
+                        <span>•</span>
+                        <span>Joined {formatDate(u.createdAt)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 self-end sm:self-center">
+                    {u.role === "admin" ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8ab4f8]/30 bg-[#8ab4f8]/10 px-3 py-1 text-xs font-medium text-[#8ab4f8]">
+                        <Shield size={12} />
+                        Admin
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-400">
+                        Viewer
+                      </span>
+                    )}
+
+                    <button
+                      type="button"
+                      disabled={isCurrentSelf}
+                      onClick={() => handleDeleteUser(u.id, u.username)}
+                      title={isCurrentSelf ? "Cannot delete your own account" : `Delete ${u.username}`}
+                      className="flex size-8 items-center justify-center rounded-xl text-zinc-500 hover:bg-rose-500/10 hover:text-rose-400 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Add User Modal Dialog */}
+      {addUserModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md">
+          <div className="w-full max-w-md rounded-3xl border border-[#2e2e2e] bg-[#141414] p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-[#262626]">
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-8 items-center justify-center rounded-xl bg-[#8ab4f8]/15 text-[#8ab4f8]">
+                  <UserPlus size={16} />
+                </div>
+                <h3 className="text-base font-bold text-white">Add New User</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAddUserModalOpen(false)}
+                className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {userModalError && (
+              <div className="mt-4 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-3 text-xs text-rose-300">
+                {userModalError}
+              </div>
+            )}
+
+            <form onSubmit={handleCreateUser} className="mt-5 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                  Username <span className="text-rose-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  autoFocus
+                  placeholder="e.g. viewer1"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                  Display Name (Optional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Guest Viewer"
+                  value={newDisplayName}
+                  onChange={(e) => setNewDisplayName(e.target.value)}
+                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                  Password <span className="text-rose-400">*</span>
+                </label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  placeholder="Min 6 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                  Role
+                </label>
+                <div className="grid grid-cols-2 gap-3 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setNewRole("viewer")}
+                    className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
+                      newRole === "viewer"
+                        ? "border-[#8ab4f8] bg-[#8ab4f8]/10 text-white"
+                        : "border-[#2e2e2e] bg-[#1a1a1a] text-zinc-400 hover:border-zinc-700"
+                    }`}
+                  >
+                    <span className="text-xs font-semibold text-zinc-100">Viewer</span>
+                    <span className="text-[11px] text-zinc-400 mt-0.5">
+                      Read-only gallery access. Cannot modify or delete photos.
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setNewRole("admin")}
+                    className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
+                      newRole === "admin"
+                        ? "border-[#8ab4f8] bg-[#8ab4f8]/10 text-white"
+                        : "border-[#2e2e2e] bg-[#1a1a1a] text-zinc-400 hover:border-zinc-700"
+                    }`}
+                  >
+                    <span className="text-xs font-semibold text-zinc-100">Admin</span>
+                    <span className="text-[11px] text-zinc-400 mt-0.5">
+                      Full administrative access, user management, and disk actions.
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6 flex justify-end gap-3 pt-3 border-t border-[#262626]">
+                <button
+                  type="button"
+                  onClick={() => setAddUserModalOpen(false)}
+                  className="rounded-2xl border border-[#333333] px-4 py-2.5 text-xs font-medium text-zinc-300 hover:bg-[#222222] transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={userSubmitting}
+                  className="inline-flex items-center gap-2 rounded-2xl bg-[#8ab4f8] px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+                >
+                  {userSubmitting ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    "Create User"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

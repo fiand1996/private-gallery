@@ -1,0 +1,15 @@
+services:
+  private-gallery:
+    build: .
+    container_name: private-gallery
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - AUTH_SECRET=change_me_to_a_secure_random_string
+      - AUTH_URL=http://localhost:3000
+    volumes:
+      - private_gallery_data:/app/data
+
+volumes:
+  private_gallery_data:
