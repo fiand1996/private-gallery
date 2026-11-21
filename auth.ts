@@ -25,8 +25,17 @@ declare module "next-auth/jwt" {
   }
 }
 
+const defaultSecret =
+  "39ed4185bf218ca28f72f0346fc59a3d9b7d6d99ef793b85d382903332f36c2d";
+
+if (process.env.NODE_ENV === "production" && !process.env.AUTH_SECRET) {
+  console.warn(
+    "[Security Warning] AUTH_SECRET environment variable is not configured. Using default fallback secret. Please set a secure AUTH_SECRET in production!",
+  );
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET || "39ed4185bf218ca28f72f0346fc59a3d9b7d6d99ef793b85d382903332f36c2d",
+  secret: process.env.AUTH_SECRET || defaultSecret,
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",
