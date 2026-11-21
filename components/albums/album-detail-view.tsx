@@ -96,6 +96,13 @@ export function AlbumDetailView({
       .then(async (res) => {
         const data = (await res.json()) as AlbumPhotosResponse & { error?: string };
         if (!res.ok) throw new Error(data.error || "Failed to load album photos.");
+        setError("");
+        if (page > 1 && data.items.length === 0) {
+          setAlbumDetail((current) =>
+            current ? { ...current, totalCount: current.items.length } : null,
+          );
+          return;
+        }
         setAlbumDetail((current) => {
           if (page === 1 || !current) return data;
           const existingPaths = new Set(current.items.map((item) => item.path));
@@ -105,42 +112,75 @@ export function AlbumDetailView({
             items: [...current.items, ...newItems],
           };
         });
-        setError("");
       })
       .catch((err) => {
         if (err instanceof DOMException && err.name === "AbortError") return;
         setError(err instanceof Error ? err.message : "Failed to load album photos.");
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
-          isFetchingRef.current = false;
-          setLoading(false);
-          setLoadingMore(false);
-        }
+        isFetchingRef.current = false;
+        setLoading(false);
+        setLoadingMore(false);
       });
 
     return () => controller.abort();
   }, [albumPath, libraryId, page, refreshKey, sort]);
 
   const hasMore = albumDetail
-    ? albumDetail.page * albumDetail.pageSize < albumDetail.totalCount
+    ? albumDetail.totalCount > 0 && albumDetail.items.length < albumDetail.totalCount
     : false;
 
+  const triggerNextPage = useCallback(() => {
+    if (isFetchingRef.current || loading || loadingMore || !hasMore) return;
+    isFetchingRef.current = true;
+    setLoadingMore(true);
+    setPage((current) => current + 1);
+  }, [hasMore, loading, loadingMore]);
+
+  // Infinite Scroll via IntersectionObserver
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || !hasMore || loading || loadingMore || error) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || isFetchingRef.current) return;
-        isFetchingRef.current = true;
-        setLoadingMore(true);
-        setPage((current) => current + 1);
+        if (entry.isIntersecting) {
+          triggerNextPage();
+        }
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "800px 0px" },
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [error, hasMore, loading, loadingMore]);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Window scroll fallback
+  useEffect(() => {
+    if (!hasMore || loading || loadingMore || error) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (scrollY + windowHeight >= docHeight - 800) {
+        triggerNextPage();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Initial fill check for large screens
+  useEffect(() => {
+    if (!loading && !loadingMore && hasMore) {
+      const timer = setTimeout(() => {
+        if (document.documentElement.scrollHeight <= window.innerHeight + 100) {
+          triggerNextPage();
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [hasMore, loading, loadingMore, albumDetail?.items.length, triggerNextPage]);
 
   const handleCloseLightbox = () => {
     setLocalSelectedPhoto(null);

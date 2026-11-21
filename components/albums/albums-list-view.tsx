@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FolderArchive, Loader2, Plus } from "lucide-react";
 import {
   AlbumCard,
@@ -85,41 +85,95 @@ export function AlbumsListView({
           };
         });
         setError("");
+        if (page > 1 && data.items.length === 0) {
+          setAlbums((current) => ({
+            ...current,
+            totalCount: current.items.length,
+          }));
+          return;
+        }
+        setAlbums((current) => {
+          if (page === 1) return data;
+          const existingKeys = new Set(
+            current.items.map((item) => item.path || String(item.id)),
+          );
+          const newItems = data.items.filter(
+            (item) => !existingKeys.has(item.path || String(item.id)),
+          );
+          return {
+            ...data,
+            items: [...current.items, ...newItems],
+          };
+        });
       })
       .catch((err) => {
         if (err instanceof DOMException && err.name === "AbortError") return;
         setError(err instanceof Error ? err.message : "Failed to load albums.");
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
-          isFetchingRef.current = false;
-          setLoading(false);
-          setLoadingMore(false);
-        }
+        isFetchingRef.current = false;
+        setLoading(false);
+        setLoadingMore(false);
       });
 
     return () => controller.abort();
   }, [libraryId, sort, kindFilter, page, refreshKey]);
 
-  const hasMore = albums.page * albums.pageSize < albums.totalCount;
+  const hasMore = albums.totalCount > 0 && albums.items.length < albums.totalCount;
 
+  const triggerNextPage = useCallback(() => {
+    if (isFetchingRef.current || loading || loadingMore || !hasMore) return;
+    isFetchingRef.current = true;
+    setLoadingMore(true);
+    setPage((p) => p + 1);
+  }, [hasMore, loading, loadingMore]);
+
+  // Infinite Scroll via IntersectionObserver
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || !hasMore || loading || loadingMore || error) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || isFetchingRef.current) return;
-        isFetchingRef.current = true;
-        setLoadingMore(true);
-        setPage((p) => p + 1);
+        if (entry.isIntersecting) {
+          triggerNextPage();
+        }
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "800px 0px" },
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [hasMore, loading, loadingMore, error]);
+  }, [hasMore, loading, loadingMore, error, triggerNextPage]);
+
+  // Window scroll fallback
+  useEffect(() => {
+    if (!hasMore || loading || loadingMore || error) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (scrollY + windowHeight >= docHeight - 800) {
+        triggerNextPage();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Initial fill check for large screens
+  useEffect(() => {
+    if (!loading && !loadingMore && hasMore) {
+      const timer = setTimeout(() => {
+        if (document.documentElement.scrollHeight <= window.innerHeight + 100) {
+          triggerNextPage();
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [hasMore, loading, loadingMore, albums.items.length, triggerNextPage]);
 
   const handleKindFilterChange = (filter: "all" | "folder" | "custom") => {
     if (filter === kindFilter) return;

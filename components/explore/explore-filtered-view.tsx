@@ -152,12 +152,19 @@ export function ExploreFilteredView({
       if (!res.ok) throw new Error("Failed to load more photos.");
       const data = (await res.json()) as FilteredPhotosResponse;
 
-      setPhotosData((prev) => ({
-        ...prev,
-        page: nextPage,
-        items: [...prev.items, ...data.items],
-      }));
-      setHasMore(photosData.items.length + data.items.length < photosData.totalCount);
+      setPhotosData((prev) => {
+        const existing = new Set(prev.items.map((i) => i.path));
+        const newItems = data.items.filter((i) => !existing.has(i.path));
+        return {
+          ...prev,
+          page: nextPage,
+          items: [...prev.items, ...newItems],
+        };
+      });
+      setHasMore(
+        data.items.length > 0 &&
+          photosData.items.length + data.items.length < photosData.totalCount,
+      );
     } catch {
       // ignore
     } finally {
@@ -188,11 +195,28 @@ export function ExploreFilteredView({
           loadMore();
         }
       },
-      { rootMargin: "600px" },
+      { rootMargin: "800px 0px" },
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
+  }, [hasMore, photosLoading, loadingMore, loadMore]);
+
+  // Window scroll fallback
+  useEffect(() => {
+    if (!hasMore || photosLoading || loadingMore) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (scrollY + windowHeight >= docHeight - 800) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, photosLoading, loadingMore, loadMore]);
 
   const allItemPaths = useMemo(

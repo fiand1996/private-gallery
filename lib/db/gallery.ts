@@ -7,8 +7,8 @@ import { GalleryPathError } from "../gallery";
 import * as schema from "../schema";
 
 export const GALLERY_PAGE_SIZE = 48;
-export const TIMELINE_PAGE_SIZE = 24;
-export const PHOTOS_PAGE_SIZE = 24;
+export const TIMELINE_PAGE_SIZE = 48;
+export const PHOTOS_PAGE_SIZE = 48;
 
 export interface IndexedGalleryItem {
   name: string;
@@ -280,10 +280,30 @@ export function getIndexedGalleryContents(
   const totalCount = folderCount + imageCount;
   const pageSize = GALLERY_PAGE_SIZE;
   const pageCount = Math.max(1, Math.ceil(totalCount / pageSize));
-  const page = Math.min(
-    pageCount,
-    Math.max(1, Number.isFinite(requestedPage) ? Math.floor(requestedPage) : 1),
+  const page = Math.max(
+    1,
+    Number.isFinite(requestedPage) ? Math.floor(requestedPage) : 1,
   );
+  if (page > pageCount && totalCount > 0) {
+    const breadcrumbs = [{ name: library.name, path: "" }];
+    const segments = normalizedPath.split("/").filter(Boolean);
+    let accumulatedPath = "";
+    for (const segment of segments) {
+      accumulatedPath = path.posix.join(accumulatedPath, segment);
+      breadcrumbs.push({ name: segment, path: accumulatedPath });
+    }
+    return {
+      currentPath: normalizedPath,
+      items: [],
+      breadcrumbs,
+      totalCount,
+      folderCount,
+      imageCount,
+      page,
+      pageSize,
+      search: query,
+    };
+  }
   const rows = db
     .select()
     .from(schema.libraryEntries)

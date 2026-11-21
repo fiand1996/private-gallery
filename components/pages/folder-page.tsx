@@ -90,7 +90,7 @@ function FolderContent({
     folderCount: 0,
     imageCount: 0,
     page: 1,
-    pageSize: 60,
+    pageSize: 48,
   });
 
   const [loading, setLoading] = useState(true);
@@ -100,6 +100,11 @@ function FolderContent({
   const [notice, setNotice] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const isFetchingRef = useRef(false);
+
+  useEffect(() => {
+    isFetchingRef.current = loading || loadingMore;
+  }, [loading, loadingMore]);
 
   // Selection state
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
@@ -164,11 +169,23 @@ function FolderContent({
       .then(async (res) => {
         const json = (await res.json()) as GalleryResponse & { error?: string };
         if (!res.ok) throw new Error(json.error || "Failed to open directory.");
-        setData((current) => ({
-          ...json,
-          items: page === 1 ? json.items : [...current.items, ...json.items],
-        }));
         setError("");
+        if (page > 1 && json.items.length === 0) {
+          setData((current) => ({
+            ...current,
+            totalCount: current.items.length,
+          }));
+          return;
+        }
+        setData((current) => {
+          if (page === 1) return json;
+          const existing = new Set(current.items.map((i) => i.path));
+          const newItems = json.items.filter((i) => !existing.has(i.path));
+          return {
+            ...json,
+            items: [...current.items, ...newItems],
+          };
+        });
         if (page === 1) {
           setSelectedPaths(new Set());
         }
@@ -180,32 +197,67 @@ function FolderContent({
         );
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-          setLoadingMore(false);
-        }
+        isFetchingRef.current = false;
+        setLoading(false);
+        setLoadingMore(false);
       });
 
     return () => controller.abort();
   }, [folderPath, libraryId, page, refreshKey, sort, folderUploadTimestamp]);
 
-  const hasMore = data.page * data.pageSize < data.totalCount;
+  const hasMore = data.totalCount > 0 && data.items.length < data.totalCount;
 
-  // Infinite Scroll
+  const triggerNextPage = useCallback(() => {
+    if (isFetchingRef.current || loading || loadingMore || !hasMore) return;
+    isFetchingRef.current = true;
+    setLoadingMore(true);
+    setPage((current) => current + 1);
+  }, [hasMore, loading, loadingMore]);
+
+  // Infinite Scroll via IntersectionObserver
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || !hasMore || loading || loadingMore || error) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setLoadingMore(true);
-        setPage((current) => current + 1);
+        if (entry.isIntersecting) {
+          triggerNextPage();
+        }
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "800px 0px" },
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [error, hasMore, loading, loadingMore]);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Window scroll fallback
+  useEffect(() => {
+    if (!hasMore || loading || loadingMore || error) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (scrollY + windowHeight >= docHeight - 800) {
+        triggerNextPage();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Initial fill check for large screens
+  useEffect(() => {
+    if (!loading && !loadingMore && hasMore) {
+      const timer = setTimeout(() => {
+        if (document.documentElement.scrollHeight <= window.innerHeight + 100) {
+          triggerNextPage();
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [hasMore, loading, loadingMore, data.items.length, triggerNextPage]);
 
   const folders = data.items.filter((item) => item.isDirectory);
   const photos: GalleryPhoto[] = data.items

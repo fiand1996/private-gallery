@@ -55,7 +55,7 @@ function PhotosList({
     items: [],
     totalCount: 0,
     page: 1,
-    pageSize: 24,
+    pageSize: 48,
   });
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -92,6 +92,13 @@ function PhotosList({
         }
         const result = data as PhotosResponse;
         setError("");
+        if (page > 1 && result.items.length === 0) {
+          setTimeline((current) => ({
+            ...current,
+            totalCount: current.items.length,
+          }));
+          return;
+        }
         setTimeline((current) => {
           if (page === 1) {
             return result;
@@ -109,11 +116,9 @@ function PhotosList({
         setError(cause instanceof Error ? cause.message : "Failed to load photos.");
       })
       .finally(() => {
-        if (!controller.signal.aborted) {
-          isFetchingRef.current = false;
-          setLoading(false);
-          setLoadingMore(false);
-        }
+        isFetchingRef.current = false;
+        setLoading(false);
+        setLoadingMore(false);
       });
 
     return () => controller.abort();
@@ -133,23 +138,59 @@ function PhotosList({
     return [...grouped.entries()];
   }, [timeline.items]);
 
-  const hasMore = timeline.page * timeline.pageSize < timeline.totalCount;
+  const hasMore = timeline.totalCount > 0 && timeline.items.length < timeline.totalCount;
 
+  const triggerNextPage = useCallback(() => {
+    if (isFetchingRef.current || loading || loadingMore || !hasMore) return;
+    isFetchingRef.current = true;
+    setLoadingMore(true);
+    setPage((current) => current + 1);
+  }, [hasMore, loading, loadingMore]);
+
+  // Infinite Scroll via IntersectionObserver
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || !hasMore || loading || loadingMore || error) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting || isFetchingRef.current) return;
-        isFetchingRef.current = true;
-        setLoadingMore(true);
-        setPage((current) => current + 1);
+        if (entry.isIntersecting) {
+          triggerNextPage();
+        }
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "800px 0px" },
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [error, hasMore, loading, loadingMore]);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Window scroll fallback to catch fast scrolling or already-intersecting sentinel
+  useEffect(() => {
+    if (!hasMore || loading || loadingMore || error) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (scrollY + windowHeight >= docHeight - 800) {
+        triggerNextPage();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [error, hasMore, loading, loadingMore, triggerNextPage]);
+
+  // Initial fill check for large screens (1440p / 4K)
+  useEffect(() => {
+    if (!loading && !loadingMore && hasMore) {
+      const timer = setTimeout(() => {
+        if (document.documentElement.scrollHeight <= window.innerHeight + 100) {
+          triggerNextPage();
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [hasMore, loading, loadingMore, timeline.items.length, triggerNextPage]);
 
   const allItemPaths = useMemo(
     () => timeline.items.map((i) => i.path),
