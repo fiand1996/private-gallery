@@ -15,6 +15,10 @@ function isWithinDirectory(directory: string, candidate: string) {
   );
 }
 
+function escapeLikePattern(pattern: string): string {
+  return pattern.replace(/[%_\\]/g, "\\$&");
+}
+
 export function resolveLibraryPath(
   libraryRoot: string,
   relativePath: string,
@@ -96,13 +100,15 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
       fs.unlinkSync(absolutePath);
     }
 
+    const childPattern = `${escapeLikePattern(normalizedRelative)}/%`;
+
     // Delete from SQLite database
     db.transaction((tx) => {
       tx.delete(schema.libraryEntries)
         .where(
           sql`${schema.libraryEntries.libraryId} = ${libraryId}
             AND (${schema.libraryEntries.path} = ${normalizedRelative}
-              OR ${schema.libraryEntries.path} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.libraryEntries.path} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
 
@@ -110,7 +116,7 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
         .where(
           sql`${schema.albumEntries.libraryId} = ${libraryId}
             AND (${schema.albumEntries.entryPath} = ${normalizedRelative}
-              OR ${schema.albumEntries.entryPath} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.albumEntries.entryPath} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
 
@@ -118,7 +124,7 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
         .where(
           sql`${schema.albums.libraryId} = ${libraryId}
             AND (${schema.albums.folderPath} = ${normalizedRelative}
-              OR ${schema.albums.folderPath} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.albums.folderPath} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
 
@@ -126,7 +132,7 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
         .where(
           sql`${schema.photoTags.libraryId} = ${libraryId}
             AND (${schema.photoTags.entryPath} = ${normalizedRelative}
-              OR ${schema.photoTags.entryPath} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.photoTags.entryPath} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
 
@@ -134,7 +140,7 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
         .where(
           sql`${schema.photoUserMetadata.libraryId} = ${libraryId}
             AND (${schema.photoUserMetadata.entryPath} = ${normalizedRelative}
-              OR ${schema.photoUserMetadata.entryPath} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.photoUserMetadata.entryPath} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
 
@@ -142,7 +148,7 @@ export function deleteGalleryItems(libraryId: number, relativePaths: string[]) {
         .where(
           sql`${schema.photoMetadata.libraryId} = ${libraryId}
             AND (${schema.photoMetadata.entryPath} = ${normalizedRelative}
-              OR ${schema.photoMetadata.entryPath} LIKE ${normalizedRelative + "/%"})`,
+              OR ${schema.photoMetadata.entryPath} LIKE ${childPattern} ESCAPE '\\')`,
         )
         .run();
     });
@@ -195,6 +201,7 @@ export function moveGalleryItems(
     // Check circular move (cannot move a directory into itself or child)
     if (
       targetRel === srcNorm ||
+      destFolderNormalized === srcNorm ||
       destFolderNormalized.startsWith(srcNorm + "/")
     ) {
       throw new GalleryPathError(
@@ -215,6 +222,8 @@ export function moveGalleryItems(
     // Move in filesystem
     fs.renameSync(srcAbs, targetAbs);
 
+    const childSrcPattern = `${escapeLikePattern(srcNorm)}/%`;
+
     // Update in database
     db.transaction((tx) => {
       // Find all affected entries (the item and its children if directory)
@@ -227,7 +236,7 @@ export function moveGalleryItems(
         .where(
           sql`${schema.libraryEntries.libraryId} = ${libraryId}
             AND (${schema.libraryEntries.path} = ${srcNorm}
-              OR ${schema.libraryEntries.path} LIKE ${srcNorm + "/%"})`,
+              OR ${schema.libraryEntries.path} LIKE ${childSrcPattern} ESCAPE '\\')`,
         )
         .all();
 
@@ -350,6 +359,17 @@ export function copyGalleryItems(
       : targetName;
 
     const stat = fs.statSync(srcAbs);
+
+    if (
+      stat.isDirectory() &&
+      (destFolderNormalized === srcNorm ||
+        destFolderNormalized.startsWith(srcNorm + "/"))
+    ) {
+      throw new GalleryPathError(
+        `Cannot copy "${originalName}" into itself or its own subfolder.`,
+        400,
+      );
+    }
 
     if (stat.isDirectory()) {
       fs.cpSync(srcAbs, targetAbs, { recursive: true });

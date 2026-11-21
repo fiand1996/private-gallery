@@ -425,6 +425,23 @@ export function renameAlbum(albumId: number, newName: string) {
 
 export function deleteAlbum(albumId: number) {
   const db = getDatabase();
+  const alb = db
+    .select({ kind: schema.albums.kind })
+    .from(schema.albums)
+    .where(eq(schema.albums.id, albumId))
+    .get();
+
+  if (!alb) {
+    throw new GalleryPathError("Album not found.", 404);
+  }
+
+  if (alb.kind === "folder") {
+    throw new GalleryPathError(
+      "Folder-based albums cannot be deleted directly. Delete the folder in the Folder view instead.",
+      400,
+    );
+  }
+
   db.delete(schema.albums).where(eq(schema.albums.id, albumId)).run();
   return { success: true };
 }

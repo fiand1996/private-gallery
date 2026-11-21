@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 import { GALLERY_ROOT } from "./gallery";
 import { createLibrary, findLibraryByRoot, getLibraryList } from "./database";
 
@@ -23,7 +24,7 @@ export function validateLibraryRoot(requestedPath: string) {
   if (!requestedPath || !requestedPath.trim()) {
     throw new Error("Folder path is required.");
   }
-  if (!requestedPath.startsWith("/")) {
+  if (!path.isAbsolute(requestedPath)) {
     throw new Error("Library path must be absolute.");
   }
 
