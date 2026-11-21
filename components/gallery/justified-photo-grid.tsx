@@ -32,12 +32,12 @@ interface LayoutRow {
 function getGridRowConfig(size: GridSize) {
   switch (size) {
     case "small":
-      return { targetRowHeight: 160, gap: 6 };
+      return { targetRowHeight: 195, gap: 10 };
     case "large":
-      return { targetRowHeight: 320, gap: 12 };
+      return { targetRowHeight: 390, gap: 18 };
     case "medium":
     default:
-      return { targetRowHeight: 220, gap: 8 };
+      return { targetRowHeight: 288, gap: 14 };
   }
 }
 
