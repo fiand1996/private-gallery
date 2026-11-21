@@ -16,11 +16,25 @@ export async function GET(request: NextRequest) {
 
     if (entryPath && libraryId) {
       const tags = getPhotoTags(libraryId, entryPath);
-      return NextResponse.json({ tags });
+      return NextResponse.json(
+        { tags },
+        {
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate",
+          },
+        },
+      );
     }
 
     const tags = getAllTags(libraryId);
-    return NextResponse.json({ tags });
+    return NextResponse.json(
+      { tags },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      },
+    );
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to load tags.";
     return NextResponse.json({ error: message }, { status: 500 });

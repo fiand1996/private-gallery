@@ -74,6 +74,7 @@ export function PhotoInfoPanel({
   // User metadata state
   const [isFavorite, setIsFavorite] = useState(false);
   const [caption, setCaption] = useState("");
+  const [initialCaption, setInitialCaption] = useState("");
   const [rating, setRating] = useState(0);
   const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -92,7 +93,7 @@ export function PhotoInfoPanel({
         libraryId: String(libraryId),
         path: photo.path,
       })}`,
-      { signal: controller.signal },
+      { signal: controller.signal, cache: "no-store" },
     )
       .then(async (res) => {
         if (!res.ok) {
@@ -105,7 +106,9 @@ export function PhotoInfoPanel({
         setMetadata(data);
         if (data.userMetadata) {
           setIsFavorite(data.userMetadata.isFavorite);
-          setCaption(data.userMetadata.caption ?? "");
+          const currentCaption = data.userMetadata.caption ?? "";
+          setCaption(currentCaption);
+          setInitialCaption(currentCaption);
           setRating(data.userMetadata.rating ?? 0);
           setTags(data.userMetadata.tags ?? []);
           setPeople(data.userMetadata.people ?? []);
@@ -122,7 +125,7 @@ export function PhotoInfoPanel({
       });
 
     // Also fetch all available tags for autocomplete suggestions
-    fetch(`/api/gallery/tags?libraryId=${libraryId}`, { signal: controller.signal })
+    fetch(`/api/gallery/tags?libraryId=${libraryId}`, { signal: controller.signal, cache: "no-store" })
       .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: { tags?: { id: number; name: string }[] }) => {
         setAllSuggestions(data.tags ?? []);
@@ -132,7 +135,7 @@ export function PhotoInfoPanel({
       });
 
     // Fetch all available people for autocomplete suggestions
-    fetch(`/api/gallery/people?libraryId=${libraryId}`, { signal: controller.signal })
+    fetch(`/api/gallery/people?libraryId=${libraryId}`, { signal: controller.signal, cache: "no-store" })
       .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: { people?: { id: number; name: string }[] }) => {
         setAllPersonSuggestions(data.people ?? []);
@@ -186,19 +189,24 @@ export function PhotoInfoPanel({
   }
 
   async function handleSaveCaption() {
+    if (caption === initialCaption) return;
     setSavingMeta(true);
     try {
-      await fetch("/api/gallery/metadata", {
+      const trimmed = caption.trim();
+      const res = await fetch("/api/gallery/metadata", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           libraryId,
           path: photo.path,
-          caption: caption.trim() || null,
+          caption: trimmed || null,
         }),
       });
-      setSavedNotice("Saved");
-      setTimeout(() => setSavedNotice(""), 2000);
+      if (res.ok) {
+        setInitialCaption(caption);
+        setSavedNotice("Saved");
+        setTimeout(() => setSavedNotice(""), 2000);
+      }
     } catch {
       // ignore
     } finally {
@@ -445,14 +453,26 @@ export function PhotoInfoPanel({
             <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
               Notes / Caption
             </span>
-            {savedNotice ? (
-              <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
-                <Check size={12} />
-                {savedNotice}
-              </span>
-            ) : savingMeta ? (
-              <Loader2 size={12} className="animate-spin text-zinc-400" />
-            ) : null}
+            <div className="flex items-center gap-2">
+              {savedNotice ? (
+                <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
+                  <Check size={12} />
+                  {savedNotice}
+                </span>
+              ) : savingMeta ? (
+                <Loader2 size={12} className="animate-spin text-zinc-400" />
+              ) : null}
+              {isAdmin && caption !== initialCaption && (
+                <button
+                  type="button"
+                  disabled={savingMeta}
+                  onClick={handleSaveCaption}
+                  className="inline-flex items-center gap-1 rounded-lg bg-[#8ab4f8] px-2 py-0.5 text-[11px] font-medium text-[#090b10] hover:bg-[#8ab4f8]/90 transition cursor-pointer"
+                >
+                  Save
+                </button>
+              )}
+            </div>
           </div>
           <textarea
             rows={2}
@@ -460,9 +480,15 @@ export function PhotoInfoPanel({
             disabled={!isAdmin}
             onChange={(e) => setCaption(e.target.value)}
             onBlur={isAdmin ? handleSaveCaption : undefined}
+            onKeyDown={(e) => {
+              if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                e.preventDefault();
+                if (isAdmin) handleSaveCaption();
+              }
+            }}
             placeholder={
               isAdmin
-                ? "Add a description or note about this photo..."
+                ? "Add a description or note about this photo... (Ctrl+Enter to save)"
                 : "No description provided."
             }
             className={`w-full resize-none rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] p-2.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition ${

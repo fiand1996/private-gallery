@@ -28,13 +28,27 @@ export async function GET(request: NextRequest) {
     const allPeople = getAllPeople(libraryId);
     if (filePath) {
       const photoPeople = getPhotoPeople(libraryId, filePath);
-      return NextResponse.json({
-        people: photoPeople,
-        allPeople,
-      });
+      return NextResponse.json(
+        {
+          people: photoPeople,
+          allPeople,
+        },
+        {
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate",
+          },
+        },
+      );
     }
 
-    return NextResponse.json({ people: allPeople });
+    return NextResponse.json(
+      { people: allPeople },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+        },
+      },
+    );
   } catch (err) {
     console.error("Failed to load people:", err);
     return NextResponse.json(

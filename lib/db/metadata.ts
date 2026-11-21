@@ -39,11 +39,12 @@ export function getPhotoTags(
   entryPath: string,
 ): { id: number; name: string }[] {
   const db = getDatabase();
+  const normalized = entryPath.replace(/\\/g, "/").replace(/^\/+/, "");
   const rows = db.all<{ id: number; name: string }>(sql`
     SELECT t.id, t.name
     FROM tags t
     JOIN photo_tags pt ON pt.tag_id = t.id
-    WHERE pt.library_id = ${libraryId} AND pt.entry_path = ${entryPath}
+    WHERE pt.library_id = ${libraryId} AND (pt.entry_path = ${entryPath} OR pt.entry_path = ${normalized})
     ORDER BY t.name ASC
   `);
   return rows;
