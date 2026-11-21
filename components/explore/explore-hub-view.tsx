@@ -60,9 +60,9 @@ export function ExploreHubView({
           {/* Favorites Card */}
           <Link
             href="/explore?collection=favorites"
-            className="group relative flex h-36 overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-5 transition duration-300 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/10"
           >
-            {summary.smartCollections.favorites.coverPath && (
+            {summary.smartCollections.favorites.coverPath ? (
               <Image
                 src={galleryImageUrl(
                   summary.smartCollections.favorites.coverPath,
@@ -77,20 +77,20 @@ export function ExploreHubView({
                 sizes="(max-width: 768px) 100vw, 400px"
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
+            ) : (
+              <div className="absolute inset-0 bg-[#181818]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
-            <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 backdrop-blur-sm border border-rose-500/30">
-                <Heart size={20} className="fill-current" />
+            <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-rose-400 backdrop-blur-md shadow-md">
+              <Heart size={18} className="fill-current" />
+            </div>
+            {/* Inward bottom gradient matching Album and Folder cards */}
+            <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12 pb-3 px-4 pointer-events-none">
+              <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-rose-300 transition">
+                Favorites
               </div>
-              <div>
-                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-rose-300 transition">
-                  Favorites
-                </div>
-                <div className="text-xs font-medium text-zinc-300 drop-shadow">
-                  {summary.smartCollections.favorites.count} photo
-                  {summary.smartCollections.favorites.count === 1 ? "" : "s"}
-                </div>
+              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+                {summary.smartCollections.favorites.count} photo
+                {summary.smartCollections.favorites.count === 1 ? "" : "s"}
               </div>
             </div>
           </Link>
@@ -98,9 +98,9 @@ export function ExploreHubView({
           {/* Top Rated Card */}
           <Link
             href="/explore?collection=top-rated"
-            className="group relative flex h-36 overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-5 transition duration-300 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10"
           >
-            {summary.smartCollections.topRated.coverPath && (
+            {summary.smartCollections.topRated.coverPath ? (
               <Image
                 src={galleryImageUrl(
                   summary.smartCollections.topRated.coverPath,
@@ -115,20 +115,20 @@ export function ExploreHubView({
                 sizes="(max-width: 768px) 100vw, 400px"
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
+            ) : (
+              <div className="absolute inset-0 bg-[#181818]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
-            <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 backdrop-blur-sm border border-amber-500/30">
-                <Star size={20} className="fill-current" />
+            <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-amber-400 backdrop-blur-md shadow-md">
+              <Star size={18} className="fill-current" />
+            </div>
+            {/* Inward bottom gradient matching Album and Folder cards */}
+            <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12 pb-3 px-4 pointer-events-none">
+              <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
+                Top Rated
               </div>
-              <div>
-                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
-                  Top Rated
-                </div>
-                <div className="text-xs font-medium text-zinc-300 drop-shadow">
-                  {summary.smartCollections.topRated.count} photo
-                  {summary.smartCollections.topRated.count === 1 ? "" : "s"} (4–5 stars)
-                </div>
+              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+                {summary.smartCollections.topRated.count} photo
+                {summary.smartCollections.topRated.count === 1 ? "" : "s"} (4–5 stars)
               </div>
             </div>
           </Link>
@@ -136,9 +136,9 @@ export function ExploreHubView({
           {/* Places / Geotagged Card */}
           <Link
             href="/explore?collection=places"
-            className="group relative flex h-36 overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-5 transition duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/10"
           >
-            {summary.smartCollections.places.coverPath && (
+            {summary.smartCollections.places.coverPath ? (
               <Image
                 src={galleryImageUrl(
                   summary.smartCollections.places.coverPath,
@@ -153,20 +153,20 @@ export function ExploreHubView({
                 sizes="(max-width: 768px) 100vw, 400px"
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
+            ) : (
+              <div className="absolute inset-0 bg-[#181818]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
-            <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 backdrop-blur-sm border border-emerald-500/30">
-                <MapPin size={20} />
+            <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-emerald-400 backdrop-blur-md shadow-md">
+              <MapPin size={18} />
+            </div>
+            {/* Inward bottom gradient matching Album and Folder cards */}
+            <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12 pb-3 px-4 pointer-events-none">
+              <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition">
+                Places & GPS
               </div>
-              <div>
-                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition">
-                  Places & GPS
-                </div>
-                <div className="text-xs font-medium text-zinc-300 drop-shadow">
-                  {summary.smartCollections.places.count} geotagged photo
-                  {summary.smartCollections.places.count === 1 ? "" : "s"}
-                </div>
+              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+                {summary.smartCollections.places.count} geotagged photo
+                {summary.smartCollections.places.count === 1 ? "" : "s"}
               </div>
             </div>
           </Link>
