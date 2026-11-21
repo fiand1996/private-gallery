@@ -4,6 +4,8 @@ import * as schema from "../schema";
 const DEFAULT_APP_SETTINGS: Record<string, string> = {
   defaultGridSize: "medium",
   defaultSort: "modified-desc",
+  theme: "sleek-dark",
+  accentColor: "blue",
 };
 
 export function getAppSettings(): Record<string, string> {

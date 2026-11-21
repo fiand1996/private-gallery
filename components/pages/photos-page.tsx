@@ -237,7 +237,7 @@ function PhotosList({
   if (loading && page === 1) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-[#8ab4f8]" />
+        <Loader2 className="size-8 animate-spin text-accent" />
       </div>
     );
   }
@@ -274,7 +274,7 @@ function PhotosList({
                 <h2 className="text-sm font-semibold tracking-tight text-zinc-200">
                   {dateLabel(dateKeyString)}
                 </h2>
-                <span className="rounded-full border border-[#2e2e2e] bg-[#1e1e1e] px-2.5 py-0.5 text-[11px] font-medium text-zinc-400">
+                <span className="rounded-full border border-border-strong bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-zinc-400">
                   {photos.length} {photos.length === 1 ? "photo" : "photos"}
                 </span>
               </div>
@@ -309,7 +309,7 @@ function PhotosList({
         ))}
 
         <div ref={sentinelRef} className="h-10 flex items-center justify-center">
-          {loadingMore && <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />}
+          {loadingMore && <Loader2 className="size-6 animate-spin text-accent" />}
         </div>
       </div>
 
@@ -329,16 +329,16 @@ function PhotosList({
 
       {/* Floating Action Bar (When items are selected) */}
       {selectedPaths.size > 0 && (
-        <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-[#2e2e2e] bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
-          <div className="flex items-center gap-2 border-r border-[#262626] pr-3 text-xs font-bold text-zinc-100">
-            <span className="flex size-5 items-center justify-center rounded-full bg-[#8ab4f8] text-[10px] font-bold text-zinc-950">
+        <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
+          <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-zinc-100">
+            <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-zinc-950">
               {selectedPaths.size}
             </span>
             <span>Selected</span>
             <button
               type="button"
               onClick={toggleSelectAll}
-              className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+              className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-accent transition hover:bg-accent/10 cursor-pointer"
             >
               {isAllSelected ? "Deselect All" : "Select All"}
             </button>
@@ -347,7 +347,7 @@ function PhotosList({
           <button
             type="button"
             onClick={handleBatchFavorite}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
           >
             <Heart size={14} className="text-rose-400" />
             <span>Favorite</span>
@@ -356,27 +356,27 @@ function PhotosList({
           <button
             type="button"
             onClick={() => setAddToAlbumOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
           >
-            <FolderArchive size={14} className="text-[#8ab4f8]" />
+            <FolderArchive size={14} className="text-accent" />
             <span>Add to Album</span>
           </button>
 
           <button
             type="button"
             onClick={() => setAddTagOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
           >
-            <Tag size={14} className="text-[#8ab4f8]" />
+            <Tag size={14} className="text-accent" />
             <span>Tag</span>
           </button>
 
           <button
             type="button"
             onClick={() => setAddPersonOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
           >
-            <Users size={14} className="text-[#8ab4f8]" />
+            <Users size={14} className="text-accent" />
             <span>Person</span>
           </button>
 
@@ -384,7 +384,7 @@ function PhotosList({
             type="button"
             onClick={() => setSelectedPaths(new Set())}
             title="Deselect all"
-            className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-[#212121] hover:text-zinc-200 cursor-pointer"
+            className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
           >
             <X size={15} />
           </button>
@@ -467,13 +467,13 @@ export function PhotosView() {
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8">
         {libraryLoading && (
           <div className="flex h-64 items-center justify-center">
-            <Loader2 className="size-8 animate-spin text-[#8ab4f8]" />
+            <Loader2 className="size-8 animate-spin text-accent" />
           </div>
         )}
 
         {!libraryLoading && selectedLibraryId === null && (
           <div className="mx-auto mt-16 max-w-md text-center">
-            <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+            <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-accent/10 text-accent">
               <FolderPlus size={32} />
             </div>
             <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-100">
@@ -484,7 +484,7 @@ export function PhotosView() {
             </p>
             <Link
               href="/settings"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa]"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover"
             >
               <FolderPlus size={16} />
               Setup First Library

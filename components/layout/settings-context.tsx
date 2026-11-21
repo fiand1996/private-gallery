@@ -10,15 +10,33 @@ import {
 } from "react";
 import type { GridSize, GallerySort } from "@/components/gallery/grid-controls";
 
+export type ThemePreset =
+  | "sleek-dark"
+  | "oled-black"
+  | "slate-dark"
+  | "clean-light";
+
+export type AccentColor =
+  | "blue"
+  | "pink"
+  | "emerald"
+  | "amber"
+  | "purple"
+  | "rose";
+
 export interface AppSettings {
   defaultGridSize: GridSize;
   defaultSort: GallerySort;
+  theme: ThemePreset;
+  accentColor: AccentColor;
   [key: string]: string;
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
   defaultGridSize: "medium",
   defaultSort: "modified-desc",
+  theme: "sleek-dark",
+  accentColor: "blue",
 };
 
 interface SettingsContextValue {
@@ -33,11 +51,51 @@ const SettingsContext = createContext<SettingsContextValue | undefined>(
   undefined,
 );
 
+function applyThemeAndAccent(theme: string, accent: string) {
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.setAttribute("data-accent", accent);
+  if (theme === "clean-light") {
+    document.documentElement.classList.remove("dark");
+    document.documentElement.classList.add("light");
+  } else {
+    document.documentElement.classList.add("dark");
+    document.documentElement.classList.remove("light");
+  }
+}
+
 function getCachedInitialSettings(): AppSettings {
   if (typeof window === "undefined") return DEFAULT_SETTINGS;
   try {
     const cachedGrid = window.localStorage.getItem("gallery-default-grid-size");
     const cachedSort = window.localStorage.getItem("gallery-default-sort");
+    const cachedTheme = window.localStorage.getItem(
+      "gallery-theme",
+    ) as ThemePreset | null;
+    const cachedAccent = window.localStorage.getItem(
+      "gallery-accent",
+    ) as AccentColor | null;
+
+    const theme: ThemePreset =
+      cachedTheme === "sleek-dark" ||
+      cachedTheme === "oled-black" ||
+      cachedTheme === "slate-dark" ||
+      cachedTheme === "clean-light"
+        ? cachedTheme
+        : "sleek-dark";
+
+    const accentColor: AccentColor =
+      cachedAccent === "blue" ||
+      cachedAccent === "pink" ||
+      cachedAccent === "emerald" ||
+      cachedAccent === "amber" ||
+      cachedAccent === "purple" ||
+      cachedAccent === "rose"
+        ? cachedAccent
+        : "blue";
+
+    applyThemeAndAccent(theme, accentColor);
+
     return {
       defaultGridSize:
         cachedGrid === "small" ||
@@ -51,6 +109,8 @@ function getCachedInitialSettings(): AppSettings {
         cachedSort === "name-desc"
           ? cachedSort
           : "modified-desc",
+      theme,
+      accentColor,
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -71,6 +131,23 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         settings?: Record<string, string>;
       };
       if (data.settings) {
+        const theme: ThemePreset =
+          data.settings.theme === "sleek-dark" ||
+          data.settings.theme === "oled-black" ||
+          data.settings.theme === "slate-dark" ||
+          data.settings.theme === "clean-light"
+            ? (data.settings.theme as ThemePreset)
+            : "sleek-dark";
+        const accentColor: AccentColor =
+          data.settings.accentColor === "blue" ||
+          data.settings.accentColor === "pink" ||
+          data.settings.accentColor === "emerald" ||
+          data.settings.accentColor === "amber" ||
+          data.settings.accentColor === "purple" ||
+          data.settings.accentColor === "rose"
+            ? (data.settings.accentColor as AccentColor)
+            : "blue";
+
         const merged: AppSettings = {
           defaultGridSize:
             data.settings.defaultGridSize === "small" ||
@@ -84,9 +161,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             data.settings.defaultSort === "name-desc"
               ? data.settings.defaultSort
               : "modified-desc",
+          theme,
+          accentColor,
           ...data.settings,
         };
         setSettings(merged);
+        applyThemeAndAccent(theme, accentColor);
         // Sync local cache
         try {
           window.localStorage.setItem(
@@ -97,6 +177,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             "gallery-default-sort",
             merged.defaultSort,
           );
+          window.localStorage.setItem("gallery-theme", theme);
+          window.localStorage.setItem("gallery-accent", accentColor);
         } catch {
           // ignore
         }
@@ -117,6 +199,23 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           settings?: Record<string, string>;
         };
         if (data.settings && active) {
+          const theme: ThemePreset =
+            data.settings.theme === "sleek-dark" ||
+            data.settings.theme === "oled-black" ||
+            data.settings.theme === "slate-dark" ||
+            data.settings.theme === "clean-light"
+              ? (data.settings.theme as ThemePreset)
+              : "sleek-dark";
+          const accentColor: AccentColor =
+            data.settings.accentColor === "blue" ||
+            data.settings.accentColor === "pink" ||
+            data.settings.accentColor === "emerald" ||
+            data.settings.accentColor === "amber" ||
+            data.settings.accentColor === "purple" ||
+            data.settings.accentColor === "rose"
+              ? (data.settings.accentColor as AccentColor)
+              : "blue";
+
           const merged: AppSettings = {
             defaultGridSize:
               data.settings.defaultGridSize === "small" ||
@@ -130,9 +229,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
               data.settings.defaultSort === "name-desc"
                 ? data.settings.defaultSort
                 : "modified-desc",
+            theme,
+            accentColor,
             ...data.settings,
           };
           setSettings(merged);
+          applyThemeAndAccent(theme, accentColor);
           try {
             window.localStorage.setItem(
               "gallery-default-grid-size",
@@ -142,6 +244,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
               "gallery-default-sort",
               merged.defaultSort,
             );
+            window.localStorage.setItem("gallery-theme", theme);
+            window.localStorage.setItem("gallery-accent", accentColor);
           } catch {
             // ignore
           }
@@ -186,6 +290,26 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             // ignore
           }
         }
+        if (newSettings.theme) {
+          next.theme = newSettings.theme as ThemePreset;
+          try {
+            window.localStorage.setItem("gallery-theme", newSettings.theme);
+          } catch {
+            // ignore
+          }
+        }
+        if (newSettings.accentColor) {
+          next.accentColor = newSettings.accentColor as AccentColor;
+          try {
+            window.localStorage.setItem(
+              "gallery-accent",
+              newSettings.accentColor,
+            );
+          } catch {
+            // ignore
+          }
+        }
+        applyThemeAndAccent(next.theme, next.accentColor);
         return next;
       });
 

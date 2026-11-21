@@ -183,7 +183,7 @@ export function useFolderUpload({
         type="button"
         disabled={isUploading}
         onClick={() => setUploadMenuOpen((prev) => !prev)}
-        className="flex items-center gap-1.5 rounded-xl bg-[#8ab4f8] px-3.5 py-1.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
       >
         <Upload size={14} />
         <span>Upload</span>
@@ -191,16 +191,16 @@ export function useFolderUpload({
       </button>
 
       {uploadMenuOpen && (
-        <div className="absolute right-0 top-full mt-2 z-30 w-44 overflow-hidden rounded-2xl border border-[#2e2e2e] bg-[#161616]/98 p-1.5 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100">
+        <div className="absolute right-0 top-full mt-2 z-30 w-44 overflow-hidden rounded-2xl border border-border-strong bg-bg-card-subtle/98 p-1.5 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100">
           <button
             type="button"
             onClick={() => {
               setUploadMenuOpen(false);
               fileInputRef.current?.click();
             }}
-            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-[#212121] cursor-pointer"
+            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
           >
-            <Upload size={14} className="text-[#8ab4f8]" />
+            <Upload size={14} className="text-accent" />
             <span>Upload Files</span>
           </button>
           <button
@@ -209,9 +209,9 @@ export function useFolderUpload({
               setUploadMenuOpen(false);
               dirInputRef.current?.click();
             }}
-            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-[#212121] cursor-pointer"
+            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
           >
-            <FolderUp size={14} className="text-[#8ab4f8]" />
+            <FolderUp size={14} className="text-accent" />
             <span>Upload Folder</span>
           </button>
         </div>

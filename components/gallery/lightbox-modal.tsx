@@ -179,7 +179,7 @@ export function LightboxModal({
             title="Info & Details (I)"
             className={`rounded-full p-2 transition ${
               showInfo
-                ? "bg-[#8ab4f8] text-zinc-950 shadow-sm"
+                ? "bg-accent text-zinc-950 shadow-sm"
                 : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
             }`}
           >

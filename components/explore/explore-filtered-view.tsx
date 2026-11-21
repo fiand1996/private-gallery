@@ -308,27 +308,27 @@ export function ExploreFilteredView({
   return (
     <div className="space-y-4">
       {/* Filter Bar with Back Button */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#262626] bg-[#141414]/80 p-3.5 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border-subtle bg-bg-card/80 p-3.5 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => router.push("/explore")}
-            className="flex items-center gap-1.5 rounded-xl border border-[#2e2e2e] bg-[#1e1e1e] px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#282828] hover:text-zinc-100 cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover hover:text-zinc-100 cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>All Explore</span>
           </button>
 
-          <div className="h-4 w-px bg-[#2e2e2e]" />
+          <div className="h-4 w-px bg-border-strong" />
 
           <div className="flex items-center gap-2">
             {photosData.filterLabel.startsWith("People:") && (
-              <User size={15} className="text-[#8ab4f8]" />
+              <User size={15} className="text-accent" />
             )}
             <span className="text-sm font-bold text-zinc-100">
               {photosData.filterLabel}
             </span>
-            <span className="rounded-full bg-[#262626] px-2 py-0.5 text-[11px] font-medium text-zinc-400">
+            <span className="rounded-full bg-border-subtle px-2 py-0.5 text-[11px] font-medium text-zinc-400">
               {photosData.totalCount} photo
               {photosData.totalCount === 1 ? "" : "s"}
             </span>
@@ -346,7 +346,7 @@ export function ExploreFilteredView({
       {/* Photos Grid */}
       {photosLoading ? (
         <div className="py-24 text-center">
-          <Loader2 className="size-8 animate-spin text-[#8ab4f8] mx-auto mb-3" />
+          <Loader2 className="size-8 animate-spin text-accent mx-auto mb-3" />
           <p className="text-xs text-zinc-400">Loading photos...</p>
         </div>
       ) : photosError ? (
@@ -380,7 +380,7 @@ export function ExploreFilteredView({
           />
 
           <div ref={sentinelRef} className="h-10 flex items-center justify-center mt-6">
-            {loadingMore && <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />}
+            {loadingMore && <Loader2 className="size-6 animate-spin text-accent" />}
           </div>
         </>
       ) : (

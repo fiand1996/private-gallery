@@ -66,7 +66,7 @@ export function FolderBreadcrumbs({
                 ) : (
                   <Link
                     href={`/folder?path=${encodeURIComponent(crumb.path)}`}
-                    className="rounded-lg px-2 py-1 text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-200 transition"
+                    className="rounded-lg px-2 py-1 text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 transition"
                   >
                     {crumb.name}
                   </Link>
@@ -91,9 +91,9 @@ export function FolderBreadcrumbs({
           <button
             type="button"
             onClick={onOpenCreateFolder}
-            className="flex items-center gap-2 rounded-xl border border-[#262626] bg-[#141414] px-3 py-1.5 text-xs font-semibold text-zinc-300 shadow-sm transition hover:bg-[#1f1f1f] cursor-pointer"
+            className="flex items-center gap-2 rounded-xl border border-border-subtle bg-bg-card px-3 py-1.5 text-xs font-semibold text-zinc-300 shadow-sm transition hover:bg-bg-hover cursor-pointer"
           >
-            <FolderPlus size={14} className="text-[#8ab4f8]" />
+            <FolderPlus size={14} className="text-accent" />
             <span>New Folder</span>
           </button>
         )}
@@ -104,12 +104,12 @@ export function FolderBreadcrumbs({
             onClick={onToggleSelectAll}
             className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               isAllSelected
-                ? "border-[#8ab4f8] bg-[#8ab4f8]/15 text-[#8ab4f8]"
-                : "border-[#262626] bg-[#141414] text-zinc-300 hover:bg-[#1f1f1f]"
+                ? "border-accent bg-accent/15 text-accent"
+                : "border-border-subtle bg-bg-card text-zinc-300 hover:bg-bg-hover"
             }`}
           >
             {isAllSelected ? (
-              <CheckSquare size={14} className="text-[#8ab4f8]" />
+              <CheckSquare size={14} className="text-accent" />
             ) : (
               <Square size={14} className="text-zinc-400" />
             )}

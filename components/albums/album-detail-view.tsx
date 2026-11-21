@@ -300,7 +300,7 @@ export function AlbumDetailView({
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-[#8ab4f8]" />
+        <Loader2 className="size-8 animate-spin text-accent" />
       </div>
     );
   }
@@ -316,7 +316,7 @@ export function AlbumDetailView({
         <div className="flex items-center gap-3">
           <Link
             href="/albums"
-            className="rounded-xl p-2 text-zinc-400 transition hover:bg-[#1c1c1c] hover:text-zinc-200 cursor-pointer"
+            className="rounded-xl p-2 text-zinc-400 transition hover:bg-bg-input hover:text-zinc-200 cursor-pointer"
           >
             <ArrowLeft size={20} />
           </Link>
@@ -333,7 +333,7 @@ export function AlbumDetailView({
                     setRenameInput(albumTitle);
                     setRenameModalOpen(true);
                   }}
-                  className="rounded-lg p-1 text-zinc-400 transition hover:bg-[#1c1c1c] hover:text-[#8ab4f8] cursor-pointer"
+                  className="rounded-lg p-1 text-zinc-400 transition hover:bg-bg-input hover:text-accent cursor-pointer"
                 >
                   <Pencil size={15} />
                 </button>
@@ -344,7 +344,7 @@ export function AlbumDetailView({
               {albumDetail?.kind === "custom" && (
                 <>
                   <span>·</span>
-                  <span className="text-[#8ab4f8] font-medium">Virtual Album</span>
+                  <span className="text-accent font-medium">Virtual Album</span>
                 </>
               )}
               {albumDetail?.description && (
@@ -417,7 +417,7 @@ export function AlbumDetailView({
           />
 
           <div ref={sentinelRef} className="h-10 flex items-center justify-center mt-6">
-            {loadingMore && <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />}
+            {loadingMore && <Loader2 className="size-6 animate-spin text-accent" />}
           </div>
         </>
       ) : (
@@ -449,7 +449,7 @@ export function AlbumDetailView({
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
         >
-          <div className="w-full max-w-sm rounded-2xl border border-[#2e2e2e] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+          <div className="w-full max-w-sm rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
             <h3 className="text-base font-bold text-zinc-100">Rename Album</h3>
             <form onSubmit={handleRename} className="mt-4">
               <input
@@ -458,21 +458,21 @@ export function AlbumDetailView({
                 value={renameInput}
                 onChange={(e) => setRenameInput(e.target.value)}
                 placeholder="Album name"
-                className="w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 py-2.5 text-xs font-medium text-zinc-100 outline-none transition focus:border-[#8ab4f8] focus:bg-[#212121]"
+                className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
               />
               <div className="mt-5 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   disabled={renaming}
                   onClick={() => setRenameModalOpen(false)}
-                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#212121] cursor-pointer"
+                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={renaming || !renameInput.trim()}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
                   {renaming && <Loader2 size={13} className="animate-spin text-zinc-950" />}
                   Save

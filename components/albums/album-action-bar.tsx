@@ -58,7 +58,7 @@ export function AlbumActionBar({
       <button
         type="button"
         onClick={onFavorite}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
       >
         <Heart size={14} className="text-rose-400" />
         <span>Favorite</span>
@@ -68,9 +68,9 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onAddToAlbum}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
         >
-          <FolderArchive size={14} className="text-[#8ab4f8]" />
+          <FolderArchive size={14} className="text-accent" />
           <span>Add to Album</span>
         </button>
       )}
@@ -79,9 +79,9 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onTag}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
         >
-          <Tag size={14} className="text-[#8ab4f8]" />
+          <Tag size={14} className="text-accent" />
           <span>Tag</span>
         </button>
       )}
@@ -90,9 +90,9 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onPerson}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
         >
-          <Users size={14} className="text-[#8ab4f8]" />
+          <Users size={14} className="text-accent" />
           <span>Person</span>
         </button>
       )}
@@ -113,7 +113,7 @@ export function AlbumActionBar({
         type="button"
         onClick={onClear}
         title="Deselect all"
-        className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-[#212121] hover:text-zinc-200 cursor-pointer"
+        className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
       >
         <X size={15} />
       </button>

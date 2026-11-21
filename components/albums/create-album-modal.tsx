@@ -61,7 +61,7 @@ export function CreateAlbumModal({
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
     >
-      <div className="w-full max-w-md rounded-2xl border border-[#2e2e2e] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+      <div className="w-full max-w-md rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
         <h3 className="text-base font-bold text-zinc-100">Create Virtual Album</h3>
         <p className="mt-1 text-xs text-zinc-400">
           Virtual albums let you curate photos without duplicating files on your disk.
@@ -78,7 +78,7 @@ export function CreateAlbumModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Best of 2024, Family Trip"
-              className="mt-1.5 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-[#8ab4f8] focus:bg-[#212121]"
+              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
             />
           </div>
 
@@ -91,7 +91,7 @@ export function CreateAlbumModal({
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               placeholder="Add a brief description..."
-              className="mt-1.5 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-[#8ab4f8] focus:bg-[#212121]"
+              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
             />
           </div>
 
@@ -100,14 +100,14 @@ export function CreateAlbumModal({
               type="button"
               disabled={creating}
               onClick={onClose}
-              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#212121] cursor-pointer"
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={creating || !name.trim()}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-md shadow-[#8ab4f8]/20 transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-md shadow-accent/20 transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
             >
               {creating && <Loader2 size={13} className="animate-spin text-zinc-950" />}
               Create Album

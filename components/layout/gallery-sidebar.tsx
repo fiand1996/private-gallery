@@ -65,7 +65,7 @@ export function GallerySidebar() {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border-subtle bg-bg-surface px-3.5 py-4 lg:flex select-none">
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="flex size-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#1a2333] to-[#1e2a3a] border border-[#2a3a55] shadow-sm shadow-accent/20">
+          <div className="flex size-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-accent/20 to-accent/10 border border-accent/30 shadow-sm shadow-accent/20">
             <span className="text-base font-bold text-accent">PS</span>
           </div>
           <div className="flex flex-col">
@@ -125,8 +125,8 @@ export function GallerySidebar() {
               href="/settings"
               className={`flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition ${
                 pathname.startsWith("/settings")
-                  ? "bg-[#1c1c1c] text-zinc-100"
-                  : "text-zinc-400 hover:bg-[#1c1c1c] hover:text-zinc-100"
+                  ? "bg-bg-input text-zinc-100"
+                  : "text-zinc-400 hover:bg-bg-input hover:text-zinc-100"
               }`}
             >
               <Settings size={18} strokeWidth={1.8} />
@@ -136,9 +136,9 @@ export function GallerySidebar() {
 
           {/* User Profile & Sign Out Box */}
           {session?.user && (
-            <div className="flex items-center justify-between rounded-2xl border border-[#262626] bg-[#171717] p-2.5">
+            <div className="flex items-center justify-between rounded-2xl border border-border-subtle bg-bg-card-subtle p-2.5">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#262626] text-xs font-semibold text-[#8ab4f8]">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-border-subtle text-xs font-semibold text-accent">
                   {userInitial}
                 </div>
                 <div className="min-w-0">
@@ -147,7 +147,7 @@ export function GallerySidebar() {
                   </div>
                   <div className="flex items-center gap-1 text-[10px] text-zinc-400">
                     {isAdmin ? (
-                      <span className="inline-flex items-center gap-1 text-[#8ab4f8]">
+                      <span className="inline-flex items-center gap-1 text-accent">
                         <Shield size={10} /> Admin
                       </span>
                     ) : (
@@ -162,7 +162,7 @@ export function GallerySidebar() {
                 type="button"
                 onClick={() => signOut({ callbackUrl: "/login" })}
                 title="Sign Out"
-                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-[#262626] hover:text-rose-400 transition"
+                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-border-subtle hover:text-rose-400 transition"
               >
                 <LogOut size={14} />
               </button>
@@ -174,7 +174,7 @@ export function GallerySidebar() {
       {/* Mobile Bottom Navigation Bar */}
       <nav
         aria-label="Mobile navigation"
-        className="fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t border-[#262626] bg-[#121212]/95 px-2 backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 flex h-16 items-center justify-around border-t border-border-subtle bg-bg-surface/95 px-2 backdrop-blur-xl lg:hidden"
       >
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = isCurrent(href);
@@ -183,7 +183,7 @@ export function GallerySidebar() {
               key={href}
               href={href}
               className={`flex flex-col items-center gap-1 rounded-xl p-2 text-xs font-medium transition ${
-                active ? "text-[#8ab4f8]" : "text-zinc-400 hover:text-zinc-100"
+                active ? "text-accent" : "text-zinc-400 hover:text-zinc-100"
               }`}
             >
               <Icon size={19} strokeWidth={active ? 2.3 : 1.8} />
@@ -196,7 +196,7 @@ export function GallerySidebar() {
             href="/settings"
             className={`flex flex-col items-center gap-1 rounded-xl p-2 text-xs font-medium transition ${
               pathname.startsWith("/settings")
-                ? "text-[#8ab4f8]"
+                ? "text-accent"
                 : "text-zinc-400 hover:text-zinc-100"
             }`}
           >

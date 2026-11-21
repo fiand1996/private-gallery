@@ -76,11 +76,11 @@ export function FolderPickerModal({
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-in fade-in duration-150"
     >
-      <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] shadow-2xl animate-in zoom-in-95 duration-150">
+      <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border-subtle bg-bg-card shadow-2xl animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#262626] px-5 py-4">
+        <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="flex size-8 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+            <div className="flex size-8 items-center justify-center rounded-xl bg-accent/10 text-accent">
               <FolderTree size={17} />
             </div>
             <div>
@@ -95,7 +95,7 @@ export function FolderPickerModal({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-full p-1.5 text-zinc-400 hover:bg-[#1f1f1f] hover:text-zinc-200 cursor-pointer"
+            className="rounded-full p-1.5 text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -109,7 +109,7 @@ export function FolderPickerModal({
 
           {fetching ? (
             <div className="flex h-40 items-center justify-center">
-              <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+              <Loader2 className="size-6 animate-spin text-accent" />
             </div>
           ) : (
             folders.map((folder) => {
@@ -123,13 +123,13 @@ export function FolderPickerModal({
                   onClick={() => setTargetFolder(folder.path)}
                   className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-xs transition cursor-pointer ${
                     isSelected
-                      ? "bg-[#8ab4f8] font-semibold text-zinc-950 shadow-sm"
-                      : "text-zinc-300 hover:bg-[#1f1f1f]"
+                      ? "bg-accent font-semibold text-zinc-950 shadow-sm"
+                      : "text-zinc-300 hover:bg-bg-hover"
                   }`}
                 >
                   <Folder
                     size={16}
-                    className={isSelected ? "text-zinc-950" : "text-[#8ab4f8]"}
+                    className={isSelected ? "text-zinc-950" : "text-accent"}
                   />
                   <div className="min-w-0 flex-1 truncate">
                     <span className="truncate">{folder.name}</span>
@@ -147,8 +147,8 @@ export function FolderPickerModal({
                     <span
                       className={`text-[10px] rounded px-1.5 py-0.5 ${
                         isSelected
-                          ? "bg-[#aecbfa] text-zinc-950 font-semibold"
-                          : "bg-[#242424] text-zinc-400"
+                          ? "bg-accent-hover text-zinc-950 font-semibold"
+                          : "bg-bg-input text-zinc-400"
                       }`}
                     >
                       Current folder
@@ -161,12 +161,12 @@ export function FolderPickerModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 border-t border-[#262626] bg-[#0d0d0d] px-5 py-3">
+        <div className="flex items-center justify-end gap-3 border-t border-border-subtle bg-bg-app px-5 py-3">
           <button
             type="button"
             disabled={loading}
             onClick={onCancel}
-            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#1f1f1f] disabled:opacity-50 cursor-pointer"
+            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover disabled:opacity-50 cursor-pointer"
           >
             Cancel
           </button>
@@ -174,7 +174,7 @@ export function FolderPickerModal({
             type="button"
             disabled={loading || fetching}
             onClick={() => onConfirm(targetFolder)}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
           >
             {loading && <Loader2 size={13} className="animate-spin" />}
             {actionName} Here

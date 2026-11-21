@@ -154,18 +154,18 @@ function LoginFormContent() {
   if (loadingInitialCheck) {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-zinc-400">
-        <Loader2 size={32} className="animate-spin text-[#8ab4f8] mb-3" />
+        <Loader2 size={32} className="animate-spin text-accent mb-3" />
         <p className="text-sm">Connecting to Private Gallery...</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-md rounded-3xl border border-[#262626] bg-[#121212]/90 p-8 shadow-2xl backdrop-blur-2xl">
+    <div className="w-full max-w-md rounded-3xl border border-border-subtle bg-bg-surface/90 p-8 shadow-2xl backdrop-blur-2xl">
       {/* Brand Header */}
       <div className="flex flex-col items-center text-center">
-        <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#1a2333] to-[#1e2a3a] border border-[#2a3a55] shadow-lg shadow-[#8ab4f8]/10 mb-4">
-          <ImageIcon size={28} className="text-[#8ab4f8]" />
+        <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-accent/20 to-accent/10 border border-accent/30 shadow-lg shadow-accent/10 mb-4">
+          <ImageIcon size={28} className="text-accent" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-white">
           {isFirstRun ? "Setup Administrator" : "Welcome to Private Gallery"}
@@ -177,7 +177,7 @@ function LoginFormContent() {
         </p>
 
         {isFirstRun && (
-          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-[#8ab4f8]/30 bg-[#8ab4f8]/10 px-3 py-1 text-xs font-medium text-[#8ab4f8]">
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
             <Shield size={12} />
             First-Run Setup • Admin Account
           </div>
@@ -215,7 +215,7 @@ function LoginFormContent() {
                 placeholder="admin"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ function LoginFormContent() {
                 placeholder="Primary Admin"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -249,7 +249,7 @@ function LoginFormContent() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -267,7 +267,7 @@ function LoginFormContent() {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -275,7 +275,7 @@ function LoginFormContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8ab4f8] py-3 text-sm font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
           >
             {submitting ? (
               <>
@@ -302,7 +302,7 @@ function LoginFormContent() {
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -319,7 +319,7 @@ function LoginFormContent() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -327,7 +327,7 @@ function LoginFormContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#8ab4f8] py-3 text-sm font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
           >
             {submitting ? (
               <>
@@ -346,14 +346,14 @@ function LoginFormContent() {
 
 export default function LoginPage() {
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-black p-4 selection:bg-[#8ab4f8]/25 selection:text-[#8ab4f8]">
+    <div className="relative flex min-h-screen items-center justify-center bg-bg-app p-4 selection:bg-accent/25 selection:text-accent">
       {/* Soft ambient background glow */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[600px] rounded-full bg-[#8ab4f8]/10 blur-[130px]" />
+      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[600px] rounded-full bg-accent/10 blur-[130px]" />
 
       <Suspense
         fallback={
           <div className="flex items-center gap-2 text-zinc-400">
-            <Loader2 size={24} className="animate-spin text-[#8ab4f8]" />
+            <Loader2 size={24} className="animate-spin text-accent" />
             <span>Loading...</span>
           </div>
         }

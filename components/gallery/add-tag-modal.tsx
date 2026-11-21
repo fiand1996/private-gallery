@@ -89,14 +89,14 @@ function AddTagDialogContent({
       }}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+        className="w-full max-w-md rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150"
         role="dialog"
         aria-modal="true"
         aria-labelledby="add-tag-modal-title"
       >
         <div className="mb-5 flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
               <Tag size={18} />
             </div>
             <div>
@@ -112,7 +112,7 @@ function AddTagDialogContent({
             type="button"
             disabled={submitting}
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -140,7 +140,7 @@ function AddTagDialogContent({
                 value={tagName}
                 onChange={(e) => setTagName(e.target.value)}
                 placeholder="e.g. holiday, family, wallpaper"
-                className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] pl-8 pr-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                className="h-10 w-full rounded-xl border border-border-strong bg-bg-input pl-8 pr-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
               />
             </div>
           </div>
@@ -157,7 +157,7 @@ function AddTagDialogContent({
                     key={s.id}
                     type="button"
                     onClick={() => handleSelectSuggestion(s.name)}
-                    className="inline-flex items-center gap-1 rounded-lg border border-[#2e2e2e] bg-[#1c1c1c] px-2.5 py-1 text-xs text-zinc-300 hover:border-[#8ab4f8]/60 hover:text-[#8ab4f8] transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-lg border border-border-strong bg-bg-input px-2.5 py-1 text-xs text-zinc-300 hover:border-accent/60 hover:text-accent transition cursor-pointer"
                   >
                     <span>#{s.name}</span>
                   </button>
@@ -171,14 +171,14 @@ function AddTagDialogContent({
               type="button"
               disabled={submitting}
               onClick={onClose}
-              className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+              className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !tagName.trim()}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#a1c4fd] disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
             >
               {submitting ? (
                 <Loader2 size={14} className="animate-spin" />

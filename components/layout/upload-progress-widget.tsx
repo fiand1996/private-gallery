@@ -48,9 +48,9 @@ export function UploadProgressWidget() {
       <aside
         aria-label="Upload Progress"
         onClick={() => setIsWidgetOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full border border-[#2e2e2e] bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl transition hover:border-[#8ab4f8]/50 hover:bg-[#1a1a1a] cursor-pointer animate-in fade-in slide-in-from-bottom duration-200"
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl transition hover:border-accent/50 hover:bg-bg-hover cursor-pointer animate-in fade-in slide-in-from-bottom duration-200"
       >
-        <div className="flex size-7 items-center justify-center rounded-full bg-[#8ab4f8]/15 text-[#8ab4f8]">
+        <div className="flex size-7 items-center justify-center rounded-full bg-accent/15 text-accent">
           {isUploading ? (
             <Loader2 size={16} className="animate-spin" />
           ) : failedCount > 0 ? (
@@ -78,12 +78,12 @@ export function UploadProgressWidget() {
   return (
     <aside
       aria-label="Upload Details"
-      className="fixed bottom-6 right-6 z-50 w-84 sm:w-96 rounded-2xl border border-[#2e2e2e] bg-[#141414]/98 p-4 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom duration-200"
+      className="fixed bottom-6 right-6 z-50 w-84 sm:w-96 rounded-2xl border border-border-strong bg-bg-card/98 p-4 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom duration-200"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#242424] pb-3">
+      <div className="flex items-center justify-between border-b border-border-subtle pb-3">
         <div className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-[#8ab4f8]/15 text-[#8ab4f8]">
+          <div className="flex size-7 items-center justify-center rounded-lg bg-accent/15 text-accent">
             {isUploading ? (
               <Loader2 size={16} className="animate-spin" />
             ) : failedCount > 0 ? (
@@ -108,7 +108,7 @@ export function UploadProgressWidget() {
             type="button"
             onClick={() => setIsWidgetOpen(false)}
             title="Minimize"
-            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-[#222] hover:text-zinc-200 cursor-pointer"
+            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
           >
             <Minimize2 size={14} />
           </button>
@@ -116,7 +116,7 @@ export function UploadProgressWidget() {
             type="button"
             onClick={isUploading ? cancelAll : clearFinished}
             title={isUploading ? "Cancel uploads" : "Close"}
-            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-[#222] hover:text-zinc-200 cursor-pointer"
+            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
           >
             <X size={15} />
           </button>
@@ -129,16 +129,16 @@ export function UploadProgressWidget() {
           <span className="truncate pr-2">
             {inProgressItem ? inProgressItem.relativePath : isAllDone ? "All files processed" : "Queued..."}
           </span>
-          <span className="shrink-0 font-semibold text-[#8ab4f8]">
+          <span className="shrink-0 font-semibold text-accent">
             {progressPercent}%
           </span>
         </div>
-        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#242424]">
+        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-bg-input">
           <div
             className={`h-full transition-all duration-200 ${
               isAllDone && failedCount === 0
                 ? "bg-emerald-400"
-                : "bg-[#8ab4f8]"
+                : "bg-accent"
             }`}
             style={{ width: `${progressPercent}%` }}
           />
@@ -177,11 +177,11 @@ export function UploadProgressWidget() {
       )}
 
       {/* Footer controls */}
-      <div className="mt-3.5 flex items-center justify-between pt-2 border-t border-[#242424] text-xs">
+      <div className="mt-3.5 flex items-center justify-between pt-2 border-t border-border-subtle text-xs">
         {isUploading ? (
           <>
             <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
-              <Upload size={12} className="text-[#8ab4f8]" />
+              <Upload size={12} className="text-accent" />
               <span>Runs in background</span>
             </span>
             <button
@@ -200,7 +200,7 @@ export function UploadProgressWidget() {
             <button
               type="button"
               onClick={clearFinished}
-              className="rounded-lg bg-[#242424] px-2.5 py-1 text-xs font-semibold text-zinc-200 hover:bg-[#2c2c2c] cursor-pointer"
+              className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-semibold text-zinc-200 hover:bg-bg-hover cursor-pointer"
             >
               Dismiss
             </button>

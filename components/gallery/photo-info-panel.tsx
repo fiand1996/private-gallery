@@ -467,7 +467,7 @@ export function PhotoInfoPanel({
                   type="button"
                   disabled={savingMeta}
                   onClick={handleSaveCaption}
-                  className="inline-flex items-center gap-1 rounded-lg bg-accent px-2 py-0.5 text-[11px] font-medium text-[#090b10] hover:bg-accent-hover transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-lg bg-accent px-2 py-0.5 text-[11px] font-medium text-zinc-950 hover:bg-accent-hover transition cursor-pointer"
                 >
                   Save
                 </button>
@@ -648,7 +648,7 @@ export function PhotoInfoPanel({
                     key={s.id}
                     type="button"
                     onClick={() => handleAddPerson(undefined, s.name)}
-                    className="inline-flex items-center gap-1 rounded-md border border-[#2e2e2e] bg-[#1c1c1c] px-2 py-0.5 text-[11px] text-zinc-400 hover:text-emerald-300 hover:border-emerald-500/40 transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-zinc-400 hover:text-emerald-300 hover:border-emerald-500/40 transition cursor-pointer"
                   >
                     <span>+{s.name}</span>
                   </button>
@@ -694,7 +694,7 @@ export function PhotoInfoPanel({
 
           {/* Dimension & File Specs */}
           <div className="grid grid-cols-2 gap-2 pt-2">
-            <div className="rounded-xl bg-[#1c1c1c] p-2.5 border border-[#262626]">
+            <div className="rounded-xl bg-bg-input p-2.5 border border-border-subtle">
               <div className="flex items-center gap-1.5 text-zinc-400">
                 <Layers size={13} />
                 <span className="text-[10px] font-medium uppercase">Resolution</span>
@@ -711,7 +711,7 @@ export function PhotoInfoPanel({
               )}
             </div>
 
-            <div className="rounded-xl bg-[#1c1c1c] p-2.5 border border-[#262626]">
+            <div className="rounded-xl bg-bg-input p-2.5 border border-border-subtle">
               <div className="flex items-center gap-1.5 text-zinc-400">
                 <HardDrive size={13} />
                 <span className="text-[10px] font-medium uppercase">Size & Format</span>
@@ -729,9 +729,9 @@ export function PhotoInfoPanel({
 
         {/* Camera & Lens Section */}
         {hasCameraData && (
-          <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-3">
-            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-[#262626] pb-2">
-              <Camera size={15} className="text-[#8ab4f8]" />
+          <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
+            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+              <Camera size={15} className="text-accent" />
               <span>Camera & Lens</span>
             </div>
 
@@ -759,25 +759,25 @@ export function PhotoInfoPanel({
 
             {/* Exposure Settings Grid */}
             <div className="grid grid-cols-4 gap-2 pt-1 text-center font-mono">
-              <div className="rounded-lg bg-[#141414] p-2 border border-[#262626]">
+              <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Focal</span>
                 <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
                   {metadata.focalLength || "-"}
                 </span>
               </div>
-              <div className="rounded-lg bg-[#141414] p-2 border border-[#262626]">
+              <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Aperture</span>
                 <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
                   {metadata.aperture || "-"}
                 </span>
               </div>
-              <div className="rounded-lg bg-[#141414] p-2 border border-[#262626]">
+              <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Shutter</span>
                 <span className="text-xs text-zinc-200 font-semibold mt-0.5 block truncate">
                   {metadata.shutterSpeed || "-"}
                 </span>
               </div>
-              <div className="rounded-lg bg-[#141414] p-2 border border-[#262626]">
+              <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">ISO</span>
                 <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
                   {metadata.iso ? `${metadata.iso}` : "-"}
@@ -789,8 +789,8 @@ export function PhotoInfoPanel({
 
         {/* GPS Location Section */}
         {hasGpsData && (
-          <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-2.5">
-            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-[#262626] pb-2">
+          <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-2.5">
+            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
               <MapPin size={15} className="text-rose-400" />
               <span>Location (GPS)</span>
             </div>
@@ -806,7 +806,7 @@ export function PhotoInfoPanel({
                   href={metadata.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3 py-1.5 text-xs text-zinc-300 hover:bg-[#262626] hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-zinc-300 hover:bg-border-subtle hover:text-white transition"
                 >
                   <span>Google Maps</span>
                   <ExternalLink size={12} />
@@ -817,7 +817,7 @@ export function PhotoInfoPanel({
                   href={metadata.openStreetMapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3 py-1.5 text-xs text-zinc-300 hover:bg-[#262626] hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-zinc-300 hover:bg-border-subtle hover:text-white transition"
                 >
                   <span>OpenStreetMap</span>
                   <ExternalLink size={12} />

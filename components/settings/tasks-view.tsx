@@ -77,7 +77,7 @@ export function TasksView() {
         <button
           type="button"
           onClick={() => setRefreshKey((k) => k + 1)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-[#262626] transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-border-subtle transition cursor-pointer"
         >
           <RefreshCw size={13} />
           Refresh
@@ -85,11 +85,11 @@ export function TasksView() {
       </div>
 
       {loading ? (
-        <div className="flex h-40 items-center justify-center rounded-2xl border border-[#262626] bg-[#141414]">
-          <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+        <div className="flex h-40 items-center justify-center rounded-2xl border border-border-subtle bg-bg-card">
+          <Loader2 className="size-6 animate-spin text-accent" />
         </div>
       ) : tasks.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#262626] p-8 text-center text-sm text-zinc-400">
+        <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-zinc-400">
           No tasks have been queued yet. Trigger a scan from the Media Libraries tab.
         </div>
       ) : (
@@ -103,7 +103,7 @@ export function TasksView() {
             return (
               <div
                 key={task.id}
-                className="flex flex-col justify-between gap-3 rounded-2xl border border-[#262626] bg-[#141414] p-4 sm:flex-row sm:items-center shadow-sm"
+                className="flex flex-col justify-between gap-3 rounded-2xl border border-border-subtle bg-bg-card p-4 sm:flex-row sm:items-center shadow-sm"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2.5">
@@ -115,7 +115,7 @@ export function TasksView() {
                     </span>
 
                     {isRunning ? (
-                      <span className="flex items-center gap-1 rounded-full bg-[#8ab4f8]/10 px-2 py-0.5 text-[10px] font-bold text-[#8ab4f8]">
+                      <span className="flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
                         <Loader2 size={10} className="animate-spin" />
                         Running
                       </span>
@@ -152,7 +152,7 @@ export function TasksView() {
                 </div>
 
                 <div className="text-right text-xs text-zinc-500">
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#1c1c1c] px-2.5 py-1 text-zinc-400">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-bg-input px-2.5 py-1 text-zinc-400">
                     <Layers size={12} />
                     Job {task.status}
                   </span>

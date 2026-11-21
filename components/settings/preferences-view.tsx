@@ -8,15 +8,79 @@ import {
   Grid2X2,
   HardDrive,
   Loader2,
+  Palette,
   RotateCcw,
+  Sparkles,
   Trash2,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAppSettings } from "@/components/layout/settings-context";
+import {
+  useAppSettings,
+  type AccentColor,
+  type ThemePreset,
+} from "@/components/layout/settings-context";
 import {
   type GallerySort,
   type GridSize,
 } from "@/components/gallery/grid-controls";
+
+const THEME_OPTIONS: Array<{
+  id: ThemePreset;
+  title: string;
+  desc: string;
+  badge?: string;
+  previewBg: string;
+  previewCard: string;
+  previewBorder: string;
+}> = [
+  {
+    id: "sleek-dark",
+    title: "Sleek Dark",
+    desc: "Default modern dark aesthetic with neutral dark contrast",
+    badge: "Default",
+    previewBg: "bg-black",
+    previewCard: "bg-zinc-900",
+    previewBorder: "border-zinc-800",
+  },
+  {
+    id: "oled-black",
+    title: "OLED Black",
+    desc: "Deep pitch-black tone optimized for high-contrast OLED displays",
+    previewBg: "bg-black",
+    previewCard: "bg-zinc-950",
+    previewBorder: "border-zinc-900",
+  },
+  {
+    id: "slate-dark",
+    title: "Slate Dark",
+    desc: "Subtle cool slate-blue midnight palette for gentle viewing",
+    previewBg: "bg-slate-950",
+    previewCard: "bg-slate-900",
+    previewBorder: "border-slate-800",
+  },
+  {
+    id: "clean-light",
+    title: "Clean Light",
+    desc: "Crisp daylight theme with soft borders and bright surfaces",
+    previewBg: "bg-slate-100",
+    previewCard: "bg-white",
+    previewBorder: "border-slate-200",
+  },
+];
+
+const ACCENT_OPTIONS: Array<{
+  id: AccentColor;
+  label: string;
+  dotColor: string;
+  badge?: string;
+}> = [
+  { id: "blue", label: "Ice Blue", dotColor: "bg-sky-400", badge: "Default" },
+  { id: "pink", label: "Bubblegum Pink", dotColor: "bg-pink-400" },
+  { id: "emerald", label: "Emerald Green", dotColor: "bg-emerald-400" },
+  { id: "amber", label: "Sunset Amber", dotColor: "bg-amber-400" },
+  { id: "purple", label: "Vivid Purple", dotColor: "bg-purple-400" },
+  { id: "rose", label: "Crimson Rose", dotColor: "bg-rose-400" },
+];
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -91,6 +155,18 @@ export function PreferencesView() {
     }
   }
 
+  function handleSelectTheme(theme: ThemePreset) {
+    void updateSetting("theme", theme);
+    setPrefNotice(`Theme preset updated to “${theme}” (saved to database).`);
+    setTimeout(() => setPrefNotice(""), 3000);
+  }
+
+  function handleSelectAccent(accent: AccentColor) {
+    void updateSetting("accentColor", accent);
+    setPrefNotice(`Accent color updated to “${accent}” (saved to database).`);
+    setTimeout(() => setPrefNotice(""), 3000);
+  }
+
   function handleSelectGridSize(size: GridSize) {
     void updateSetting("defaultGridSize", size);
     setPrefNotice(`Default grid size updated to “${size}” (saved to database).`);
@@ -113,9 +189,13 @@ export function PreferencesView() {
     void updateSettings({
       defaultGridSize: "medium",
       defaultSort: "modified-desc",
+      theme: "sleek-dark",
+      accentColor: "blue",
     });
     try {
       window.localStorage.removeItem("gallery-library-id");
+      window.localStorage.setItem("gallery-theme", "sleek-dark");
+      window.localStorage.setItem("gallery-accent", "blue");
     } catch {
       // ignore
     }
@@ -132,10 +212,142 @@ export function PreferencesView() {
         </div>
       )}
 
-      {/* Grid Size Preference */}
-      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+      {/* Theme Presets */}
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
+            <Palette size={18} />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-text-primary">
+              Interface Theme
+            </h2>
+            <p className="text-xs text-text-secondary">
+              Select your preferred workspace appearance and backdrop style.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 pt-2">
+          {THEME_OPTIONS.map((item) => {
+            const isSelected = (settings.theme ?? "sleek-dark") === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleSelectTheme(item.id)}
+                className={`flex flex-col text-left rounded-2xl border p-4 transition cursor-pointer ${
+                  isSelected
+                    ? "border-accent bg-accent/10 shadow-sm"
+                    : "border-border-subtle bg-bg-input hover:border-border-strong"
+                }`}
+              >
+                {/* Visual miniature preview */}
+                <div
+                  className={`h-20 w-full rounded-xl border mb-3.5 flex items-center gap-2 p-2.5 overflow-hidden ${item.previewBg} ${item.previewBorder}`}
+                >
+                  <div
+                    className={`h-full w-5 rounded-lg border ${item.previewCard} ${item.previewBorder}`}
+                  />
+                  <div className="flex-1 flex flex-col gap-1.5 h-full">
+                    <div
+                      className={`h-3 w-3/4 rounded border ${item.previewCard} ${item.previewBorder}`}
+                    />
+                    <div className="grid grid-cols-2 gap-1 flex-1">
+                      <div
+                        className={`rounded border ${item.previewCard} ${item.previewBorder}`}
+                      />
+                      <div
+                        className={`rounded border ${item.previewCard} ${item.previewBorder}`}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-bold text-text-primary">
+                      {item.title}
+                    </span>
+                    {item.badge && (
+                      <span className="rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-semibold text-accent">
+                        {item.badge}
+                      </span>
+                    )}
+                  </div>
+                  {isSelected && (
+                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-zinc-950">
+                      <Check size={12} strokeWidth={3} />
+                    </span>
+                  )}
+                </div>
+                <span className="mt-1 text-xs text-text-secondary line-clamp-2">
+                  {item.desc}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Accent Color Selection */}
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
+            <Sparkles size={18} />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-text-primary">
+              Accent Color
+            </h2>
+            <p className="text-xs text-text-secondary">
+              Personalize primary action highlights, focus rings, and selection indicators.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 pt-2">
+          {ACCENT_OPTIONS.map((item) => {
+            const isSelected = (settings.accentColor ?? "blue") === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleSelectAccent(item.id)}
+                className={`flex flex-col items-center justify-center text-center rounded-2xl border p-4 transition cursor-pointer ${
+                  isSelected
+                    ? "border-accent bg-accent/10 shadow-sm"
+                    : "border-border-subtle bg-bg-input hover:border-border-strong"
+                }`}
+              >
+                <div className="relative mb-2.5 flex items-center justify-center">
+                  <span
+                    className={`size-8 rounded-full shadow-inner ${item.dotColor}`}
+                  />
+                  {isSelected && (
+                    <span className="absolute inset-0 flex items-center justify-center text-zinc-950">
+                      <Check size={14} strokeWidth={3} />
+                    </span>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-text-primary">
+                  {item.label}
+                </span>
+                {item.badge && (
+                  <span className="mt-1 rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-semibold text-accent">
+                    {item.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Grid Size Preference */}
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
             <Grid2X2 size={18} />
           </div>
           <div>
@@ -180,18 +392,18 @@ export function PreferencesView() {
                 onClick={() => handleSelectGridSize(item.id)}
                 className={`flex flex-col text-left rounded-2xl border p-4 transition cursor-pointer ${
                   isSelected
-                    ? "border-[#8ab4f8] bg-[#8ab4f8]/10 shadow-sm"
-                    : "border-[#262626] bg-[#1c1c1c] hover:border-zinc-700"
+                    ? "border-accent bg-accent/10 shadow-sm"
+                    : "border-border-subtle bg-bg-input hover:border-zinc-700"
                 }`}
               >
                 <div
-                  className={`h-20 w-full rounded-xl bg-[#141414] border border-[#262626] mb-3.5 flex items-center justify-center ${item.iconStyle}`}
+                  className={`h-20 w-full rounded-xl bg-bg-card border border-border-subtle mb-3.5 flex items-center justify-center ${item.iconStyle}`}
                 >
                   {Array.from({ length: item.boxes }).map((_, i) => (
                     <div
                       key={i}
                       className={`size-full rounded ${
-                        isSelected ? "bg-[#8ab4f8]/40" : "bg-zinc-700/40"
+                        isSelected ? "bg-accent/40" : "bg-zinc-700/40"
                       }`}
                     />
                   ))}
@@ -202,7 +414,7 @@ export function PreferencesView() {
                     {item.label}
                   </span>
                   {isSelected && (
-                    <span className="flex size-5 items-center justify-center rounded-full bg-[#8ab4f8] text-zinc-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-zinc-950">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}
@@ -217,7 +429,7 @@ export function PreferencesView() {
       </section>
 
       {/* Sort Order Preference */}
-      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
             <ArrowDownAZ size={18} />
@@ -259,7 +471,7 @@ export function PreferencesView() {
                 className={`flex flex-col text-left rounded-2xl border p-4 transition cursor-pointer ${
                   isSelected
                     ? "border-purple-400/80 bg-purple-500/10 shadow-sm"
-                    : "border-[#262626] bg-[#1c1c1c] hover:border-zinc-700"
+                    : "border-border-subtle bg-bg-input hover:border-zinc-700"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -282,7 +494,7 @@ export function PreferencesView() {
       </section>
 
       {/* Reset Preferences & Browser Storage */}
-      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <h3 className="text-sm font-bold text-zinc-100">
@@ -295,7 +507,7 @@ export function PreferencesView() {
           <button
             type="button"
             onClick={handleResetPreferences}
-            className="inline-flex items-center gap-2 self-start rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#262626] hover:text-white cursor-pointer sm:self-auto"
+            className="inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-bg-input px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-border-subtle hover:text-white cursor-pointer sm:self-auto"
           >
             <RotateCcw size={14} />
             Reset Defaults
@@ -304,7 +516,7 @@ export function PreferencesView() {
       </section>
 
       {/* Thumbnail Cache Management */}
-      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div className="flex items-start gap-3.5">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 mt-0.5">
@@ -361,7 +573,7 @@ export function PreferencesView() {
           }}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150"
             role="dialog"
             aria-modal="true"
             aria-labelledby="purge-cache-title"
@@ -396,7 +608,7 @@ export function PreferencesView() {
                 type="button"
                 disabled={purgingCache}
                 onClick={() => setConfirmPurgeOpen(false)}
-                className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -419,7 +631,7 @@ export function PreferencesView() {
       )}
 
       {/* System & Architecture Info */}
-      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+      <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
             <Database size={18} />
@@ -435,19 +647,19 @@ export function PreferencesView() {
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
-          <div className="rounded-xl border border-[#262626] bg-[#1c1c1c] p-3.5">
+          <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
             <span className="text-zinc-500 font-medium">Database Path</span>
             <p className="font-mono text-zinc-200 mt-1">data/gallery.sqlite</p>
           </div>
-          <div className="rounded-xl border border-[#262626] bg-[#1c1c1c] p-3.5">
+          <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
             <span className="text-zinc-500 font-medium">Thumbnail Cache</span>
             <p className="font-mono text-zinc-200 mt-1">data/thumbnails/ (Sharp WebP)</p>
           </div>
-          <div className="rounded-xl border border-[#262626] bg-[#1c1c1c] p-3.5">
+          <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
             <span className="text-zinc-500 font-medium">UI Theme</span>
             <p className="text-zinc-200 mt-1">Immich Dark Media Theme</p>
           </div>
-          <div className="rounded-xl border border-[#262626] bg-[#1c1c1c] p-3.5">
+          <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
             <span className="text-zinc-500 font-medium">Version</span>
             <p className="text-zinc-200 mt-1">Private Gallery v1.0.0</p>
           </div>

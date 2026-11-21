@@ -32,7 +32,7 @@ export function ExploreHubView({
   if (loading) {
     return (
       <div className="py-24 text-center">
-        <Loader2 className="size-8 animate-spin text-[#8ab4f8] mx-auto mb-3" />
+        <Loader2 className="size-8 animate-spin text-accent mx-auto mb-3" />
         <p className="text-xs text-zinc-400">Loading Explore collections...</p>
       </div>
     );
@@ -60,7 +60,7 @@ export function ExploreHubView({
           {/* Favorites Card */}
           <Link
             href="/explore?collection=favorites"
-            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-4 transition duration-300 hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-500/10"
           >
             {summary.smartCollections.favorites.coverPath ? (
               <Image
@@ -78,7 +78,7 @@ export function ExploreHubView({
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
             ) : (
-              <div className="absolute inset-0 bg-[#181818]" />
+              <div className="absolute inset-0 bg-bg-hover" />
             )}
             <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-rose-400 backdrop-blur-md shadow-md">
               <Heart size={18} className="fill-current" />
@@ -98,7 +98,7 @@ export function ExploreHubView({
           {/* Top Rated Card */}
           <Link
             href="/explore?collection=top-rated"
-            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-4 transition duration-300 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10"
           >
             {summary.smartCollections.topRated.coverPath ? (
               <Image
@@ -116,7 +116,7 @@ export function ExploreHubView({
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
             ) : (
-              <div className="absolute inset-0 bg-[#181818]" />
+              <div className="absolute inset-0 bg-bg-hover" />
             )}
             <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-amber-400 backdrop-blur-md shadow-md">
               <Star size={18} className="fill-current" />
@@ -136,7 +136,7 @@ export function ExploreHubView({
           {/* Places / Geotagged Card */}
           <Link
             href="/explore?collection=places"
-            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-4 transition duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/10"
+            className="group relative flex h-36 flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-4 transition duration-300 hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/10"
           >
             {summary.smartCollections.places.coverPath ? (
               <Image
@@ -154,7 +154,7 @@ export function ExploreHubView({
                 className="object-cover transition duration-500 group-hover:scale-105"
               />
             ) : (
-              <div className="absolute inset-0 bg-[#181818]" />
+              <div className="absolute inset-0 bg-bg-hover" />
             )}
             <div className="relative z-10 flex size-9 items-center justify-center rounded-xl bg-black/60 border border-white/10 text-emerald-400 backdrop-blur-md shadow-md">
               <MapPin size={18} />
@@ -177,7 +177,7 @@ export function ExploreHubView({
       {summary.people && summary.people.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center gap-2">
-            <Users size={16} className="text-[#8ab4f8]" />
+            <Users size={16} className="text-accent" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               People ({summary.people.length})
             </h3>
@@ -190,7 +190,7 @@ export function ExploreHubView({
                 href={`/explore?person=${encodeURIComponent(person.name)}`}
                 className="group flex flex-col items-center gap-2.5 text-center"
               >
-                <div className="relative size-20 sm:size-24 overflow-hidden rounded-full border-2 border-[#262626] bg-[#141414] transition duration-300 group-hover:scale-105 group-hover:border-[#8ab4f8] group-hover:shadow-lg group-hover:shadow-[#8ab4f8]/20">
+                <div className="relative size-20 sm:size-24 overflow-hidden rounded-full border-2 border-border-subtle bg-bg-card transition duration-300 group-hover:scale-105 group-hover:border-accent group-hover:shadow-lg group-hover:shadow-accent/20">
                   {person.coverPath ? (
                     <Image
                       src={galleryImageUrl(
@@ -213,7 +213,7 @@ export function ExploreHubView({
                   )}
                 </div>
                 <div className="w-full px-1">
-                  <div className="truncate text-xs font-semibold text-zinc-200 capitalize group-hover:text-[#8ab4f8] transition">
+                  <div className="truncate text-xs font-semibold text-zinc-200 capitalize group-hover:text-accent transition">
                     {person.name}
                   </div>
                   <div className="text-[11px] text-zinc-500">
@@ -229,7 +229,7 @@ export function ExploreHubView({
       {/* 3. Tags & Topics */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
-          <Tag size={16} className="text-[#8ab4f8]" />
+          <Tag size={16} className="text-accent" />
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Tags & Topics ({summary.tags.length})
           </h3>
@@ -241,7 +241,7 @@ export function ExploreHubView({
               <Link
                 key={tag.id}
                 href={`/explore?tag=${encodeURIComponent(tag.name)}`}
-                className="group relative flex h-28 flex-col justify-end overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-3 transition duration-300 hover:border-[#8ab4f8]/50 hover:shadow-lg"
+                className="group relative flex h-28 flex-col justify-end overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-3 transition duration-300 hover:border-accent/50 hover:shadow-lg"
               >
                 {tag.coverPath ? (
                   <Image
@@ -259,12 +259,12 @@ export function ExploreHubView({
                     className="object-cover transition duration-500 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-[#1c1c1c]" />
+                  <div className="absolute inset-0 bg-bg-input" />
                 )}
                 {/* Inward bottom shadow gradient for clear text readability */}
                 <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/60 to-transparent pointer-events-none" />
                 <div className="relative z-10">
-                  <div className="truncate text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-[#8ab4f8] transition">
+                  <div className="truncate text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-accent transition">
                     #{tag.name}
                   </div>
                   <div className="text-[11px] font-medium text-zinc-300 drop-shadow">
@@ -275,7 +275,7 @@ export function ExploreHubView({
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-[#262626] bg-[#141414]/50 p-8 text-center text-xs text-zinc-500">
+          <div className="rounded-2xl border border-border-subtle bg-bg-card/50 p-8 text-center text-xs text-zinc-500">
             No tags found. Add tags to photos or scan files containing embedded keywords.
           </div>
         )}
@@ -285,7 +285,7 @@ export function ExploreHubView({
       {summary.cameras.length > 0 && (
         <section className="space-y-3">
           <div className="flex items-center gap-2">
-            <Camera size={16} className="text-[#8ab4f8]" />
+            <Camera size={16} className="text-accent" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               Cameras & Equipment ({summary.cameras.length})
             </h3>
@@ -296,10 +296,10 @@ export function ExploreHubView({
               <Link
                 key={idx}
                 href={`/explore?camera=${encodeURIComponent(cam.displayName)}`}
-                className="group relative flex h-24 items-center gap-3.5 overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-3 transition duration-300 hover:border-[#8ab4f8]/50"
+                className="group relative flex h-24 items-center gap-3.5 overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-3 transition duration-300 hover:border-accent/50"
               >
                 {cam.coverPath ? (
-                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl border border-[#262626]">
+                  <div className="relative size-16 shrink-0 overflow-hidden rounded-xl border border-border-subtle">
                     <Image
                       src={galleryImageUrl(
                         cam.coverPath,
@@ -316,12 +316,12 @@ export function ExploreHubView({
                     />
                   </div>
                 ) : (
-                  <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-[#212121] text-zinc-500">
+                  <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-bg-hover text-zinc-500">
                     <Camera size={24} />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold text-zinc-200 group-hover:text-[#8ab4f8] transition">
+                  <div className="truncate text-sm font-semibold text-zinc-200 group-hover:text-accent transition">
                     {cam.displayName}
                   </div>
                   <div className="text-xs text-zinc-400">
@@ -349,7 +349,7 @@ export function ExploreHubView({
               <Link
                 key={y.year}
                 href={`/explore?year=${encodeURIComponent(y.year)}`}
-                className="group relative flex h-24 flex-col justify-end overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] p-3 transition duration-300 hover:border-amber-400/50"
+                className="group relative flex h-24 flex-col justify-end overflow-hidden rounded-2xl border border-border-subtle bg-bg-card p-3 transition duration-300 hover:border-amber-400/50"
               >
                 {y.coverPath && (
                   <Image

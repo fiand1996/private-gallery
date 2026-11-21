@@ -147,7 +147,7 @@ export function UsersView() {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-[#262626] bg-[#141414] p-8 text-center text-zinc-400">
+      <div className="rounded-3xl border border-border-subtle bg-bg-card p-8 text-center text-zinc-400">
         <Shield size={32} className="mx-auto text-zinc-600 mb-3" />
         <p className="text-sm font-medium text-zinc-200">Access Restricted</p>
         <p className="text-xs text-zinc-500 mt-1">
@@ -162,7 +162,7 @@ export function UsersView() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
-            <Users size={20} className="text-[#8ab4f8]" />
+            <Users size={20} className="text-accent" />
             User Accounts
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
@@ -175,7 +175,7 @@ export function UsersView() {
             setUserModalError("");
             setAddUserModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 rounded-2xl bg-[#8ab4f8] px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] cursor-pointer"
         >
           <UserPlus size={15} />
           <span>Add User</span>
@@ -200,11 +200,11 @@ export function UsersView() {
 
       {loadingUsers ? (
         <div className="flex items-center justify-center py-16 text-zinc-500 gap-2">
-          <Loader2 size={20} className="animate-spin text-[#8ab4f8]" />
+          <Loader2 size={20} className="animate-spin text-accent" />
           <span className="text-xs">Loading user accounts...</span>
         </div>
       ) : users.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-[#262626] bg-[#121212]/50 p-12 text-center">
+        <div className="rounded-3xl border border-dashed border-border-subtle bg-bg-surface/50 p-12 text-center">
           <Users size={32} className="mx-auto text-zinc-600 mb-3" />
           <p className="text-sm font-medium text-zinc-300">No users found</p>
           <p className="text-xs text-zinc-500 mt-1">
@@ -212,8 +212,8 @@ export function UsersView() {
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-[#262626] bg-[#141414]">
-          <div className="divide-y divide-[#222222]">
+        <div className="overflow-hidden rounded-3xl border border-border-subtle bg-bg-card">
+          <div className="divide-y divide-border-subtle">
             {users.map((u) => {
               const isCurrentSelf = Number(session?.user?.id) === u.id;
               const userInitial = (u.displayName || u.username).charAt(0).toUpperCase();
@@ -221,10 +221,10 @@ export function UsersView() {
               return (
                 <div
                   key={u.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 transition hover:bg-[#181818]"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 transition hover:bg-bg-hover"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-[#202020] border border-[#2e2e2e] text-sm font-bold text-[#8ab4f8]">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-bg-input border border-border-strong text-sm font-bold text-accent">
                       {userInitial}
                     </div>
                     <div className="min-w-0">
@@ -233,7 +233,7 @@ export function UsersView() {
                           {u.displayName || u.username}
                         </span>
                         {isCurrentSelf && (
-                          <span className="rounded-full bg-[#8ab4f8]/15 px-2 py-0.5 text-[10px] font-semibold text-[#8ab4f8]">
+                          <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-semibold text-accent">
                             You
                           </span>
                         )}
@@ -248,7 +248,7 @@ export function UsersView() {
 
                   <div className="flex items-center gap-3 self-end sm:self-center">
                     {u.role === "admin" ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#8ab4f8]/30 bg-[#8ab4f8]/10 px-3 py-1 text-xs font-medium text-[#8ab4f8]">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
                         <Shield size={12} />
                         Admin
                       </span>
@@ -278,10 +278,10 @@ export function UsersView() {
       {/* Add User Modal Dialog */}
       {addUserModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md">
-          <div className="w-full max-w-md rounded-3xl border border-[#2e2e2e] bg-[#141414] p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 border-b border-[#262626]">
+          <div className="w-full max-w-md rounded-3xl border border-border-strong bg-bg-card p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-4 border-b border-border-subtle">
               <div className="flex items-center gap-2.5">
-                <div className="flex size-8 items-center justify-center rounded-xl bg-[#8ab4f8]/15 text-[#8ab4f8]">
+                <div className="flex size-8 items-center justify-center rounded-xl bg-accent/15 text-accent">
                   <UserPlus size={16} />
                 </div>
                 <h3 className="text-base font-bold text-white">Add New User</h3>
@@ -289,7 +289,7 @@ export function UsersView() {
               <button
                 type="button"
                 onClick={() => setAddUserModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-white"
+                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-white"
               >
                 <X size={16} />
               </button>
@@ -313,7 +313,7 @@ export function UsersView() {
                   placeholder="e.g. viewer1"
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
-                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -326,7 +326,7 @@ export function UsersView() {
                   placeholder="e.g. Guest Viewer"
                   value={newDisplayName}
                   onChange={(e) => setNewDisplayName(e.target.value)}
-                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -341,7 +341,7 @@ export function UsersView() {
                   placeholder="Min 6 characters"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full rounded-2xl border border-[#2e2e2e] bg-[#1a1a1a] px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-[#8ab4f8] focus:outline-none focus:ring-1 focus:ring-[#8ab4f8]"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
@@ -355,8 +355,8 @@ export function UsersView() {
                     onClick={() => setNewRole("viewer")}
                     className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
                       newRole === "viewer"
-                        ? "border-[#8ab4f8] bg-[#8ab4f8]/10 text-white"
-                        : "border-[#2e2e2e] bg-[#1a1a1a] text-zinc-400 hover:border-zinc-700"
+                        ? "border-accent bg-accent/10 text-white"
+                        : "border-border-strong bg-bg-hover text-zinc-400 hover:border-zinc-700"
                     }`}
                   >
                     <span className="text-xs font-semibold text-zinc-100">Viewer</span>
@@ -370,8 +370,8 @@ export function UsersView() {
                     onClick={() => setNewRole("admin")}
                     className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
                       newRole === "admin"
-                        ? "border-[#8ab4f8] bg-[#8ab4f8]/10 text-white"
-                        : "border-[#2e2e2e] bg-[#1a1a1a] text-zinc-400 hover:border-zinc-700"
+                        ? "border-accent bg-accent/10 text-white"
+                        : "border-border-strong bg-bg-hover text-zinc-400 hover:border-zinc-700"
                     }`}
                   >
                     <span className="text-xs font-semibold text-zinc-100">Admin</span>
@@ -382,18 +382,18 @@ export function UsersView() {
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-end gap-3 pt-3 border-t border-[#262626]">
+              <div className="mt-6 flex justify-end gap-3 pt-3 border-t border-border-subtle">
                 <button
                   type="button"
                   onClick={() => setAddUserModalOpen(false)}
-                  className="rounded-2xl border border-[#333333] px-4 py-2.5 text-xs font-medium text-zinc-300 hover:bg-[#222222] transition cursor-pointer"
+                  className="rounded-2xl border border-border-strong px-4 py-2.5 text-xs font-medium text-zinc-300 hover:bg-bg-hover transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={userSubmitting}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-[#8ab4f8] px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 cursor-pointer"
                 >
                   {userSubmitting ? (
                     <>

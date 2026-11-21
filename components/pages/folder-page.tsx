@@ -396,8 +396,8 @@ function FolderContent({
     >
       {/* Drag & Drop Visual Overlay */}
       {isDragging && (
-        <div className="pointer-events-none fixed inset-4 z-50 flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-[#8ab4f8] bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
-          <div className="flex size-20 items-center justify-center rounded-3xl bg-[#8ab4f8]/15 text-[#8ab4f8] shadow-2xl animate-bounce">
+        <div className="pointer-events-none fixed inset-4 z-50 flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-accent bg-black/85 backdrop-blur-md animate-in fade-in duration-150">
+          <div className="flex size-20 items-center justify-center rounded-3xl bg-accent/15 text-accent shadow-2xl animate-bounce">
             <Upload size={40} />
           </div>
           <p className="mt-4 text-base font-bold text-zinc-100">
@@ -405,7 +405,7 @@ function FolderContent({
           </p>
           <p className="mt-1 text-xs text-zinc-400">
             Upload directly into{" "}
-            <span className="font-semibold text-[#8ab4f8]">
+            <span className="font-semibold text-accent">
               {folderPath ? folderPath : "Root"}
             </span>
           </p>
@@ -446,7 +446,7 @@ function FolderContent({
 
       {loading ? (
         <div className="flex h-64 items-center justify-center">
-          <Loader2 className="size-8 animate-spin text-[#8ab4f8]" />
+          <Loader2 className="size-8 animate-spin text-accent" />
         </div>
       ) : (
         <div>
@@ -494,7 +494,7 @@ function FolderContent({
                 className="h-10 flex items-center justify-center mt-6"
               >
                 {loadingMore && (
-                  <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+                  <Loader2 className="size-6 animate-spin text-accent" />
                 )}
               </div>
             </div>

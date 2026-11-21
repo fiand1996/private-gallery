@@ -85,16 +85,16 @@ function AddPersonDialogContent({
     .slice(0, 8);
 
   return (
-    <div className="relative w-full max-w-sm rounded-3xl border border-[#2e2e2e] bg-[#161616] p-6 shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-150">
-      <div className="flex items-center justify-between border-b border-[#262626] pb-3">
+    <div className="relative w-full max-w-sm rounded-3xl border border-border-strong bg-bg-card-subtle p-6 shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-150">
+      <div className="flex items-center justify-between border-b border-border-subtle pb-3">
         <div className="flex items-center gap-2 text-zinc-100 font-semibold text-sm">
-          <Users size={16} className="text-[#8ab4f8]" />
+          <Users size={16} className="text-accent" />
           <span>Tag Person</span>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full p-1 text-zinc-400 hover:bg-[#242424] hover:text-white transition cursor-pointer"
+          className="rounded-full p-1 text-zinc-400 hover:bg-bg-hover hover:text-white transition cursor-pointer"
         >
           <X size={15} />
         </button>
@@ -128,7 +128,7 @@ function AddPersonDialogContent({
               value={personName}
               onChange={(e) => setPersonName(e.target.value)}
               placeholder="e.g. John Doe, Sarah..."
-              className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1a1a1a] pl-8 pr-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:ring-1 focus:ring-[#8ab4f8]/30"
+              className="h-10 w-full rounded-xl border border-border-strong bg-bg-hover pl-8 pr-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:ring-1 focus:ring-accent/30"
             />
           </div>
         </div>
@@ -147,8 +147,8 @@ function AddPersonDialogContent({
                   onClick={() => setPersonName(s.name)}
                   className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
                     personName.toLowerCase() === s.name.toLowerCase()
-                      ? "border-[#8ab4f8] bg-[#8ab4f8]/15 text-[#8ab4f8]"
-                      : "border-[#262626] bg-[#212121] text-zinc-300 hover:border-zinc-500 hover:text-white"
+                      ? "border-accent bg-accent/15 text-accent"
+                      : "border-border-subtle bg-bg-hover text-zinc-300 hover:border-zinc-500 hover:text-white"
                   }`}
                 >
                   <Plus size={11} />
@@ -159,18 +159,18 @@ function AddPersonDialogContent({
           </div>
         )}
 
-        <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#262626]">
+        <div className="flex items-center justify-end gap-2 pt-2 border-t border-border-subtle">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 hover:bg-[#222] hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 transition cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={submitting || !personName.trim()}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-[#a8c7fa] disabled:opacity-40 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover disabled:opacity-40 cursor-pointer"
           >
             {submitting ? (
               <Loader2 size={13} className="animate-spin" />

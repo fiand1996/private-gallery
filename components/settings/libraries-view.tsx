@@ -309,9 +309,9 @@ export function LibrariesView() {
 
       {/* Summary KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-[#262626] bg-[#141414] p-5 shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-bg-card p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent">
               <ImageIcon size={20} />
             </div>
             <div>
@@ -325,7 +325,7 @@ export function LibrariesView() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#262626] bg-[#141414] p-5 shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-bg-card p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400">
               <FolderOpen size={20} />
@@ -341,7 +341,7 @@ export function LibrariesView() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#262626] bg-[#141414] p-5 shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-bg-card p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
               <HardDrive size={20} />
@@ -373,7 +373,7 @@ export function LibrariesView() {
             <button
               type="button"
               onClick={() => setRefreshKey((k) => k + 1)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-[#262626] transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-border-subtle transition cursor-pointer"
             >
               <RefreshCw size={13} />
               Refresh
@@ -381,7 +381,7 @@ export function LibrariesView() {
             <button
               type="button"
               onClick={() => setAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#8ab4f8] px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-[#aecbfa] transition cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-accent-hover transition cursor-pointer shadow-sm"
             >
               <FolderPlus size={14} />
               Add Library
@@ -390,16 +390,16 @@ export function LibrariesView() {
         </div>
 
         {loading ? (
-          <div className="flex h-40 items-center justify-center rounded-2xl border border-[#262626] bg-[#141414]">
-            <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+          <div className="flex h-40 items-center justify-center rounded-2xl border border-border-subtle bg-bg-card">
+            <Loader2 className="size-6 animate-spin text-accent" />
           </div>
         ) : libraries.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#262626] p-8 text-center text-sm text-zinc-400">
+          <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-zinc-400">
             <p>No libraries registered yet.</p>
             <button
               type="button"
               onClick={() => setAddModalOpen(true)}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#8ab4f8] px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-[#aecbfa] transition cursor-pointer shadow-sm"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-accent-hover transition cursor-pointer shadow-sm"
             >
               <FolderPlus size={14} />
               Add Your First Library
@@ -416,7 +416,7 @@ export function LibrariesView() {
               return (
                 <div
                   key={lib.id}
-                  className="flex flex-col justify-between gap-4 rounded-2xl border border-[#262626] bg-[#141414] p-5 transition sm:flex-row sm:items-center shadow-sm"
+                  className="flex flex-col justify-between gap-4 rounded-2xl border border-border-subtle bg-bg-card p-5 transition sm:flex-row sm:items-center shadow-sm"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">
@@ -424,12 +424,12 @@ export function LibrariesView() {
                         {lib.name}
                       </h3>
                       {lib.isDefault && (
-                        <span className="rounded-full bg-[#8ab4f8]/15 border border-[#8ab4f8]/30 px-2 py-0.5 text-[10px] font-semibold text-[#8ab4f8]">
+                        <span className="rounded-full bg-accent/15 border border-accent/30 px-2 py-0.5 text-[10px] font-semibold text-accent">
                           Default
                         </span>
                       )}
                       {isScanning ? (
-                        <span className="flex items-center gap-1.5 rounded-full bg-[#8ab4f8]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#8ab4f8]">
+                        <span className="flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[11px] font-semibold text-accent">
                           <Loader2 size={12} className="animate-spin" />
                           Scanning ({lib.activeTask?.scannedEntries} items)...
                         </span>
@@ -439,7 +439,7 @@ export function LibrariesView() {
                           Scan Failed
                         </span>
                       ) : (
-                        <span className="rounded-full bg-[#1c1c1c] px-2.5 py-0.5 text-[11px] font-medium text-zinc-300">
+                        <span className="rounded-full bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-zinc-300">
                           Ready
                         </span>
                       )}
@@ -469,7 +469,7 @@ export function LibrariesView() {
                       disabled={submitting}
                       onClick={() => openEditModal(lib)}
                       title="Edit library name and path"
-                      className="inline-flex size-9 items-center justify-center rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                      className="inline-flex size-9 items-center justify-center rounded-xl border border-border-strong bg-bg-input text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
                     >
                       <Pencil size={14} />
                     </button>
@@ -488,7 +488,7 @@ export function LibrariesView() {
                       type="button"
                       disabled={submitting || isScanning}
                       onClick={() => scanLibrary(lib)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                     >
                       {isScanning ? (
                         <>
@@ -521,14 +521,14 @@ export function LibrariesView() {
           }}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            className="w-full max-w-md rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150"
             role="dialog"
             aria-modal="true"
             aria-labelledby="add-library-title"
           >
             <div className="mb-5 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
                   <FolderPlus size={18} />
                 </div>
                 <div>
@@ -547,7 +547,7 @@ export function LibrariesView() {
                 type="button"
                 disabled={submitting}
                 onClick={() => setAddModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-zinc-200 transition cursor-pointer"
+                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -564,7 +564,7 @@ export function LibrariesView() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Vacation Photos, Main Camera, etc."
-                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -578,7 +578,7 @@ export function LibrariesView() {
                   value={rootPath}
                   onChange={(e) => setRootPath(e.target.value)}
                   placeholder="e.g. /Users/vian/Pictures/Gallery or /Volumes/Storage/Photos"
-                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -587,14 +587,14 @@ export function LibrariesView() {
                   type="button"
                   disabled={submitting}
                   onClick={() => setAddModalOpen(false)}
-                  className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -621,14 +621,14 @@ export function LibrariesView() {
           }}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            className="w-full max-w-md rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150"
             role="dialog"
             aria-modal="true"
             aria-labelledby="edit-library-title"
           >
             <div className="mb-5 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
                   <Pencil size={18} />
                 </div>
                 <div>
@@ -650,7 +650,7 @@ export function LibrariesView() {
                   setEditModalOpen(false);
                   setEditingLibrary(null);
                 }}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-zinc-200 transition cursor-pointer"
+                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -667,7 +667,7 @@ export function LibrariesView() {
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   placeholder="e.g. Vacation Photos"
-                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -681,7 +681,7 @@ export function LibrariesView() {
                   value={editRootPath}
                   onChange={(e) => setEditRootPath(e.target.value)}
                   placeholder="/Volumes/Storage/Photos"
-                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -703,14 +703,14 @@ export function LibrariesView() {
                     setEditModalOpen(false);
                     setEditingLibrary(null);
                   }}
-                  className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -737,7 +737,7 @@ export function LibrariesView() {
           }}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150"
             role="dialog"
             aria-modal="true"
             aria-labelledby="delete-library-title"
@@ -762,7 +762,7 @@ export function LibrariesView() {
             <p className="text-xs text-zinc-300 leading-relaxed">
               Are you sure you want to remove <strong className="text-white">“{deletingLibrary.name}”</strong> from Private Gallery?
             </p>
-            <div className="mt-3 rounded-xl border border-[#2e2e2e] bg-[#1a1a1a] p-3 text-xs text-zinc-400">
+            <div className="mt-3 rounded-xl border border-border-strong bg-bg-hover p-3 text-xs text-zinc-400">
               <span className="font-semibold text-emerald-400">Note: </span>
               Your physical photo files on disk will <strong className="text-zinc-200">NOT</strong> be deleted. Only the gallery index entries, albums, and tags within this library will be cleared.
             </div>
@@ -775,7 +775,7 @@ export function LibrariesView() {
                   setDeleteModalOpen(false);
                   setDeletingLibrary(null);
                 }}
-                className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>

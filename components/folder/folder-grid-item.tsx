@@ -33,10 +33,10 @@ export function FolderGridItem({
   return (
     <div
       onContextMenu={onContextMenu}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-[#141414] aspect-square transition-all duration-200 ${
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-bg-card aspect-square transition-all duration-200 ${
         isSelected
-          ? "border-[#8ab4f8] ring-4 ring-[#8ab4f8]/20 shadow-md"
-          : "border-[#262626] hover:-translate-y-0.5 hover:border-[#8ab4f8]/50 hover:shadow-xl hover:shadow-black/70"
+          ? "border-accent ring-4 ring-accent/20 shadow-md"
+          : "border-border-subtle hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-xl hover:shadow-black/70"
       }`}
     >
       {/* Checkbox */}
@@ -49,7 +49,7 @@ export function FolderGridItem({
         title={isSelected ? "Deselect folder" : "Select folder"}
         className={`absolute top-2.5 left-2.5 z-20 flex size-6 items-center justify-center rounded-full transition-all cursor-pointer ${
           isSelected
-            ? "bg-[#8ab4f8] text-zinc-950 shadow-md shadow-[#8ab4f8]/30 opacity-100"
+            ? "bg-accent text-zinc-950 shadow-md shadow-accent/30 opacity-100"
             : "bg-black/60 text-white/90 backdrop-blur hover:bg-black/90 opacity-0 group-hover:opacity-100"
         }`}
       >
@@ -83,16 +83,16 @@ export function FolderGridItem({
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center text-[#8ab4f8] bg-[#181818]">
-            <Folder size={44} className="fill-[#8ab4f8]/10" />
+          <div className="flex h-full w-full flex-col items-center justify-center text-accent bg-bg-card">
+            <Folder size={44} className="fill-accent/10" />
           </div>
         )}
 
         {/* Bottom Gradient Overlay & Name */}
         <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-3 pt-8">
           <div className="flex items-center gap-1.5 truncate">
-            <Folder size={14} className="text-[#8ab4f8] shrink-0 fill-[#8ab4f8]/30" />
-            <span className="truncate text-xs font-semibold text-zinc-100 group-hover:text-[#8ab4f8] transition">
+            <Folder size={14} className="text-accent shrink-0 fill-accent/30" />
+            <span className="truncate text-xs font-semibold text-zinc-100 group-hover:text-accent transition">
               {folder.name}
             </span>
           </div>

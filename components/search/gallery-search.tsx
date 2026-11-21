@@ -188,25 +188,25 @@ export function GallerySearch({
           onFocus={() => setFocused(true)}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search your photos, albums, or dates..."
-          className="h-11 w-full rounded-full border border-[#2e2e2e] bg-[#1e1e1e] pl-11 pr-16 text-sm text-zinc-100 placeholder-zinc-400 transition-all outline-none focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+          className="h-11 w-full rounded-full border border-border-strong bg-bg-input pl-11 pr-16 text-sm text-zinc-100 placeholder-zinc-400 transition-all outline-none focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
         />
         {query ? (
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-3 rounded-full p-1 text-zinc-400 hover:bg-[#2e2e2e] hover:text-zinc-200"
+            className="absolute right-3 rounded-full p-1 text-zinc-400 hover:bg-border-strong hover:text-zinc-200"
           >
             <X size={15} />
           </button>
         ) : (
-          <span className="pointer-events-none absolute right-3.5 hidden sm:flex items-center gap-0.5 rounded-md border border-[#3a3a3a] bg-[#2a2a2a] px-1.5 py-0.5 text-[10px] font-mono text-zinc-400">
+          <span className="pointer-events-none absolute right-3.5 hidden sm:flex items-center gap-0.5 rounded-md border border-border-strong bg-bg-input px-1.5 py-0.5 text-[10px] font-mono text-zinc-400">
             ⌘K
           </span>
         )}
       </div>
 
       {open && (
-        <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-2xl border border-[#2e2e2e] bg-[#161616]/98 p-3 shadow-2xl backdrop-blur-2xl">
+        <div className="absolute top-full z-50 mt-2 w-full overflow-hidden rounded-2xl border border-border-strong bg-bg-card-subtle/98 p-3 shadow-2xl backdrop-blur-2xl">
           {error && (
             <p className="px-3 py-2 text-xs text-rose-500">{error}</p>
           )}
@@ -236,9 +236,9 @@ export function GallerySearch({
                       if (libraryId) recordAlbumOpen(libraryId, album.path);
                       setFocused(false);
                     }}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-zinc-200 hover:bg-[#222222] transition"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-zinc-200 hover:bg-bg-hover transition"
                   >
-                    <div className="relative size-10 shrink-0 overflow-hidden rounded-xl bg-[#222222]">
+                    <div className="relative size-10 shrink-0 overflow-hidden rounded-xl bg-bg-hover">
                       {album.coverPath ? (
                         <Image
                           src={galleryImageUrl(album.coverPath, libraryId, null, null, 120)}
@@ -279,7 +279,7 @@ export function GallerySearch({
                       if (onSelectPhoto) onSelectPhoto(photo);
                       setFocused(false);
                     }}
-                    className="group relative aspect-square overflow-hidden rounded-xl bg-[#1c1c1c] focus:outline-none focus:ring-2 focus:ring-[#8ab4f8]"
+                    className="group relative aspect-square overflow-hidden rounded-xl bg-bg-input focus:outline-none focus:ring-2 focus:ring-accent"
                   >
                     <Image
                       src={galleryImageUrl(photo.path, libraryId, photo.modifiedAt, photo.size, 160)}
