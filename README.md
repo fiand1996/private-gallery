@@ -37,7 +37,7 @@ Designed for media enthusiasts, creators, and privacy advocates, Private Gallery
 Run Private Gallery instantly with Docker Compose:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   private-gallery:
@@ -49,11 +49,12 @@ services:
       - AUTH_SECRET=your-secure-random-secret-key
     volumes:
       - ./data:/app/data
-      - /path/to/your/photos:/photos:ro
+      - /path/to/your/photos:/media/photos
     restart: unless-stopped
 ```
 
 Start the container:
+
 ```bash
 docker compose up -d
 ```
@@ -61,29 +62,34 @@ docker compose up -d
 ### Option 2: Local Development
 
 #### Prerequisites
+
 - **Node.js** (v20+ recommended)
 - **pnpm** (`npm install -g pnpm`)
 
 #### Installation & Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/fiand1996/private-gallery.git
    cd private-gallery
    ```
 
 2. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 3. **Configure environment variables:**
    Create a `.env` file in the root directory:
+
    ```env
    AUTH_SECRET="super-secret-key-change-in-production"
    ```
 
 4. **Run database migrations:**
+
    ```bash
    pnpm db:migrate
    ```
