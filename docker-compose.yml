@@ -7,8 +7,11 @@ services:
       - "3000:3000"
     environment:
       - AUTH_SECRET=change_me_to_a_secure_random_string
+      - GALLERY_ROOT_PATH=/media/photos
     volumes:
       - private_gallery_data:/app/data
+      # Mount your host photo directory into the container (change path to your local folder):
+      # - /path/to/your/photos:/media/photos:ro
 
 volumes:
   private_gallery_data:
