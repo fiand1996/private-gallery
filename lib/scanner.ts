@@ -98,6 +98,7 @@ export async function scanLibrary(taskId: string, libraryId: number) {
           const existing = existingMetaIndex.get(relativePath);
           if (
             !existing ||
+            existing.width === null ||
             existing.size !== stats.size ||
             existing.modifiedAt !== modifiedIso
           ) {

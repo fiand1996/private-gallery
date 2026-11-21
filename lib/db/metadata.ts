@@ -292,14 +292,18 @@ export interface ScannedImageFile {
 
 export function getExistingPhotoMetadataIndex(
   libraryId: number,
-): Map<string, { size: number | null; modifiedAt: string | null }> {
+): Map<
+  string,
+  { size: number | null; modifiedAt: string | null; width: number | null }
+> {
   const db = getDatabase();
   const rows = db.all<{
     path: string;
     size: number | null;
     modified_at: string | null;
+    width: number | null;
   }>(sql`
-    SELECT le.path, le.size, le.modified_at
+    SELECT le.path, le.size, le.modified_at, pm.width
     FROM library_entries le
     JOIN photo_metadata pm ON pm.library_id = le.library_id AND pm.entry_path = le.path
     WHERE le.library_id = ${libraryId} AND le.kind = 'image'
@@ -307,10 +311,14 @@ export function getExistingPhotoMetadataIndex(
 
   const map = new Map<
     string,
-    { size: number | null; modifiedAt: string | null }
+    { size: number | null; modifiedAt: string | null; width: number | null }
   >();
   for (const r of rows) {
-    map.set(r.path, { size: r.size, modifiedAt: r.modified_at });
+    map.set(r.path, {
+      size: r.size,
+      modifiedAt: r.modified_at,
+      width: r.width,
+    });
   }
   return map;
 }

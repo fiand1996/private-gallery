@@ -19,6 +19,7 @@ interface PhotoCardProps {
   onToggleFavorite?: (photo: GalleryPhoto, isFav: boolean) => void;
   onSelect: (photo: GalleryPhoto) => void;
   onContextMenu?: (e: React.MouseEvent) => void;
+  onMeasureAspectRatio?: (path: string, ar: number) => void;
 }
 
 function timeLabel(value: string | null) {
@@ -42,6 +43,7 @@ export function PhotoCard({
   onToggleFavorite,
   onSelect,
   onContextMenu,
+  onMeasureAspectRatio,
 }: PhotoCardProps) {
   const [favoritedOverride, setFavoritedOverride] = useState<{
     path: string;
@@ -82,6 +84,16 @@ export function PhotoCard({
       return;
     }
     onSelect(photo);
+  };
+
+  const handleImageLoad = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
+  ) => {
+    if (!onMeasureAspectRatio) return;
+    const img = e.currentTarget;
+    if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+      onMeasureAspectRatio(photo.path, img.naturalWidth / img.naturalHeight);
+    }
   };
 
   const isSquare = aspectRatio === "square";
@@ -143,6 +155,7 @@ export function PhotoCard({
             quality={80}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={eager ? "high" : "auto"}
+            onLoad={handleImageLoad}
             className={`object-cover transition-transform duration-300 ${
               selected ? "scale-[0.98]" : "group-hover:scale-105"
             }`}
@@ -160,6 +173,7 @@ export function PhotoCard({
             alt={photo.name}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
+            onLoad={handleImageLoad}
             className={`block h-auto w-full object-cover transition-transform duration-300 ${
               selected ? "scale-[0.98]" : "group-hover:scale-105"
             }`}

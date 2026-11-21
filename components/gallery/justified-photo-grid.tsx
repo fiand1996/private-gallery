@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PhotoCard } from "./photo-card";
 import { type GalleryPhoto } from "./lightbox-modal";
 import { type GridSize } from "./grid-controls";
@@ -84,6 +84,24 @@ export function JustifiedPhotoGrid({
 
   const { targetRowHeight, gap } = getGridRowConfig(gridSize);
 
+  const [measuredAspectRatios, setMeasuredAspectRatios] = useState<
+    Record<string, number>
+  >({});
+
+  const handleMeasureAspectRatio = useCallback(
+    (path: string, naturalAr: number) => {
+      if (!naturalAr || naturalAr <= 0 || !Number.isFinite(naturalAr)) return;
+      setMeasuredAspectRatios((prev) => {
+        const existing = prev[path];
+        if (existing && Math.abs(existing - naturalAr) < 0.03) {
+          return prev;
+        }
+        return { ...prev, [path]: naturalAr };
+      });
+    },
+    [],
+  );
+
   // Compute horizontal justified layout rows
   const rows: LayoutRow[] = useMemo(() => {
     if (!photos || photos.length === 0 || containerWidth <= 0) return [];
@@ -95,11 +113,14 @@ export function JustifiedPhotoGrid({
     for (const photo of photos) {
       // Calculate aspect ratio (width / height)
       let ar = 1.5; // Standard 3:2 landscape fallback
-      if (photo.width && photo.height && photo.height > 0) {
+      const measured = measuredAspectRatios[photo.path];
+      if (measured) {
+        ar = measured;
+      } else if (photo.width && photo.height && photo.height > 0) {
         ar = photo.width / photo.height;
       }
-      // Clamp aspect ratio between 0.55 (tall portrait) and 2.5 (wide landscape/panorama)
-      ar = Math.max(0.55, Math.min(2.5, ar));
+      // Clamp aspect ratio between 0.5 (tall portrait) and 3.0 (wide landscape/panorama)
+      ar = Math.max(0.5, Math.min(3.0, ar));
 
       currentRow.push({ photo, ar });
       currentSumAr += ar;
@@ -182,7 +203,7 @@ export function JustifiedPhotoGrid({
     }
 
     return computedRows;
-  }, [photos, containerWidth, targetRowHeight, gap]);
+  }, [photos, containerWidth, targetRowHeight, gap, measuredAspectRatios]);
 
   return (
     <div ref={containerRef} className="w-full">
@@ -207,6 +228,7 @@ export function JustifiedPhotoGrid({
               onToggleFavorite={onToggleFavorite}
               onSelect={onSelect}
               onContextMenu={(e) => onContextMenu?.(e, photo)}
+              onMeasureAspectRatio={handleMeasureAspectRatio}
             />
           ))}
         </div>

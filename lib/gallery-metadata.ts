@@ -5,6 +5,28 @@ import sharp from "sharp";
 import { resolveLibraryFile } from "./library-files";
 import { IMAGE_CONTENT_TYPES } from "./gallery";
 
+export function isOrientationRotated90(orientation: unknown): boolean {
+  if (typeof orientation === "number") {
+    // 5: Mirror horizontal and rotate 270 CW
+    // 6: Rotate 90 CW
+    // 7: Mirror horizontal and rotate 90 CW
+    // 8: Rotate 270 CW
+    return (
+      orientation === 5 ||
+      orientation === 6 ||
+      orientation === 7 ||
+      orientation === 8
+    );
+  }
+  if (typeof orientation === "string") {
+    const trimmed = orientation.trim();
+    if (/^[5-8]$/.test(trimmed)) return true;
+    if (/rotate\s*(90|270)/i.test(trimmed)) return true;
+    if (/transpose|transverse/i.test(trimmed)) return true;
+  }
+  return false;
+}
+
 export interface FormattedPhotoMetadata {
   fileName: string;
   filePath: string;
@@ -296,6 +318,8 @@ export async function getPhotoMetadata(
   }
 
   // Dimensions & image metadata fallback
+  let orientation = rawExif.Orientation ?? rawExif.orientation;
+
   let width =
     typeof rawExif.ExifImageWidth === "number"
       ? rawExif.ExifImageWidth
@@ -319,10 +343,20 @@ export async function getPhotoMetadata(
       const sharpMeta = await sharp(absolutePath).metadata();
       width = sharpMeta.width ?? null;
       height = sharpMeta.height ?? null;
+      if (!orientation && sharpMeta.orientation) {
+        orientation = sharpMeta.orientation;
+      }
       if (!colorSpace && sharpMeta.space) {
         colorSpace = sharpMeta.space.toUpperCase();
       }
     } catch {}
+  }
+
+  // Adjust dimensions for rotated orientation (EXIF 5, 6, 7, 8 swap width and height visually)
+  if (width && height && isOrientationRotated90(orientation)) {
+    const temp = width;
+    width = height;
+    height = temp;
   }
 
   // Camera & Lens
@@ -509,19 +543,39 @@ export async function extractEmbeddedPhotoData(
     gpsData = await exifr.gps(absolutePath);
   } catch {}
 
-  const width =
+  let orientation = rawExif.Orientation ?? rawExif.orientation;
+
+  let width =
     typeof rawExif.ExifImageWidth === "number"
       ? rawExif.ExifImageWidth
       : typeof rawExif.ImageWidth === "number"
         ? rawExif.ImageWidth
         : null;
 
-  const height =
+  let height =
     typeof rawExif.ExifImageHeight === "number"
       ? rawExif.ExifImageHeight
       : typeof rawExif.ImageHeight === "number"
         ? rawExif.ImageHeight
         : null;
+
+  if (!width || !height) {
+    try {
+      const sharpMeta = await sharp(absolutePath).metadata();
+      width = sharpMeta.width ?? null;
+      height = sharpMeta.height ?? null;
+      if (!orientation && sharpMeta.orientation) {
+        orientation = sharpMeta.orientation;
+      }
+    } catch {}
+  }
+
+  // Adjust dimensions for rotated orientation (EXIF 5, 6, 7, 8 swap width and height visually)
+  if (width && height && isOrientationRotated90(orientation)) {
+    const temp = width;
+    width = height;
+    height = temp;
+  }
 
   const cameraMake = extractString(rawExif.Make);
   let cameraModel = extractString(rawExif.Model);
