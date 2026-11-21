@@ -142,7 +142,7 @@ export function PhotoCard({
               libraryId,
               photo.modifiedAt,
               photo.size,
-              width ? Math.max(360, Math.round(width * 1.5)) : 360,
+              width ? Math.max(400, Math.round(width * 1.5)) : 640,
             )}
             alt={photo.name}
             fill
@@ -150,7 +150,7 @@ export function PhotoCard({
             sizes={
               width
                 ? `${width}px`
-                : "(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 15vw"
+                : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             }
             quality={80}
             loading={eager ? "eager" : "lazy"}

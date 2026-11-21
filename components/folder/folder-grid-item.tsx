@@ -74,7 +74,7 @@ export function FolderGridItem({
               libraryId,
               folder.coverUpdatedAt,
               folder.coverSize,
-              360,
+              640,
             )}
             alt={folder.name}
             fill
