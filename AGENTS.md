@@ -19,7 +19,7 @@ This document provides essential architectural context for AI agents working on 
 - **Domain:** A directory-based local photo & media gallery server.
 - **Media-First, Not a Detached File Manager:** Photos remain in their original directories on disk. SQLite indexes them for fast search, timeline dates, and album views.
 - **Language & Localization:** All UI text, tooltips, dialogs, comments, and documentation MUST strictly remain in **English (EN)**.
-- **Design System:** Sleek dark media theme (starts with `dark` class on `<html>`, neutral zinc/slate palette `#090b10` / `zinc-950`).
+- **Design System:** Structured multi-theme and multi-accent architecture powered by semantic CSS variables (`app/globals.css`). Supports Sleek Dark (default), OLED Black, Clean Light, Midnight Slate, and Warm Amber, paired with accents (Ice Blue, Emerald, Purple, Rose, Amber, Bubblegum Pink).
 
 ---
 
@@ -97,3 +97,22 @@ Strict separation of concerns MUST be maintained:
 - **EXIF Orientation & Metadata Accuracy:**
   - Dimension extraction in `lib/gallery-metadata.ts` checks EXIF `Orientation` (tags 5, 6, 7, 8) via `isOrientationRotated90`. Rotated images swap `width` and `height` to ensure upright portrait photos are never cropped into landscape slots.
   - Client-side `onMeasureAspectRatio` in `PhotoCard` provides real-time self-correction upon image load.
+
+---
+
+## 6. Design System & Theming Architecture
+
+- **Semantic CSS Token Philosophy:**
+  - **Zero Hardcoded Colors:** NEVER use raw hex values (`#...`) or hardcoded palette utility classes (e.g., `bg-zinc-900`, `text-zinc-100`, `bg-black/95`, `border-zinc-800`) in components or pages.
+  - All surface colors, borders, typography, and interactive states MUST use semantic tokens defined in `app/globals.css`:
+    - **Backgrounds:** `bg-bg-app`, `bg-bg-card`, `bg-bg-sidebar`, `bg-bg-input`, `bg-bg-hover`
+    - **Borders:** `border-border-subtle`, `border-border-strong`
+    - **Typography:** `text-text-primary`, `text-text-secondary`, `text-text-muted`
+    - **Accents:** `bg-accent`, `text-accent`, `border-accent`, `bg-accent-hover`, `bg-accent-muted`, `border-accent-border`
+    - **Accent Text (`text-accent-foreground`):** Used inside accent-filled buttons and active tabs to ensure accessible, high-contrast text across all accents (e.g., Bubblegum Pink, Emerald) and themes (Clean Light vs. Sleek Dark).
+- **Themes & Accents:**
+  - **Supported Themes:** `sleek-dark` (default), `oled-black`, `clean-light`, `midnight-slate`, `warm-amber`.
+  - **Supported Accents:** `ice-blue` (default), `emerald`, `purple`, `rose`, `amber`, `bubblegum-pink`.
+  - Driven by `data-theme="..."` and `data-accent="..."` attributes on `<html>`, maintained through `SettingsContext` and persisted in user preferences.
+- **Photo Overlay Rule:**
+  - Text placed directly over dark photo gradient overlays (`bg-gradient-to-t from-black/95`) MUST use explicit white text with drop shadows (`text-white drop-shadow`, `text-white/85 drop-shadow`), NOT semantic tokens like `text-text-secondary` or `text-zinc-300` which turn dark in light mode.

@@ -14,7 +14,7 @@ Designed for media enthusiasts, creators, and privacy advocates, Private Gallery
 - **📁 Rich Gallery Views**: Seamlessly navigate between Photos view with horizontal justified grid (Immich / Google Photos style), Custom & Folder-backed Albums with infinite scroll, hierarchical Folder browser, and Explore hub.
 - **🛡️ Atomic File Operations**: Perform file operations (`delete`, `move`, `copy`) directly from the web interface with instant physical disk and SQLite database synchronization.
 - **🔒 Self-Hosted & Private**: Fully self-contained with authentication (`NextAuth.js`), secure path traversal resolution, and zero external telemetry.
-- **🌙 Sleek Dark Media Theme**: Dark media interface starting with the `dark` class on `<html>` using a neutral zinc/slate palette (`#090b10` / `zinc-950`).
+- **🎨 Modular Theming & Accent System**: Clean semantic token architecture supporting multiple dark and light themes (Sleek Dark, OLED Black, Clean Light, Midnight Slate, Warm Amber) paired with vibrant accent colors (Ice Blue, Emerald, Purple, Rose, Amber, Bubblegum Pink).
 
 ---
 

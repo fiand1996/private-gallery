@@ -61,6 +61,10 @@ Private Gallery is structured around a clear separation of concerns between Next
 ### 5. Horizontal Justified Layout (`components/gallery/justified-photo-grid.tsx`)
 - **Design**: Implements row-by-row justified layouts (Immich / Google Photos style) that preserve original photo aspect ratios without vertical masonry jumps during pagination. Synchronized row heights correspond directly to Album and Folder square card heights across Small, Medium, and Large grid sizes.
 
+### 6. Semantic Theming & Accent Architecture (`app/globals.css`)
+- **Design**: Entire application surfaces, typography, borders, and interactive elements are driven strictly by semantic CSS variables (`--bg-app`, `--bg-card`, `--text-primary`, `--accent`, `--accent-foreground`, etc.).
+- **Capabilities**: Supports on-the-fly switching between 5 distinct themes (Sleek Dark, OLED Black, Clean Light, Midnight Slate, Warm Amber) and 6 vibrant accent palettes (Ice Blue, Emerald, Purple, Rose, Amber, Bubblegum Pink) persisted via `SettingsContext` and SQLite user preferences without visual layout jumps or unreadable contrast states.
+
 ---
 
 ## 🔄 Request Lifecycle
