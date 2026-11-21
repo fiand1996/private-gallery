@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["exifr", "better-sqlite3", "sharp"],
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    proxyClientMaxBodySize: "250mb",
+  },
   images: {
     localPatterns: [{ pathname: "/api/gallery/image" }],
     qualities: [60, 75, 80, 85],

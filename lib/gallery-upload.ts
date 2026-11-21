@@ -6,7 +6,7 @@ import {
   syncFolderAlbums,
   syncScannedImageMetadataBatch,
 } from "./database";
-import { GalleryPathError, IMAGE_CONTENT_TYPES } from "./gallery";
+import { GalleryPathError } from "./gallery";
 import { resolveLibraryPath } from "./gallery-actions";
 import * as schema from "./schema";
 
@@ -41,8 +41,30 @@ export async function processUploadBatch(
   // Track directories to register in DB
   const createdDirectories = new Set<string>();
 
+  // Allowed photo extensions (exclude executable formats or scriptable vector graphics)
+  const ALLOWED_EXTENSIONS = new Set([
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".avif",
+    ".gif",
+  ]);
+
+  const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250 MB per file limit
+
   for (const item of items) {
-    // Sanitize item relative path
+    // Sanitize item relative path and reject null bytes
+    if (item.relativePath.includes("\0")) {
+      skipped.push({ path: item.relativePath, reason: "Invalid file path (null byte detected)." });
+      continue;
+    }
+
+    if (item.buffer.length > MAX_FILE_SIZE) {
+      skipped.push({ path: item.relativePath, reason: "File exceeds 250MB size limit." });
+      continue;
+    }
+
     const sanitizedRel = item.relativePath
       .replace(/\\/g, "/")
       .replace(/^\/+|\/+$/g, "")
@@ -60,16 +82,26 @@ export async function processUploadBatch(
       : sanitizedRel;
 
     const ext = path.extname(fullRelativePath).toLowerCase();
-    if (!IMAGE_CONTENT_TYPES[ext]) {
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
       skipped.push({
         path: item.relativePath,
-        reason: `Unsupported format (${ext || "no extension"}). Only images are supported.`,
+        reason: `Unsupported format (${ext || "no extension"}). Only standard photos (.jpg, .jpeg, .png, .webp, .avif, .gif) are supported.`,
       });
       continue;
     }
 
     // Resolve destination on disk
     const destAbsolute = path.resolve(root, fullRelativePath);
+
+    // Defense-in-depth: Ensure destination path stays strictly inside library root
+    if (!destAbsolute.startsWith(root + path.sep) && destAbsolute !== root) {
+      skipped.push({
+        path: item.relativePath,
+        reason: "Security violation: Destination path escapes library root.",
+      });
+      continue;
+    }
+
     const parentDirAbs = path.dirname(destAbsolute);
     const parentDirRel = path.posix.dirname(fullRelativePath);
     const normalizedParentRel = parentDirRel === "." ? "" : parentDirRel;

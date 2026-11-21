@@ -1,9 +1,22 @@
 import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { processUploadBatch, type UploadItem } from "@/lib/gallery-upload";
 import { GalleryPathError } from "@/lib/gallery";
 
 export async function POST(request: Request) {
   try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    if (session.user.role === "viewer") {
+      return NextResponse.json(
+        { error: "Forbidden. Viewer accounts have read-only access." },
+        { status: 403 },
+      );
+    }
+
     const formData = await request.formData();
     const libraryIdStr = formData.get("libraryId");
     if (!libraryIdStr) {
@@ -14,6 +27,13 @@ export async function POST(request: Request) {
     }
 
     const libraryId = Number(libraryIdStr);
+    if (!Number.isSafeInteger(libraryId) || libraryId < 1) {
+      return NextResponse.json(
+        { error: "Invalid library ID." },
+        { status: 400 },
+      );
+    }
+
     const targetFolder = String(formData.get("targetFolder") || "");
 
     const files = formData.getAll("files") as File[];

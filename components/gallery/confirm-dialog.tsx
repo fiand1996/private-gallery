@@ -7,10 +7,12 @@ interface ConfirmDialogProps {
   title: string;
   description: string;
   confirmLabel?: string;
+  cancelLabel?: string;
   isDestructive?: boolean;
   loading?: boolean;
+  hideCancel?: boolean;
   onConfirm: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 export function ConfirmDialog({
@@ -18,8 +20,10 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
   isDestructive = false,
   loading = false,
+  hideCancel = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -42,21 +46,23 @@ export function ConfirmDialog({
             <h3 className="text-base font-bold text-zinc-100">
               {title}
             </h3>
-            <p className="mt-1.5 text-xs text-zinc-400">
+            <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed">
               {description}
             </p>
           </div>
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            disabled={loading}
-            onClick={onCancel}
-            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#1f1f1f] hover:text-zinc-200 disabled:opacity-50 cursor-pointer"
-          >
-            Cancel
-          </button>
+          {!hideCancel && (
+            <button
+              type="button"
+              disabled={loading}
+              onClick={onCancel}
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#1f1f1f] hover:text-zinc-200 disabled:opacity-50 cursor-pointer"
+            >
+              {cancelLabel}
+            </button>
+          )}
           <button
             type="button"
             disabled={loading}

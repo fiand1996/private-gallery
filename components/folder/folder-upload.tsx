@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronDown, FolderUp, Loader2, Upload } from "lucide-react";
+import { ChevronDown, FolderUp, Upload } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useUpload } from "@/components/layout/upload-context";
 
 export interface UploadFileItem {
   file: File;
@@ -91,16 +92,14 @@ export function useFolderUpload({
   libraryId,
   folderPath,
   onSuccess,
-  onError,
 }: UseFolderUploadOptions) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dirInputRef = useRef<HTMLInputElement>(null);
   const uploadMenuRef = useRef<HTMLDivElement>(null);
 
   const [uploadMenuOpen, setUploadMenuOpen] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
+  const { enqueueUpload, isUploading } = useUpload();
 
   // Close upload menu on outside click
   useEffect(() => {
@@ -115,69 +114,12 @@ export function useFolderUpload({
   }, [uploadMenuOpen]);
 
   const startUpload = useCallback(
-    async (items: UploadFileItem[]) => {
+    (items: UploadFileItem[]) => {
       if (items.length === 0) return;
-      setUploading(true);
-      setUploadProgress({ total: items.length, current: 0 });
-
-      const CHUNK_SIZE = 5;
-      let successCount = 0;
-      const failedReasons: string[] = [];
-
-      try {
-        for (let i = 0; i < items.length; i += CHUNK_SIZE) {
-          const chunk = items.slice(i, i + CHUNK_SIZE);
-          const formData = new FormData();
-          formData.append("libraryId", String(libraryId));
-          formData.append("targetFolder", folderPath);
-
-          for (const item of chunk) {
-            formData.append("files", item.file);
-            formData.append("paths", item.relativePath);
-          }
-
-          const res = await fetch("/api/gallery/upload", {
-            method: "POST",
-            body: formData,
-          });
-
-          const json = (await res.json()) as {
-            success?: boolean;
-            uploadedCount?: number;
-            skippedCount?: number;
-            skipped?: { path: string; reason: string }[];
-            error?: string;
-          };
-
-          if (!res.ok) {
-            throw new Error(json.error || "Upload failed.");
-          }
-
-          successCount += json.uploadedCount ?? 0;
-          if (json.skipped && json.skipped.length > 0) {
-            for (const s of json.skipped) {
-              failedReasons.push(`${s.path}: ${s.reason}`);
-            }
-          }
-
-          setUploadProgress({
-            total: items.length,
-            current: Math.min(items.length, i + chunk.length),
-          });
-        }
-
-        let msg = `Successfully uploaded ${successCount} photo(s).`;
-        if (failedReasons.length > 0) {
-          msg += ` (${failedReasons.length} item(s) skipped)`;
-        }
-        onSuccess(msg);
-      } catch (err) {
-        onError(err instanceof Error ? err.message : "Upload failed.");
-      } finally {
-        setUploading(false);
-      }
+      enqueueUpload(libraryId, folderPath, items);
+      onSuccess(`Queued ${items.length} photo(s) for upload.`);
     },
-    [folderPath, libraryId, onError, onSuccess],
+    [enqueueUpload, folderPath, libraryId, onSuccess],
   );
 
   const handleFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +181,7 @@ export function useFolderUpload({
 
       <button
         type="button"
-        disabled={uploading}
+        disabled={isUploading}
         onClick={() => setUploadMenuOpen((prev) => !prev)}
         className="flex items-center gap-1.5 rounded-xl bg-[#8ab4f8] px-3.5 py-1.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
       >
@@ -277,47 +219,13 @@ export function useFolderUpload({
     </div>
   );
 
-  const UploadProgressToast = uploading ? (
-    <div className="fixed bottom-6 right-6 z-50 flex w-80 items-center gap-3.5 rounded-2xl border border-[#2e2e2e] bg-[#161616]/95 p-4 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#8ab4f8]/15 text-[#8ab4f8]">
-        <Loader2 size={20} className="animate-spin" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between text-xs font-semibold text-zinc-100">
-          <span>Uploading Media...</span>
-          <span>
-            {uploadProgress.total > 0
-              ? Math.round((uploadProgress.current / uploadProgress.total) * 100)
-              : 0}
-            %
-          </span>
-        </div>
-        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#262626]">
-          <div
-            className="h-full bg-[#8ab4f8] transition-all duration-200"
-            style={{
-              width: `${
-                uploadProgress.total > 0
-                  ? Math.round((uploadProgress.current / uploadProgress.total) * 100)
-                  : 0
-              }%`,
-            }}
-          />
-        </div>
-        <p className="mt-1 truncate text-[11px] text-zinc-400">
-          {uploadProgress.current} of {uploadProgress.total} file(s)
-        </p>
-      </div>
-    </div>
-  ) : null;
-
   return {
-    uploading,
-    uploadProgress,
+    uploading: isUploading,
+    uploadProgress: { current: 0, total: 0 },
     isDragging,
     setIsDragging,
     handleDrop,
     UploadMenu,
-    UploadProgressToast,
+    UploadProgressToast: null,
   };
 }

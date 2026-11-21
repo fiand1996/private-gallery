@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import { useSession } from "next-auth/react";
+import { ConfirmDialog } from "@/components/gallery/confirm-dialog";
 
 interface UserItem {
   id: number;
@@ -43,6 +44,10 @@ export function UsersView() {
   const [userSubmitting, setUserSubmitting] = useState(false);
   const [userActionNotice, setUserActionNotice] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const [deleteTarget, setDeleteTarget] = useState<UserItem | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [alertError, setAlertError] = useState<string | null>(null);
 
   const fetchUsers = () => {
     setRefreshKey((k) => k + 1);
@@ -119,22 +124,24 @@ export function UsersView() {
     }
   };
 
-  const handleDeleteUser = async (id: number, username: string) => {
-    if (!confirm(`Are you sure you want to delete user "${username}"? This cannot be undone.`)) {
-      return;
-    }
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleteLoading(true);
     try {
-      const res = await fetch(`/api/users?id=${id}`, {
+      const res = await fetch(`/api/users?id=${deleteTarget.id}`, {
         method: "DELETE",
       });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to delete user.");
       }
-      setUserActionNotice(`User "${username}" was deleted.`);
+      setUserActionNotice(`User "${deleteTarget.username}" was deleted.`);
+      setDeleteTarget(null);
       fetchUsers();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to delete user.");
+      setAlertError(err instanceof Error ? err.message : "Failed to delete user.");
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -254,7 +261,7 @@ export function UsersView() {
                     <button
                       type="button"
                       disabled={isCurrentSelf}
-                      onClick={() => handleDeleteUser(u.id, u.username)}
+                      onClick={() => setDeleteTarget(u)}
                       title={isCurrentSelf ? "Cannot delete your own account" : `Delete ${u.username}`}
                       className="flex size-8 items-center justify-center rounded-xl text-zinc-500 hover:bg-rose-500/10 hover:text-rose-400 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                     >
@@ -402,6 +409,30 @@ export function UsersView() {
           </div>
         </div>
       )}
+
+      {/* Confirm Delete User Dialog */}
+      <ConfirmDialog
+        open={Boolean(deleteTarget)}
+        title="Delete User Account"
+        description={`Are you sure you want to delete user "${deleteTarget?.username}"? This action cannot be undone.`}
+        confirmLabel="Delete User"
+        isDestructive
+        loading={deleteLoading}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          if (!deleteLoading) setDeleteTarget(null);
+        }}
+      />
+
+      {/* Error Alert Dialog */}
+      <ConfirmDialog
+        open={Boolean(alertError)}
+        title="Action Failed"
+        description={alertError || ""}
+        confirmLabel="OK"
+        hideCancel
+        onConfirm={() => setAlertError(null)}
+      />
     </div>
   );
 }

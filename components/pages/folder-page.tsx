@@ -30,6 +30,7 @@ import { FolderGridItem } from "@/components/folder/folder-grid-item";
 import { FolderActionBar } from "@/components/folder/folder-action-bar";
 import { CreateFolderModal } from "@/components/folder/create-folder-modal";
 import { useFolderUpload } from "@/components/folder/folder-upload";
+import { useUpload } from "@/components/layout/upload-context";
 
 interface GalleryItem {
   name: string;
@@ -130,13 +131,21 @@ function FolderContent({
   const [actionLoading, setActionLoading] = useState(false);
   const [createFolderOpen, setCreateFolderOpen] = useState(false);
 
+  // Global Upload Listener: auto-refresh when files complete uploading in this folder
+  const { lastCompletedFolder } = useUpload();
+  const folderUploadTimestamp =
+    lastCompletedFolder &&
+    lastCompletedFolder.libraryId === libraryId &&
+    lastCompletedFolder.folderPath === folderPath
+      ? lastCompletedFolder.timestamp
+      : 0;
+
   // Upload Hook
   const {
     isDragging,
     setIsDragging,
     handleDrop,
     UploadMenu,
-    UploadProgressToast,
   } = useFolderUpload({
     libraryId,
     folderPath,
@@ -186,7 +195,7 @@ function FolderContent({
       });
 
     return () => controller.abort();
-  }, [folderPath, libraryId, page, refreshKey, sort]);
+  }, [folderPath, libraryId, page, refreshKey, sort, folderUploadTimestamp]);
 
   const hasMore = data.page * data.pageSize < data.totalCount;
 
@@ -521,9 +530,6 @@ function FolderContent({
         onDelete={() => setConfirmDeleteOpen(true)}
         onClear={() => setSelectedPaths(new Set())}
       />
-
-      {/* Floating Upload Progress Toast */}
-      {UploadProgressToast}
 
       {/* Right Click Context Menu */}
       <ContextMenu
