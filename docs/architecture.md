@@ -6,7 +6,7 @@ This document outlines the system architecture, core modules, data flow, and dat
 
 ## 🏛️ High-Level Architecture
 
-Private Gallery is structured around a clear separation of concerns between Next.js App Router endpoints, backend services, SQLite persistence, and high-performance image processing.
+Private Gallery is structured around a clear separation of concerns between Next.js App Router endpoints, backend services, SQLite persistence, and efficient on-demand image processing.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -51,7 +51,7 @@ Private Gallery is structured around a clear separation of concerns between Next
 - **Design**: Asynchronous background task runner triggered via `POST /api/tasks`.
 - **Behavior**: Recursively traverses registered library roots, extracts file stats and extensions, and performs batched insertions into SQLite without blocking the main event loop.
 
-### 3. High-Performance Image Caching (`lib/gallery-image-url.ts`, `/api/gallery/image/route.ts`)
+### 3. Optimized Image Caching (`lib/gallery-image-url.ts`, `/api/gallery/image/route.ts`)
 - **Pipeline**: Uses `sharp` to process original media files into responsive WebP thumbnails with standard server buckets (`w=160`, `w=260`, `w=400`, `w=640`, `w=1200`).
 - **Caching**: Stored on disk in `data/thumbnails/` and served with HTTP `304 Not Modified` response validation using `ETag`.
 

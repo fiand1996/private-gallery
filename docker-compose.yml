@@ -9,6 +9,14 @@ services:
     environment:
       - AUTH_SECRET="QdNBexXXaOI6tpMKSiPc+3dKO/56zSeIMD0z+fEs2qM="
       - GALLERY_ROOT_PATH=/media/photos
+      - NODE_OPTIONS=--max-old-space-size=2048
+    deploy:
+      resources:
+        limits:
+          cpus: "3.0"
+          memory: 3G
+        reservations:
+          memory: 512M
     volumes:
       - private_gallery_data:/app/data
       # Mount your host photo directory into the container (change path to your local folder):

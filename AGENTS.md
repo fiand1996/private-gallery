@@ -61,7 +61,7 @@ Strict separation of concerns MUST be maintained:
 - **Drizzle Migrations:**
   - Managed via Drizzle Kit in `drizzle/` (`pnpm db:generate`, `pnpm db:migrate`).
   - Executed automatically at server startup in-process via `migrate()` inside `lib/db/client.ts`.
-  - Configured with high-performance SQLite pragmas: WAL journal mode, `foreign_keys = ON`, `busy_timeout = 5000`, and memory temp store.
+  - Configured with optimized SQLite pragmas: WAL journal mode, `foreign_keys = ON`, `busy_timeout = 5000`, and memory temp store.
   - **Schema Mutation Rule:** Whenever `lib/schema.ts` is modified, agents MUST generate the corresponding migration using `pnpm exec drizzle-kit generate --name <descriptive_name>`. **NEVER** write manual raw SQL DDL (`CREATE TABLE`, `ALTER TABLE`) inside runtime application code (`lib/db/client.ts`, etc.)!
 - **In-Process Scanner:**
   - When a user triggers "Scan Now" via `POST /api/tasks`, `triggerScanQueue()` from `lib/scan-runner.ts` executes the scan in the background within the server process.

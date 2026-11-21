@@ -2,14 +2,14 @@
 
 **Private Gallery** is a lightning-fast, self-hosted local photo and media gallery server built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS v4**, **SQLite**, and **Drizzle ORM**.
 
-Designed for media enthusiasts, creators, and privacy advocates, Private Gallery scans your existing local directories on disk, indexes them into SQLite for instant timeline dates, albums, and folder browsing, and streams high-performance WebP thumbnails using `sharp`—all without moving or modifying your original media files.
+Designed for media enthusiasts, creators, and privacy advocates, Private Gallery scans your existing local directories on disk, indexes them into SQLite for instant timeline dates, albums, and folder browsing, and streams optimized, disk-cached WebP thumbnails using `sharp`—all without moving or modifying your original media files.
 
 ---
 
 ## ✨ Key Features
 
 - **📂 Media-First Directory Indexing**: Photos remain in their original folder structure on disk. SQLite indexes them for lightning-fast search, timeline dates, and album views.
-- **⚡ High-Performance WebP Caching**: Automatically generates server-side WebP thumbnails (down from ~15MB raw to ~15KB WebP, a 99% reduction) using `sharp`. Supports HTTP `304 Not Modified` caching via ETag.
+- **⚡ Optimized WebP Caching**: Automatically generates server-side WebP thumbnails (down from ~15MB raw to ~15KB WebP, a 99% reduction) using `sharp`. Supports HTTP `304 Not Modified` caching via ETag.
 - **🔍 Advanced Search & Metadata**: Extracts EXIF, GPS, camera, lens, and IPTC/XMP metadata on-demand with automatic EXIF orientation correction. Global search with multi-filter support.
 - **📁 Rich Gallery Views**: Seamlessly navigate between Photos view with horizontal justified grid (Immich / Google Photos style), Custom & Folder-backed Albums with infinite scroll, hierarchical Folder browser, and Explore hub.
 - **🛡️ Atomic File Operations**: Perform file operations (`delete`, `move`, `copy`) directly from the web interface with instant physical disk and SQLite database synchronization.

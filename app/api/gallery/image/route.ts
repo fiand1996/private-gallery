@@ -9,8 +9,41 @@ import {
 } from "@/lib/gallery";
 import { resolveLibraryFile } from "@/lib/library-files";
 
+// Optimize Sharp memory and thread usage:
+// 1. Limit internal libvips cache to prevent memory bloat during batch thumbnail requests
+sharp.cache({ memory: 50, items: 100, files: 20 });
+// 2. Limit concurrency (libvips worker threads) to prevent CPU core saturation
+sharp.concurrency(2);
+sharp.simd(true);
+
 const THUMBNAIL_CACHE_DIR = path.join(process.cwd(), "data", "thumbnails");
 const pendingThumbnails = new Map<string, Promise<string>>();
+
+// Semaphore to limit simultaneous image decodes in memory (prevents multi-gigabyte RAM spikes)
+const MAX_CONCURRENT_RESIZES = 4;
+let activeResizes = 0;
+const resizeQueue: (() => void)[] = [];
+
+function acquireResizeSlot(): Promise<void> {
+  if (activeResizes < MAX_CONCURRENT_RESIZES) {
+    activeResizes++;
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    resizeQueue.push(() => {
+      activeResizes++;
+      resolve();
+    });
+  });
+}
+
+function releaseResizeSlot(): void {
+  activeResizes--;
+  if (resizeQueue.length > 0) {
+    const next = resizeQueue.shift();
+    next?.();
+  }
+}
 
 function normalizeThumbnailWidth(width: number): number {
   if (width <= 160) return 160;
@@ -43,6 +76,7 @@ async function getOrCreateThumbnail(
   const promise = (async () => {
     await fs.promises.mkdir(THUMBNAIL_CACHE_DIR, { recursive: true });
     const tempPath = `${thumbPath}.${process.pid}.${Date.now()}.tmp`;
+    await acquireResizeSlot();
     try {
       await sharp(absolutePath)
         .rotate()
@@ -61,6 +95,7 @@ async function getOrCreateThumbnail(
       } catch {}
       throw err;
     } finally {
+      releaseResizeSlot();
       pendingThumbnails.delete(thumbPath);
     }
   })();
