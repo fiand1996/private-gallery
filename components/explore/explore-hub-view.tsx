@@ -69,24 +69,25 @@ export function ExploreHubView({
                   libraryId,
                   undefined,
                   undefined,
-                  360,
+                  400,
                 )}
                 alt="Favorites cover"
                 fill
                 unoptimized
-                sizes="(max-width: 768px) 100vw, 360px"
-                className="object-cover opacity-25 transition duration-500 group-hover:scale-105 group-hover:opacity-35"
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover transition duration-500 group-hover:scale-105"
               />
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
             <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-rose-500/15 text-rose-400">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 backdrop-blur-sm border border-rose-500/30">
                 <Heart size={20} className="fill-current" />
               </div>
               <div>
-                <div className="text-base font-bold text-zinc-100 group-hover:text-rose-300 transition">
+                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-rose-300 transition">
                   Favorites
                 </div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs font-medium text-zinc-300 drop-shadow">
                   {summary.smartCollections.favorites.count} photo
                   {summary.smartCollections.favorites.count === 1 ? "" : "s"}
                 </div>
@@ -106,24 +107,25 @@ export function ExploreHubView({
                   libraryId,
                   undefined,
                   undefined,
-                  360,
+                  400,
                 )}
                 alt="Top Rated cover"
                 fill
                 unoptimized
-                sizes="(max-width: 768px) 100vw, 360px"
-                className="object-cover opacity-25 transition duration-500 group-hover:scale-105 group-hover:opacity-35"
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover transition duration-500 group-hover:scale-105"
               />
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
             <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-400">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400 backdrop-blur-sm border border-amber-500/30">
                 <Star size={20} className="fill-current" />
               </div>
               <div>
-                <div className="text-base font-bold text-zinc-100 group-hover:text-amber-300 transition">
+                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
                   Top Rated
                 </div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs font-medium text-zinc-300 drop-shadow">
                   {summary.smartCollections.topRated.count} photo
                   {summary.smartCollections.topRated.count === 1 ? "" : "s"} (4–5 stars)
                 </div>
@@ -143,24 +145,25 @@ export function ExploreHubView({
                   libraryId,
                   undefined,
                   undefined,
-                  360,
+                  400,
                 )}
                 alt="Places cover"
                 fill
                 unoptimized
-                sizes="(max-width: 768px) 100vw, 360px"
-                className="object-cover opacity-25 transition duration-500 group-hover:scale-105 group-hover:opacity-35"
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover transition duration-500 group-hover:scale-105"
               />
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30 pointer-events-none" />
             <div className="relative z-10 flex h-full flex-col justify-between">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 backdrop-blur-sm border border-emerald-500/30">
                 <MapPin size={20} />
               </div>
               <div>
-                <div className="text-base font-bold text-zinc-100 group-hover:text-emerald-300 transition">
+                <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition">
                   Places & GPS
                 </div>
-                <div className="text-xs text-zinc-400">
+                <div className="text-xs font-medium text-zinc-300 drop-shadow">
                   {summary.smartCollections.places.count} geotagged photo
                   {summary.smartCollections.places.count === 1 ? "" : "s"}
                 </div>
@@ -247,23 +250,24 @@ export function ExploreHubView({
                       libraryId,
                       undefined,
                       undefined,
-                      260,
+                      400,
                     )}
                     alt={tag.name}
                     fill
                     unoptimized
                     sizes="260px"
-                    className="object-cover opacity-35 transition duration-500 group-hover:scale-105 group-hover:opacity-50"
+                    className="object-cover transition duration-500 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-[#1c1c1c]" />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                {/* Inward bottom shadow gradient for clear text readability */}
+                <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/60 to-transparent pointer-events-none" />
                 <div className="relative z-10">
-                  <div className="truncate text-sm font-bold text-zinc-100 group-hover:text-[#8ab4f8] transition">
+                  <div className="truncate text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-[#8ab4f8] transition">
                     #{tag.name}
                   </div>
-                  <div className="text-[11px] text-zinc-400">
+                  <div className="text-[11px] font-medium text-zinc-300 drop-shadow">
                     {tag.count} photo{tag.count === 1 ? "" : "s"}
                   </div>
                 </div>
@@ -354,21 +358,22 @@ export function ExploreHubView({
                       libraryId,
                       undefined,
                       undefined,
-                      260,
+                      400,
                     )}
                     alt={y.year}
                     fill
                     unoptimized
                     sizes="260px"
-                    className="object-cover opacity-30 transition duration-500 group-hover:scale-105 group-hover:opacity-40"
+                    className="object-cover transition duration-500 group-hover:scale-105"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                {/* Inward bottom shadow gradient for clear text readability */}
+                <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-black/95 via-black/60 to-transparent pointer-events-none" />
                 <div className="relative z-10">
-                  <div className="text-lg font-bold text-zinc-100 group-hover:text-amber-300 transition">
+                  <div className="text-lg font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
                     {y.year}
                   </div>
-                  <div className="text-[11px] text-zinc-400">
+                  <div className="text-[11px] font-medium text-zinc-300 drop-shadow">
                     {y.count} photo{y.count === 1 ? "" : "s"}
                   </div>
                 </div>
