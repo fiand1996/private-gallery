@@ -400,10 +400,10 @@ function FolderContent({
           <div className="flex size-20 items-center justify-center rounded-3xl bg-accent/15 text-accent shadow-2xl animate-bounce">
             <Upload size={40} />
           </div>
-          <p className="mt-4 text-base font-bold text-zinc-100">
+          <p className="mt-4 text-base font-bold text-text-primary">
             Drop files or folders here
           </p>
-          <p className="mt-1 text-xs text-zinc-400">
+          <p className="mt-1 text-xs text-text-secondary">
             Upload directly into{" "}
             <span className="font-semibold text-accent">
               {folderPath ? folderPath : "Root"}
@@ -499,10 +499,10 @@ function FolderContent({
               </div>
             </div>
           ) : (
-            <div className="py-20 text-center text-sm text-zinc-400">
-              <Upload size={36} className="mx-auto mb-3 text-zinc-600" />
-              <p className="font-semibold text-zinc-300">This directory is empty</p>
-              <p className="mt-1 text-xs text-zinc-500">
+            <div className="py-20 text-center text-sm text-text-secondary">
+              <Upload size={36} className="mx-auto mb-3 text-text-muted" />
+              <p className="font-semibold text-foreground">This directory is empty</p>
+              <p className="mt-1 text-xs text-text-muted">
                 Click &ldquo;Upload&rdquo; or drag and drop images and folders here.
               </p>
             </div>

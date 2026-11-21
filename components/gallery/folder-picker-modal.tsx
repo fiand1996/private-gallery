@@ -84,10 +84,10 @@ export function FolderPickerModal({
               <FolderTree size={17} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-zinc-100">
+              <h3 className="text-sm font-bold text-text-primary">
                 {actionName} {selectedCount} Item(s)
               </h3>
-              <p className="text-[11px] text-zinc-400">
+              <p className="text-[11px] text-text-secondary">
                 Select a destination folder in this library
               </p>
             </div>
@@ -95,7 +95,7 @@ export function FolderPickerModal({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-full p-1.5 text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+            className="rounded-full p-1.5 text-text-secondary hover:bg-bg-hover hover:text-foreground cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -166,7 +166,7 @@ export function FolderPickerModal({
             type="button"
             disabled={loading}
             onClick={onCancel}
-            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover disabled:opacity-50 cursor-pointer"
+            className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover disabled:opacity-50 cursor-pointer"
           >
             Cancel
           </button>

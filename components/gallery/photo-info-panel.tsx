@@ -431,7 +431,7 @@ export function PhotoInfoPanel({
                 className={`p-1 transition ${
                   !isAdmin
                     ? "cursor-default"
-                    : "text-zinc-500 hover:text-amber-400 cursor-pointer"
+                    : "text-text-muted hover:text-amber-400 cursor-pointer"
                 }`}
               >
                 <Star
@@ -439,7 +439,7 @@ export function PhotoInfoPanel({
                   className={
                     starVal <= rating
                       ? "fill-amber-400 text-amber-400"
-                      : "text-zinc-600 hover:text-zinc-400"
+                      : "text-text-muted hover:text-text-secondary"
                   }
                 />
               </button>
@@ -460,7 +460,7 @@ export function PhotoInfoPanel({
                   {savedNotice}
                 </span>
               ) : savingMeta ? (
-                <Loader2 size={12} className="animate-spin text-zinc-400" />
+                <Loader2 size={12} className="animate-spin text-text-secondary" />
               ) : null}
               {isAdmin && caption !== initialCaption && (
                 <button
@@ -491,7 +491,7 @@ export function PhotoInfoPanel({
                 ? "Add a description or note about this photo... (Ctrl+Enter to save)"
                 : "No description provided."
             }
-            className={`w-full resize-none rounded-xl border border-border-strong bg-bg-input p-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition ${
+            className={`w-full resize-none rounded-xl border border-border-strong bg-bg-input p-2.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition ${
               isAdmin
                 ? "focus:border-accent focus:ring-1 focus:ring-accent-border"
                 : "opacity-80 cursor-default"
@@ -519,7 +519,7 @@ export function PhotoInfoPanel({
                     type="button"
                     onClick={() => handleRemoveTag(t.id)}
                     title={`Remove #${t.name}`}
-                    className="rounded hover:bg-accent-border p-0.5 text-accent hover:text-zinc-100 cursor-pointer"
+                    className="rounded hover:bg-accent-border p-0.5 text-accent hover:text-text-primary cursor-pointer"
                   >
                     <X size={11} />
                   </button>
@@ -527,7 +527,7 @@ export function PhotoInfoPanel({
               </span>
             ))}
             {tags.length === 0 && (
-              <span className="text-xs text-zinc-500 italic">No tags added yet.</span>
+              <span className="text-xs text-text-muted italic">No tags added yet.</span>
             )}
           </div>
 
@@ -535,7 +535,7 @@ export function PhotoInfoPanel({
           {isAdmin && (
             <form onSubmit={handleAddTag} className="flex items-center gap-2 pt-1">
               <div className="relative flex-1">
-                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-500">
+                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-text-muted">
                   #
                 </span>
                 <input
@@ -543,7 +543,7 @@ export function PhotoInfoPanel({
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   placeholder="Add a tag..."
-                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-6 pr-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition focus:border-accent"
+                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-6 pr-2.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent"
                 />
               </div>
               <button
@@ -560,7 +560,7 @@ export function PhotoInfoPanel({
           {/* Quick Suggestions (Admin Only) */}
           {isAdmin && unusedSuggestions.length > 0 && (
             <div className="pt-1">
-              <span className="block text-[10px] text-zinc-500 uppercase tracking-wider mb-1.5">
+              <span className="block text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
                 Suggested
               </span>
               <div className="flex flex-wrap gap-1">
@@ -569,7 +569,7 @@ export function PhotoInfoPanel({
                     key={s.id}
                     type="button"
                     onClick={() => handleAddTag(undefined, s.name)}
-                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-zinc-400 hover:text-accent hover:border-accent-border transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-text-secondary hover:text-accent hover:border-accent-border transition cursor-pointer"
                   >
                     <span>+{s.name}</span>
                   </button>
@@ -600,7 +600,7 @@ export function PhotoInfoPanel({
                     type="button"
                     onClick={() => handleRemovePerson(p.id)}
                     title={`Remove ${p.name}`}
-                    className="rounded hover:bg-emerald-500/20 p-0.5 text-emerald-400 hover:text-zinc-100 cursor-pointer"
+                    className="rounded hover:bg-emerald-500/20 p-0.5 text-emerald-400 hover:text-text-primary cursor-pointer"
                   >
                     <X size={11} />
                   </button>
@@ -608,7 +608,7 @@ export function PhotoInfoPanel({
               </span>
             ))}
             {people.length === 0 && (
-              <span className="text-xs text-zinc-500 italic">No people tagged yet.</span>
+              <span className="text-xs text-text-muted italic">No people tagged yet.</span>
             )}
           </div>
 
@@ -616,13 +616,13 @@ export function PhotoInfoPanel({
           {isAdmin && (
             <form onSubmit={handleAddPerson} className="flex items-center gap-2 pt-1">
               <div className="relative flex-1">
-                <User size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <User size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted" />
                 <input
                   type="text"
                   value={personInput}
                   onChange={(e) => setPersonInput(e.target.value)}
                   placeholder="Add person name..."
-                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-7 pr-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition focus:border-accent"
+                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-7 pr-2.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent"
                 />
               </div>
               <button
@@ -639,7 +639,7 @@ export function PhotoInfoPanel({
           {/* Quick Suggestions (Admin Only) */}
           {isAdmin && unusedPersonSuggestions.length > 0 && (
             <div className="pt-1">
-              <span className="block text-[10px] text-zinc-500 uppercase tracking-wider mb-1.5">
+              <span className="block text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
                 Suggested
               </span>
               <div className="flex flex-wrap gap-1">
@@ -648,7 +648,7 @@ export function PhotoInfoPanel({
                     key={s.id}
                     type="button"
                     onClick={() => handleAddPerson(undefined, s.name)}
-                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-zinc-400 hover:text-emerald-300 hover:border-emerald-500/40 transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-text-secondary hover:text-emerald-300 hover:border-emerald-500/40 transition cursor-pointer"
                   >
                     <span>+{s.name}</span>
                   </button>
@@ -661,7 +661,7 @@ export function PhotoInfoPanel({
         {/* Basic File Details */}
         <section className="space-y-3">
           <div>
-            <span className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
+            <span className="block text-[11px] font-medium text-text-muted uppercase tracking-wider">
               File Name
             </span>
             <span className="mt-0.5 block break-all font-mono text-xs text-text-primary">
@@ -670,7 +670,7 @@ export function PhotoInfoPanel({
           </div>
 
           <div>
-            <span className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
+            <span className="block text-[11px] font-medium text-text-muted uppercase tracking-wider">
               Folder Path
             </span>
             <span className="mt-0.5 block break-all font-mono text-[11px] text-text-secondary">
@@ -685,7 +685,7 @@ export function PhotoInfoPanel({
                 <span className="text-text-primary font-medium block">
                   {formatDateTime(displayDate)}
                 </span>
-                <span className="text-[10px] text-zinc-500">
+                <span className="text-[10px] text-text-muted">
                   {metadata?.capturedAt ? "Date Captured (EXIF)" : "Date Modified"}
                 </span>
               </div>
@@ -742,7 +742,7 @@ export function PhotoInfoPanel({
                   {metadata.cameraMake ? `${metadata.cameraMake} ` : ""}
                   {metadata.cameraModel}
                 </p>
-                <p className="text-[10px] text-zinc-500">Camera Body</p>
+                <p className="text-[10px] text-text-muted">Camera Body</p>
               </div>
             )}
 
@@ -752,7 +752,7 @@ export function PhotoInfoPanel({
                 <Aperture size={14} className="mt-0.5 text-text-secondary shrink-0" />
                 <div>
                   <p className="text-text-primary font-medium">{metadata.lensModel}</p>
-                  <p className="text-[10px] text-zinc-500">Lens</p>
+                  <p className="text-[10px] text-text-muted">Lens</p>
                 </div>
               </div>
             )}
@@ -760,25 +760,25 @@ export function PhotoInfoPanel({
             {/* Exposure Settings Grid */}
             <div className="grid grid-cols-4 gap-2 pt-1 text-center font-mono">
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
-                <span className="text-[10px] text-zinc-500 block">Focal</span>
+                <span className="text-[10px] text-text-muted block">Focal</span>
                 <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.focalLength || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
-                <span className="text-[10px] text-zinc-500 block">Aperture</span>
+                <span className="text-[10px] text-text-muted block">Aperture</span>
                 <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.aperture || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
-                <span className="text-[10px] text-zinc-500 block">Shutter</span>
+                <span className="text-[10px] text-text-muted block">Shutter</span>
                 <span className="text-xs text-text-primary font-semibold mt-0.5 block truncate">
                   {metadata.shutterSpeed || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
-                <span className="text-[10px] text-zinc-500 block">ISO</span>
+                <span className="text-[10px] text-text-muted block">ISO</span>
                 <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.iso ? `${metadata.iso}` : "-"}
                 </span>

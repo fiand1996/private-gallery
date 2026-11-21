@@ -74,9 +74,9 @@ export function ExplorePage() {
   if (!selectedLibraryId) {
     return (
       <div className="flex h-[70vh] flex-col items-center justify-center text-center">
-        <Compass size={48} className="text-zinc-600 mb-4 animate-pulse" />
-        <h2 className="text-xl font-bold text-zinc-200">No Media Library Selected</h2>
-        <p className="mt-2 text-sm text-zinc-500 max-w-sm">
+        <Compass size={48} className="text-text-muted mb-4 animate-pulse" />
+        <h2 className="text-xl font-bold text-foreground">No Media Library Selected</h2>
+        <p className="mt-2 text-sm text-text-muted max-w-sm">
           Select or add a media library from Settings to start exploring.
         </p>
       </div>
@@ -90,10 +90,10 @@ export function ExplorePage() {
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 pb-24 sm:px-8">
         {/* Page Title & Subtitle */}
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
             Explore
           </h1>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-text-secondary">
             {hasFilter
               ? "Filtered Collection View"
               : "Discover your photos by smart collections, tags, equipment, and memories."}

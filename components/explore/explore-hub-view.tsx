@@ -33,7 +33,7 @@ export function ExploreHubView({
     return (
       <div className="py-24 text-center">
         <Loader2 className="size-8 animate-spin text-accent mx-auto mb-3" />
-        <p className="text-xs text-zinc-400">Loading Explore collections...</p>
+        <p className="text-xs text-text-secondary">Loading Explore collections...</p>
       </div>
     );
   }
@@ -52,7 +52,7 @@ export function ExploreHubView({
     <div className="space-y-10">
       {/* 1. Smart Quick Collections */}
       <section className="space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
           Smart Collections
         </h3>
 
@@ -178,7 +178,7 @@ export function ExploreHubView({
         <section className="space-y-4">
           <div className="flex items-center gap-2">
             <Users size={16} className="text-accent" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
               People ({summary.people.length})
             </h3>
           </div>
@@ -207,16 +207,16 @@ export function ExploreHubView({
                       className="object-cover transition duration-500 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="flex size-full items-center justify-center bg-zinc-800 text-zinc-400">
+                    <div className="flex size-full items-center justify-center bg-bg-card-subtle text-text-secondary">
                       <User size={32} />
                     </div>
                   )}
                 </div>
                 <div className="w-full px-1">
-                  <div className="truncate text-xs font-semibold text-zinc-200 capitalize group-hover:text-accent transition">
+                  <div className="truncate text-xs font-semibold text-foreground capitalize group-hover:text-accent transition">
                     {person.name}
                   </div>
-                  <div className="text-[11px] text-zinc-500">
+                  <div className="text-[11px] text-text-muted">
                     {person.count} photo{person.count === 1 ? "" : "s"}
                   </div>
                 </div>
@@ -230,7 +230,7 @@ export function ExploreHubView({
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <Tag size={16} className="text-accent" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
             Tags & Topics ({summary.tags.length})
           </h3>
         </div>
@@ -275,7 +275,7 @@ export function ExploreHubView({
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-border-subtle bg-bg-card/50 p-8 text-center text-xs text-zinc-500">
+          <div className="rounded-2xl border border-border-subtle bg-bg-card/50 p-8 text-center text-xs text-text-muted">
             No tags found. Add tags to photos or scan files containing embedded keywords.
           </div>
         )}
@@ -286,7 +286,7 @@ export function ExploreHubView({
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Camera size={16} className="text-accent" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
               Cameras & Equipment ({summary.cameras.length})
             </h3>
           </div>
@@ -316,15 +316,15 @@ export function ExploreHubView({
                     />
                   </div>
                 ) : (
-                  <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-bg-hover text-zinc-500">
+                  <div className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-bg-hover text-text-muted">
                     <Camera size={24} />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold text-zinc-200 group-hover:text-accent transition">
+                  <div className="truncate text-sm font-semibold text-foreground group-hover:text-accent transition">
                     {cam.displayName}
                   </div>
-                  <div className="text-xs text-zinc-400">
+                  <div className="text-xs text-text-secondary">
                     {cam.count} photo{cam.count === 1 ? "" : "s"}
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export function ExploreHubView({
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <Calendar size={16} className="text-amber-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">
               Timeline Archives ({summary.years.length})
             </h3>
           </div>

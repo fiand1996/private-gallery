@@ -107,14 +107,6 @@
 
   --foreground: #0f172a;
   color-scheme: light;
-
-  --color-zinc-100: #0f172a;
-  --color-zinc-200: #1e293b;
-  --color-zinc-300: #334155;
-  --color-zinc-400: #64748b;
-  --color-zinc-500: #94a3b8;
-  --color-zinc-600: #94a3b8;
-  --color-zinc-700: #cbd5e1;
 }
 
 [data-theme="clean-light"] input,
@@ -269,6 +261,7 @@
   --color-accent-muted: var(--accent-muted);
   --color-accent-border: var(--accent-border);
   --color-accent-foreground: var(--accent-foreground);
+  --color-preview-foreground: #09090b;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);

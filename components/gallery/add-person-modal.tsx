@@ -87,7 +87,7 @@ function AddPersonDialogContent({
   return (
     <div className="relative w-full max-w-sm rounded-3xl border border-border-strong bg-bg-card-subtle p-6 shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-150">
       <div className="flex items-center justify-between border-b border-border-subtle pb-3">
-        <div className="flex items-center gap-2 text-zinc-100 font-semibold text-sm">
+        <div className="flex items-center gap-2 text-text-primary font-semibold text-sm">
           <Users size={16} className="text-accent" />
           <span>Tag Person</span>
         </div>
@@ -100,9 +100,9 @@ function AddPersonDialogContent({
         </button>
       </div>
 
-      <p className="mt-3 text-xs text-zinc-400">
+      <p className="mt-3 text-xs text-text-secondary">
         Tag a person in{" "}
-        <span className="font-semibold text-zinc-200">
+        <span className="font-semibold text-foreground">
           {entryPaths.length} selected photo{entryPaths.length === 1 ? "" : "s"}
         </span>
         .
@@ -116,11 +116,11 @@ function AddPersonDialogContent({
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
-          <label className="block text-[11px] font-semibold text-zinc-400 uppercase tracking-wider mb-1.5">
+          <label className="block text-[11px] font-semibold text-text-secondary uppercase tracking-wider mb-1.5">
             Person Name
           </label>
           <div className="relative">
-            <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
               required
@@ -128,7 +128,7 @@ function AddPersonDialogContent({
               value={personName}
               onChange={(e) => setPersonName(e.target.value)}
               placeholder="e.g. John Doe, Sarah..."
-              className="h-10 w-full rounded-xl border border-border-strong bg-bg-hover pl-8 pr-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:ring-1 focus:ring-accent/30"
+              className="h-10 w-full rounded-xl border border-border-strong bg-bg-hover pl-8 pr-3 text-sm text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:ring-1 focus:ring-accent/30"
             />
           </div>
         </div>
@@ -136,7 +136,7 @@ function AddPersonDialogContent({
         {/* Autocomplete / Suggested list */}
         {filteredSuggestions.length > 0 && (
           <div>
-            <span className="block text-[10px] text-zinc-500 uppercase tracking-wider mb-1.5">
+            <span className="block text-[10px] text-text-muted uppercase tracking-wider mb-1.5">
               Existing People
             </span>
             <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1">
@@ -163,7 +163,7 @@ function AddPersonDialogContent({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-bg-hover hover:text-foreground transition cursor-pointer"
           >
             Cancel
           </button>

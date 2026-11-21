@@ -89,7 +89,7 @@ export function TasksView() {
           <Loader2 className="size-6 animate-spin text-accent" />
         </div>
       ) : tasks.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-zinc-400">
+        <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-text-secondary">
           No tasks have been queued yet. Trigger a scan from the Media Libraries tab.
         </div>
       ) : (
@@ -107,10 +107,10 @@ export function TasksView() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2.5">
-                    <span className="font-mono text-xs text-zinc-400">
+                    <span className="font-mono text-xs text-text-secondary">
                       #{task.id.slice(0, 8)}
                     </span>
-                    <span className="font-semibold text-zinc-200 text-sm">
+                    <span className="font-semibold text-foreground text-sm">
                       {task.libraryName ?? `Library #${task.libraryId}`}
                     </span>
 
@@ -138,7 +138,7 @@ export function TasksView() {
                     <p className="mt-1 text-xs text-rose-400">{task.error}</p>
                   )}
 
-                  <div className="mt-2 flex flex-wrap gap-4 text-xs text-zinc-500">
+                  <div className="mt-2 flex flex-wrap gap-4 text-xs text-text-muted">
                     <span>{task.scannedEntries} items scanned</span>
                     <span>·</span>
                     <span>Created: {formatDate(task.createdAt)}</span>
@@ -151,8 +151,8 @@ export function TasksView() {
                   </div>
                 </div>
 
-                <div className="text-right text-xs text-zinc-500">
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-bg-input px-2.5 py-1 text-zinc-400">
+                <div className="text-right text-xs text-text-muted">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-bg-input px-2.5 py-1 text-text-secondary">
                     <Layers size={12} />
                     Job {task.status}
                   </span>

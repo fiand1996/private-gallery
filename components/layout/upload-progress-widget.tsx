@@ -60,16 +60,16 @@ export function UploadProgressWidget() {
           )}
         </div>
         <div className="flex flex-col">
-          <span className="text-xs font-semibold text-zinc-100">
+          <span className="text-xs font-semibold text-text-primary">
             {isUploading
               ? `Uploading ${completedCount + failedCount}/${totalCount}`
               : `Upload complete (${completedCount}/${totalCount})`}
           </span>
-          <span className="text-[10px] text-zinc-400">
+          <span className="text-[10px] text-text-secondary">
             {isUploading ? `${progressPercent}% completed` : "Click to view details"}
           </span>
         </div>
-        <Maximize2 size={14} className="ml-2 text-zinc-400" />
+        <Maximize2 size={14} className="ml-2 text-text-secondary" />
       </aside>
     );
   }
@@ -93,10 +93,10 @@ export function UploadProgressWidget() {
             )}
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-zinc-100">
+            <h4 className="text-xs font-semibold text-text-primary">
               {isUploading ? "Uploading Media" : "Upload Complete"}
             </h4>
-            <p className="text-[10px] text-zinc-400">
+            <p className="text-[10px] text-text-secondary">
               {completedCount} of {totalCount} uploaded
               {failedCount > 0 ? ` · ${failedCount} skipped/failed` : ""}
             </p>
@@ -108,7 +108,7 @@ export function UploadProgressWidget() {
             type="button"
             onClick={() => setIsWidgetOpen(false)}
             title="Minimize"
-            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+            className="flex size-7 items-center justify-center rounded-lg text-text-secondary transition hover:bg-bg-hover hover:text-foreground cursor-pointer"
           >
             <Minimize2 size={14} />
           </button>
@@ -116,7 +116,7 @@ export function UploadProgressWidget() {
             type="button"
             onClick={isUploading ? cancelAll : clearFinished}
             title={isUploading ? "Cancel uploads" : "Close"}
-            className="flex size-7 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+            className="flex size-7 items-center justify-center rounded-lg text-text-secondary transition hover:bg-bg-hover hover:text-foreground cursor-pointer"
           >
             <X size={15} />
           </button>
@@ -125,7 +125,7 @@ export function UploadProgressWidget() {
 
       {/* Progress Bar */}
       <div className="mt-3.5">
-        <div className="flex items-center justify-between text-[11px] font-medium text-zinc-300">
+        <div className="flex items-center justify-between text-[11px] font-medium text-foreground">
           <span className="truncate pr-2">
             {inProgressItem ? inProgressItem.relativePath : isAllDone ? "All files processed" : "Queued..."}
           </span>
@@ -165,9 +165,9 @@ export function UploadProgressWidget() {
               {failedItems.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-lg bg-black/40 p-1.5 text-zinc-300 border border-rose-500/10"
+                  className="rounded-lg bg-bg-app/40 p-1.5 text-foreground border border-rose-500/10"
                 >
-                  <p className="font-medium text-zinc-200 truncate">{item.relativePath}</p>
+                  <p className="font-medium text-foreground truncate">{item.relativePath}</p>
                   <p className="text-rose-400 text-[10px]">{item.error || "Upload rejected."}</p>
                 </div>
               ))}
@@ -180,7 +180,7 @@ export function UploadProgressWidget() {
       <div className="mt-3.5 flex items-center justify-between pt-2 border-t border-border-subtle text-xs">
         {isUploading ? (
           <>
-            <span className="text-[11px] text-zinc-400 flex items-center gap-1.5">
+            <span className="text-[11px] text-text-secondary flex items-center gap-1.5">
               <Upload size={12} className="text-accent" />
               <span>Runs in background</span>
             </span>
@@ -194,13 +194,13 @@ export function UploadProgressWidget() {
           </>
         ) : (
           <>
-            <span className="text-[11px] text-zinc-400">
+            <span className="text-[11px] text-text-secondary">
               {failedCount === 0 ? "All photos uploaded successfully." : "Upload completed with warnings."}
             </span>
             <button
               type="button"
               onClick={clearFinished}
-              className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-semibold text-zinc-200 hover:bg-bg-hover cursor-pointer"
+              className="rounded-lg bg-bg-input px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-bg-hover cursor-pointer"
             >
               Dismiss
             </button>

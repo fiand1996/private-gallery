@@ -182,7 +182,7 @@ function AddToAlbumDialogContent({
               onClick={() => setCreatingNew(true)}
               className="flex w-full items-center gap-3 rounded-xl border border-dashed border-border-strong p-3 text-left transition hover:border-accent hover:bg-accent-muted cursor-pointer group"
             >
-              <div className="flex size-8 items-center justify-center rounded-lg bg-bg-input text-accent transition group-hover:bg-accent group-hover:text-zinc-950">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-bg-input text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
                 <Plus size={16} />
               </div>
               <span className="text-xs font-semibold text-text-primary group-hover:text-accent">
@@ -218,7 +218,7 @@ function AddToAlbumDialogContent({
                         {album.name}
                       </span>
                     </div>
-                    <span className="text-[11px] text-zinc-500 shrink-0">
+                    <span className="text-[11px] text-text-muted shrink-0">
                       {album.photoCount} photos
                     </span>
                   </button>

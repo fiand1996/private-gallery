@@ -313,7 +313,7 @@ export function ExploreFilteredView({
           <button
             type="button"
             onClick={() => router.push("/explore")}
-            className="flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover hover:text-zinc-100 cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>All Explore</span>
@@ -325,10 +325,10 @@ export function ExploreFilteredView({
             {photosData.filterLabel.startsWith("People:") && (
               <User size={15} className="text-accent" />
             )}
-            <span className="text-sm font-bold text-zinc-100">
+            <span className="text-sm font-bold text-text-primary">
               {photosData.filterLabel}
             </span>
-            <span className="rounded-full bg-border-subtle px-2 py-0.5 text-[11px] font-medium text-zinc-400">
+            <span className="rounded-full bg-border-subtle px-2 py-0.5 text-[11px] font-medium text-text-secondary">
               {photosData.totalCount} photo
               {photosData.totalCount === 1 ? "" : "s"}
             </span>
@@ -347,7 +347,7 @@ export function ExploreFilteredView({
       {photosLoading ? (
         <div className="py-24 text-center">
           <Loader2 className="size-8 animate-spin text-accent mx-auto mb-3" />
-          <p className="text-xs text-zinc-400">Loading photos...</p>
+          <p className="text-xs text-text-secondary">Loading photos...</p>
         </div>
       ) : photosError ? (
         <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-4 text-xs text-rose-400">
@@ -384,7 +384,7 @@ export function ExploreFilteredView({
           </div>
         </>
       ) : (
-        <div className="py-24 text-center text-sm text-zinc-500">
+        <div className="py-24 text-center text-sm text-text-muted">
           No photos found in this collection.
         </div>
       )}

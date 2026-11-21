@@ -188,10 +188,10 @@ export function AlbumsListView({
       {/* Top Header & Toolbar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl">
+          <h1 className="text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
             Albums
           </h1>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-text-secondary">
             {albums.totalCount} albums in library
           </p>
         </div>
@@ -205,7 +205,7 @@ export function AlbumsListView({
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "all"
                   ? "bg-accent text-accent-foreground font-bold"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  : "text-text-secondary hover:text-foreground"
               }`}
             >
               All
@@ -216,7 +216,7 @@ export function AlbumsListView({
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "folder"
                   ? "bg-accent text-accent-foreground font-bold"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  : "text-text-secondary hover:text-foreground"
               }`}
             >
               Folders
@@ -227,7 +227,7 @@ export function AlbumsListView({
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "custom"
                   ? "bg-accent text-accent-foreground font-bold"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  : "text-text-secondary hover:text-foreground"
               }`}
             >
               Virtual
@@ -252,13 +252,13 @@ export function AlbumsListView({
         </div>
       ) : albums.items.length === 0 ? (
         <div className="mx-auto mt-16 max-w-md text-center">
-          <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-bg-input text-zinc-500">
+          <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-bg-input text-text-muted">
             <FolderArchive size={32} />
           </div>
-          <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-100">
+          <h2 className="mt-4 text-xl font-bold tracking-tight text-text-primary">
             No Albums Found
           </h2>
-          <p className="mt-2 text-sm text-zinc-400">
+          <p className="mt-2 text-sm text-text-secondary">
             Create a new virtual album or scan directories in your library.
           </p>
           <button
@@ -318,8 +318,8 @@ export function AlbumsListView({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
         >
           <div className="w-full max-w-sm rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <h3 className="text-base font-bold text-zinc-100">Rename Album</h3>
-            <p className="mt-1 text-xs text-zinc-400">
+            <h3 className="text-base font-bold text-text-primary">Rename Album</h3>
+            <p className="mt-1 text-xs text-text-secondary">
               Change the display title of this album.
             </p>
 
@@ -330,7 +330,7 @@ export function AlbumsListView({
                 value={renameInput}
                 onChange={(e) => setRenameInput(e.target.value)}
                 placeholder="Album title"
-                className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
+                className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-text-primary outline-none transition focus:border-accent focus:bg-bg-hover"
               />
 
               <div className="mt-5 flex items-center justify-end gap-2.5">
@@ -338,7 +338,7 @@ export function AlbumsListView({
                   type="button"
                   disabled={renaming}
                   onClick={() => setRenameTarget(null)}
-                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover cursor-pointer"
+                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover cursor-pointer"
                 >
                   Cancel
                 </button>

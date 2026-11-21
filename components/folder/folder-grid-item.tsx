@@ -49,7 +49,7 @@ export function FolderGridItem({
         title={isSelected ? "Deselect folder" : "Select folder"}
         className={`absolute top-2.5 left-2.5 z-20 flex size-6 items-center justify-center rounded-full transition-all cursor-pointer ${
           isSelected
-            ? "bg-accent text-zinc-950 shadow-md shadow-accent/30 opacity-100"
+            ? "bg-accent text-accent-foreground shadow-md shadow-accent/30 opacity-100"
             : "bg-black/60 text-white/90 backdrop-blur hover:bg-black/90 opacity-0 group-hover:opacity-100"
         }`}
       >

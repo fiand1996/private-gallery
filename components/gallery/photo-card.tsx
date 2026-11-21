@@ -200,14 +200,14 @@ export function PhotoCard({
           title={selected ? "Deselect photo" : "Select photo"}
           className={`absolute top-2.5 left-2.5 z-10 flex size-6 items-center justify-center rounded-full transition-all cursor-pointer ${
             selected
-              ? "bg-accent text-zinc-950 shadow-md shadow-accent/30 scale-100 opacity-100 ring-2 ring-black"
+              ? "bg-accent text-accent-foreground shadow-md shadow-accent/30 scale-100 opacity-100 ring-2 ring-black"
               : "border-2 border-white/70 bg-black/30 text-transparent backdrop-blur hover:scale-110 hover:border-white opacity-0 group-hover:opacity-100"
           }`}
         >
           <Check
             size={13}
             strokeWidth={3}
-            className={selected ? "text-zinc-950" : "text-transparent"}
+            className={selected ? "text-accent-foreground" : "text-transparent"}
           />
         </button>
       )}

@@ -100,10 +100,10 @@ function AddTagDialogContent({
               <Tag size={18} />
             </div>
             <div>
-              <h2 id="add-tag-modal-title" className="text-base font-bold text-zinc-100">
+              <h2 id="add-tag-modal-title" className="text-base font-bold text-text-primary">
                 Add Tag to {entryPaths.length} {entryPaths.length === 1 ? "Item" : "Items"}
               </h2>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-text-secondary">
                 Categorize selected photos with a custom label.
               </p>
             </div>
@@ -112,7 +112,7 @@ function AddTagDialogContent({
             type="button"
             disabled={submitting}
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
+            className="rounded-lg p-1 text-text-secondary hover:bg-border-subtle hover:text-foreground transition cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -126,11 +126,11 @@ function AddTagDialogContent({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+            <label className="block text-xs font-semibold text-foreground mb-1.5">
               Tag Name
             </label>
             <div className="relative">
-              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-500">
+              <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-text-muted">
                 #
               </span>
               <input
@@ -140,7 +140,7 @@ function AddTagDialogContent({
                 value={tagName}
                 onChange={(e) => setTagName(e.target.value)}
                 placeholder="e.g. holiday, family, wallpaper"
-                className="h-10 w-full rounded-xl border border-border-strong bg-bg-input pl-8 pr-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
+                className="h-10 w-full rounded-xl border border-border-strong bg-bg-input pl-8 pr-3.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ function AddTagDialogContent({
           {/* Existing tag suggestions */}
           {suggestions.length > 0 && (
             <div>
-              <span className="block text-[11px] font-medium text-zinc-400 mb-1.5">
+              <span className="block text-[11px] font-medium text-text-secondary mb-1.5">
                 Existing Tags
               </span>
               <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
@@ -157,7 +157,7 @@ function AddTagDialogContent({
                     key={s.id}
                     type="button"
                     onClick={() => handleSelectSuggestion(s.name)}
-                    className="inline-flex items-center gap-1 rounded-lg border border-border-strong bg-bg-input px-2.5 py-1 text-xs text-zinc-300 hover:border-accent/60 hover:text-accent transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-lg border border-border-strong bg-bg-input px-2.5 py-1 text-xs text-foreground hover:border-accent/60 hover:text-accent transition cursor-pointer"
                   >
                     <span>#{s.name}</span>
                   </button>

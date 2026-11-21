@@ -147,10 +147,10 @@ export function UsersView() {
 
   if (!isAdmin) {
     return (
-      <div className="rounded-3xl border border-border-subtle bg-bg-card p-8 text-center text-zinc-400">
-        <Shield size={32} className="mx-auto text-zinc-600 mb-3" />
-        <p className="text-sm font-medium text-zinc-200">Access Restricted</p>
-        <p className="text-xs text-zinc-500 mt-1">
+      <div className="rounded-3xl border border-border-subtle bg-bg-card p-8 text-center text-text-secondary">
+        <Shield size={32} className="mx-auto text-text-muted mb-3" />
+        <p className="text-sm font-medium text-foreground">Access Restricted</p>
+        <p className="text-xs text-text-muted mt-1">
           Only administrators have permission to manage user accounts.
         </p>
       </div>
@@ -161,11 +161,11 @@ export function UsersView() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-zinc-100 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-text-primary flex items-center gap-2">
             <Users size={20} className="text-accent" />
             User Accounts
           </h2>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-text-secondary mt-1">
             Manage user credentials and access levels for Private Gallery.
           </p>
         </div>
@@ -199,15 +199,15 @@ export function UsersView() {
       )}
 
       {loadingUsers ? (
-        <div className="flex items-center justify-center py-16 text-zinc-500 gap-2">
+        <div className="flex items-center justify-center py-16 text-text-muted gap-2">
           <Loader2 size={20} className="animate-spin text-accent" />
           <span className="text-xs">Loading user accounts...</span>
         </div>
       ) : users.length === 0 ? (
         <div className="rounded-3xl border border-dashed border-border-subtle bg-bg-surface/50 p-12 text-center">
-          <Users size={32} className="mx-auto text-zinc-600 mb-3" />
-          <p className="text-sm font-medium text-zinc-300">No users found</p>
-          <p className="text-xs text-zinc-500 mt-1">
+          <Users size={32} className="mx-auto text-text-muted mb-3" />
+          <p className="text-sm font-medium text-foreground">No users found</p>
+          <p className="text-xs text-text-muted mt-1">
             Add your first user to grant access to the gallery.
           </p>
         </div>
@@ -229,7 +229,7 @@ export function UsersView() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-zinc-100 truncate">
+                        <span className="text-sm font-semibold text-text-primary truncate">
                           {u.displayName || u.username}
                         </span>
                         {isCurrentSelf && (
@@ -238,7 +238,7 @@ export function UsersView() {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-zinc-400 mt-0.5">
+                      <div className="flex items-center gap-2 text-xs text-text-secondary mt-0.5">
                         <span>@{u.username}</span>
                         <span>•</span>
                         <span>Joined {formatDate(u.createdAt)}</span>
@@ -253,7 +253,7 @@ export function UsersView() {
                         Admin
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-400">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border-strong bg-bg-hover px-3 py-1 text-xs font-medium text-text-secondary">
                         Viewer
                       </span>
                     )}
@@ -263,7 +263,7 @@ export function UsersView() {
                       disabled={isCurrentSelf}
                       onClick={() => setDeleteTarget(u)}
                       title={isCurrentSelf ? "Cannot delete your own account" : `Delete ${u.username}`}
-                      className="flex size-8 items-center justify-center rounded-xl text-zinc-500 hover:bg-rose-500/10 hover:text-rose-400 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      className="flex size-8 items-center justify-center rounded-xl text-text-muted hover:bg-rose-500/10 hover:text-rose-400 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                     >
                       <Trash2 size={15} />
                     </button>
@@ -303,7 +303,7 @@ export function UsersView() {
 
             <form onSubmit={handleCreateUser} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                <label className="block text-xs font-semibold text-foreground mb-1">
                   Username <span className="text-rose-400">*</span>
                 </label>
                 <input
@@ -313,12 +313,12 @@ export function UsersView() {
                   placeholder="e.g. viewer1"
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
-                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                <label className="block text-xs font-semibold text-foreground mb-1">
                   Display Name (Optional)
                 </label>
                 <input
@@ -326,12 +326,12 @@ export function UsersView() {
                   placeholder="e.g. Guest Viewer"
                   value={newDisplayName}
                   onChange={(e) => setNewDisplayName(e.target.value)}
-                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                <label className="block text-xs font-semibold text-foreground mb-1">
                   Password <span className="text-rose-400">*</span>
                 </label>
                 <input
@@ -341,12 +341,12 @@ export function UsersView() {
                   placeholder="Min 6 characters"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                  className="w-full rounded-2xl border border-border-strong bg-bg-hover px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1">
+                <label className="block text-xs font-semibold text-foreground mb-1">
                   Role
                 </label>
                 <div className="grid grid-cols-2 gap-3 mt-1.5">
@@ -355,12 +355,12 @@ export function UsersView() {
                     onClick={() => setNewRole("viewer")}
                     className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
                       newRole === "viewer"
-                        ? "border-accent bg-accent/10 text-white"
-                        : "border-border-strong bg-bg-hover text-zinc-400 hover:border-zinc-700"
+                        ? "border-accent bg-accent/10 text-text-primary"
+                        : "border-border-strong bg-bg-hover text-text-secondary hover:border-border-strong"
                     }`}
                   >
-                    <span className="text-xs font-semibold text-zinc-100">Viewer</span>
-                    <span className="text-[11px] text-zinc-400 mt-0.5">
+                    <span className="text-xs font-semibold text-text-primary">Viewer</span>
+                    <span className="text-[11px] text-text-secondary mt-0.5">
                       Read-only gallery access. Cannot modify or delete photos.
                     </span>
                   </button>
@@ -370,12 +370,12 @@ export function UsersView() {
                     onClick={() => setNewRole("admin")}
                     className={`flex flex-col items-start rounded-2xl border p-3 text-left transition cursor-pointer ${
                       newRole === "admin"
-                        ? "border-accent bg-accent/10 text-white"
-                        : "border-border-strong bg-bg-hover text-zinc-400 hover:border-zinc-700"
+                        ? "border-accent bg-accent/10 text-text-primary"
+                        : "border-border-strong bg-bg-hover text-text-secondary hover:border-border-strong"
                     }`}
                   >
-                    <span className="text-xs font-semibold text-zinc-100">Admin</span>
-                    <span className="text-[11px] text-zinc-400 mt-0.5">
+                    <span className="text-xs font-semibold text-text-primary">Admin</span>
+                    <span className="text-[11px] text-text-secondary mt-0.5">
                       Full administrative access, user management, and disk actions.
                     </span>
                   </button>
@@ -386,7 +386,7 @@ export function UsersView() {
                 <button
                   type="button"
                   onClick={() => setAddUserModalOpen(false)}
-                  className="rounded-2xl border border-border-strong px-4 py-2.5 text-xs font-medium text-zinc-300 hover:bg-bg-hover transition cursor-pointer"
+                  className="rounded-2xl border border-border-strong px-4 py-2.5 text-xs font-medium text-foreground hover:bg-bg-hover transition cursor-pointer"
                 >
                   Cancel
                 </button>

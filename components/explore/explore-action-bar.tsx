@@ -43,7 +43,7 @@ export function ExploreActionBar({
   return (
     <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
       <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-text-primary">
-        <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-zinc-950">
+        <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
           {selectedCount}
         </span>
         <span>Selected</span>

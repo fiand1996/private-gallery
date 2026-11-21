@@ -62,14 +62,14 @@ export function CreateAlbumModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
     >
       <div className="w-full max-w-md rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-        <h3 className="text-base font-bold text-zinc-100">Create Virtual Album</h3>
-        <p className="mt-1 text-xs text-zinc-400">
+        <h3 className="text-base font-bold text-text-primary">Create Virtual Album</h3>
+        <p className="mt-1 text-xs text-text-secondary">
           Virtual albums let you curate photos without duplicating files on your disk.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-zinc-300">
+            <label className="block text-xs font-medium text-foreground">
               Album Title
             </label>
             <input
@@ -78,12 +78,12 @@ export function CreateAlbumModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Best of 2024, Family Trip"
-              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
+              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-text-primary outline-none transition focus:border-accent focus:bg-bg-hover"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-300">
+            <label className="block text-xs font-medium text-foreground">
               Description (optional)
             </label>
             <input
@@ -91,7 +91,7 @@ export function CreateAlbumModal({
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               placeholder="Add a brief description..."
-              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
+              className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-text-primary outline-none transition focus:border-accent focus:bg-bg-hover"
             />
           </div>
 
@@ -100,7 +100,7 @@ export function CreateAlbumModal({
               type="button"
               disabled={creating}
               onClick={onClose}
-              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover cursor-pointer"
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover cursor-pointer"
             >
               Cancel
             </button>

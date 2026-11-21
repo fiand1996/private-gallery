@@ -43,10 +43,10 @@ export function ConfirmDialog({
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <h3 className="text-base font-bold text-zinc-100">
+            <h3 className="text-base font-bold text-text-primary">
               {title}
             </h3>
-            <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed">
+            <p className="mt-1.5 text-xs text-text-secondary leading-relaxed">
               {description}
             </p>
           </div>
@@ -58,7 +58,7 @@ export function ConfirmDialog({
               type="button"
               disabled={loading}
               onClick={onCancel}
-              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 disabled:opacity-50 cursor-pointer"
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover hover:text-foreground disabled:opacity-50 cursor-pointer"
             >
               {cancelLabel}
             </button>
@@ -70,7 +70,7 @@ export function ConfirmDialog({
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold shadow-sm transition disabled:opacity-50 cursor-pointer ${
               isDestructive
                 ? "bg-rose-600 shadow-rose-500/20 hover:bg-rose-500 text-white"
-                : "bg-accent text-zinc-950 hover:bg-accent-hover"
+                : "bg-accent text-accent-foreground hover:bg-accent-hover"
             }`}
           >
             {loading && <Loader2 size={13} className="animate-spin" />}

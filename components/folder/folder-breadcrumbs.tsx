@@ -44,7 +44,7 @@ export function FolderBreadcrumbs({
       <div className="flex flex-col gap-1.5">
         <nav
           aria-label="Breadcrumb"
-          className="flex flex-wrap items-center gap-1.5 text-xs text-zinc-500"
+          className="flex flex-wrap items-center gap-1.5 text-xs text-text-muted"
         >
           <Link
             href="/folder"
@@ -76,7 +76,7 @@ export function FolderBreadcrumbs({
           })}
         </nav>
 
-        <div className="flex items-center gap-2 pl-2 text-[11px] text-zinc-400">
+        <div className="flex items-center gap-2 pl-2 text-[11px] text-text-secondary">
           <span>{folderCount} folders</span>
           <span>·</span>
           <span>{imageCount} photos</span>
@@ -91,7 +91,7 @@ export function FolderBreadcrumbs({
           <button
             type="button"
             onClick={onOpenCreateFolder}
-            className="flex items-center gap-2 rounded-xl border border-border-subtle bg-bg-card px-3 py-1.5 text-xs font-semibold text-zinc-300 shadow-sm transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-2 rounded-xl border border-border-subtle bg-bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm transition hover:bg-bg-hover cursor-pointer"
           >
             <FolderPlus size={14} className="text-accent" />
             <span>New Folder</span>
@@ -105,13 +105,13 @@ export function FolderBreadcrumbs({
             className={`flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-semibold transition cursor-pointer ${
               isAllSelected
                 ? "border-accent bg-accent/15 text-accent"
-                : "border-border-subtle bg-bg-card text-zinc-300 hover:bg-bg-hover"
+                : "border-border-subtle bg-bg-card text-foreground hover:bg-bg-hover"
             }`}
           >
             {isAllSelected ? (
               <CheckSquare size={14} className="text-accent" />
             ) : (
-              <Square size={14} className="text-zinc-400" />
+              <Square size={14} className="text-text-secondary" />
             )}
             <span>
               {isAllSelected ? "Deselect All" : "Select All (Ctrl+A)"}

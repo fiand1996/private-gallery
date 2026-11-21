@@ -198,7 +198,7 @@ export function useFolderUpload({
               setUploadMenuOpen(false);
               fileInputRef.current?.click();
             }}
-            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <Upload size={14} className="text-accent" />
             <span>Upload Files</span>
@@ -209,7 +209,7 @@ export function useFolderUpload({
               setUploadMenuOpen(false);
               dirInputRef.current?.click();
             }}
-            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+            className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <FolderUp size={14} className="text-accent" />
             <span>Upload Folder</span>

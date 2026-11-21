@@ -179,7 +179,7 @@ export function GallerySearch({
       <div className="relative flex items-center">
         <Search
           size={18}
-          className="pointer-events-none absolute left-4 text-zinc-400"
+          className="pointer-events-none absolute left-4 text-text-secondary"
         />
         <input
           ref={inputRef}
@@ -194,12 +194,12 @@ export function GallerySearch({
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-3 rounded-full p-1 text-zinc-400 hover:bg-border-strong hover:text-zinc-200"
+            className="absolute right-3 rounded-full p-1 text-text-secondary hover:bg-border-strong hover:text-foreground"
           >
             <X size={15} />
           </button>
         ) : (
-          <span className="pointer-events-none absolute right-3.5 hidden sm:flex items-center gap-0.5 rounded-md border border-border-strong bg-bg-input px-1.5 py-0.5 text-[10px] font-mono text-zinc-400">
+          <span className="pointer-events-none absolute right-3.5 hidden sm:flex items-center gap-0.5 rounded-md border border-border-strong bg-bg-input px-1.5 py-0.5 text-[10px] font-mono text-text-secondary">
             ⌘K
           </span>
         )}
@@ -212,11 +212,11 @@ export function GallerySearch({
           )}
 
           {loading && isSearching && (
-            <div className="px-3 py-3 text-xs text-zinc-400">Searching...</div>
+            <div className="px-3 py-3 text-xs text-text-secondary">Searching...</div>
           )}
 
           {!loading && isSearching && activeData.albums.length === 0 && activeData.photos.length === 0 && (
-            <div className="px-3 py-4 text-center text-xs text-zinc-400">
+            <div className="px-3 py-4 text-center text-xs text-text-secondary">
               No results for &ldquo;{resultsQuery}&rdquo;
             </div>
           )}
@@ -224,7 +224,7 @@ export function GallerySearch({
           {/* Albums Section */}
           {activeData.albums.length > 0 && (
             <div className="mb-3">
-              <p className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-zinc-400 uppercase dark:text-zinc-500">
+              <p className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-text-secondary uppercase dark:text-text-muted">
                 Albums
               </p>
               <div className="space-y-1">
@@ -249,12 +249,12 @@ export function GallerySearch({
                           className="object-cover"
                         />
                       ) : (
-                        <Folder className="m-auto size-5 text-zinc-400" />
+                        <Folder className="m-auto size-5 text-text-secondary" />
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium">{album.name}</p>
-                      <p className="text-xs text-zinc-400">
+                      <p className="text-xs text-text-secondary">
                         {album.photoCount} photos
                       </p>
                     </div>
@@ -267,7 +267,7 @@ export function GallerySearch({
           {/* Photos Section */}
           {activeData.photos.length > 0 && (
             <div>
-              <p className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-zinc-400 uppercase dark:text-zinc-500">
+              <p className="px-3 py-1.5 text-[11px] font-semibold tracking-wider text-text-secondary uppercase dark:text-text-muted">
                 Photos
               </p>
               <div className="grid grid-cols-4 gap-2 px-1">

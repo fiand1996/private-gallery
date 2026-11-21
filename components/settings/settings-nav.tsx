@@ -60,7 +60,7 @@ export function SettingsNav() {
             <span
               className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
                 isLibraries
-                  ? "bg-black/20 text-accent-foreground"
+                  ? "bg-accent-foreground/10 text-accent-foreground"
                   : "bg-border-subtle text-text-secondary"
               }`}
             >

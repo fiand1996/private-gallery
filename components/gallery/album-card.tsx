@@ -71,7 +71,7 @@ export function AlbumCard({
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-zinc-600 bg-gradient-to-br from-bg-card to-bg-surface">
+          <div className="flex h-full w-full items-center justify-center text-text-muted bg-gradient-to-br from-bg-card to-bg-surface">
             <Folder size={48} />
           </div>
         )}
@@ -110,7 +110,7 @@ export function AlbumCard({
               e.stopPropagation();
               setMenuOpen((prev) => !prev);
             }}
-            className="flex size-7 items-center justify-center rounded-xl bg-black/60 text-zinc-300 backdrop-blur-md transition hover:bg-black/90 hover:text-white cursor-pointer opacity-0 group-hover:opacity-100"
+            className="flex size-7 items-center justify-center rounded-xl bg-black/60 text-foreground backdrop-blur-md transition hover:bg-black/90 hover:text-white cursor-pointer opacity-0 group-hover:opacity-100"
           >
             <MoreVertical size={14} />
           </button>
@@ -126,7 +126,7 @@ export function AlbumCard({
                     setMenuOpen(false);
                     onRename(album);
                   }}
-                  className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+                  className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-xs font-medium text-foreground transition hover:bg-bg-hover cursor-pointer"
                 >
                   <Pencil size={13} className="text-accent" />
                   <span>Rename</span>

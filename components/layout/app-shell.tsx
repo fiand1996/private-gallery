@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <SettingsProvider>
         <LibraryProvider>
           <UploadProvider>
-            <div className="min-h-screen bg-black text-zinc-100 lg:pl-64 pb-20 lg:pb-0">
+            <div className="min-h-screen bg-bg-app text-text-primary lg:pl-64 pb-20 lg:pb-0">
               <GallerySidebar />
               <main className="min-h-screen">{children}</main>
               <UploadProgressWidget />

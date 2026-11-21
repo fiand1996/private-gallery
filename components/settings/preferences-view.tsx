@@ -276,7 +276,7 @@ export function PreferencesView() {
                     )}
                   </div>
                   {isSelected && (
-                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-zinc-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-accent-foreground">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}
@@ -325,7 +325,7 @@ export function PreferencesView() {
                     className={`size-8 rounded-full shadow-inner ${item.dotColor}`}
                   />
                   {isSelected && (
-                    <span className="absolute inset-0 flex items-center justify-center text-zinc-950">
+                    <span className="absolute inset-0 flex items-center justify-center text-preview-foreground">
                       <Check size={14} strokeWidth={3} />
                     </span>
                   )}
@@ -414,7 +414,7 @@ export function PreferencesView() {
                     {item.label}
                   </span>
                   {isSelected && (
-                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-zinc-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-accent text-accent-foreground">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}
@@ -479,7 +479,7 @@ export function PreferencesView() {
                     {opt.title}
                   </span>
                   {isSelected && (
-                    <span className="flex size-5 items-center justify-center rounded-full bg-purple-400 text-zinc-950">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-purple-400 text-preview-foreground">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}

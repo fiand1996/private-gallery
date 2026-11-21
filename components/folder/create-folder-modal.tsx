@@ -64,10 +64,10 @@ export function CreateFolderModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
     >
       <div className="w-full max-w-md overflow-hidden rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-        <h3 className="text-base font-bold text-zinc-100">Create New Folder</h3>
-        <p className="mt-1.5 text-xs text-zinc-400">
+        <h3 className="text-base font-bold text-text-primary">Create New Folder</h3>
+        <p className="mt-1.5 text-xs text-text-secondary">
           Enter a name for the new folder in{" "}
-          <span className="font-semibold text-zinc-200">
+          <span className="font-semibold text-foreground">
             {parentFolder || "Root"}
           </span>
           .
@@ -80,7 +80,7 @@ export function CreateFolderModal({
             onChange={(e) => setFolderName(e.target.value)}
             placeholder="Folder name"
             autoFocus
-            className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-hover focus:ring-4 focus:ring-accent/15"
+            className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-hover focus:ring-4 focus:ring-accent/15"
           />
 
           <div className="mt-6 flex items-center justify-end gap-3">
@@ -88,7 +88,7 @@ export function CreateFolderModal({
               type="button"
               disabled={loading}
               onClick={onClose}
-              className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 disabled:opacity-50 cursor-pointer"
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover hover:text-foreground disabled:opacity-50 cursor-pointer"
             >
               Cancel
             </button>

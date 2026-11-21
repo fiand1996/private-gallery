@@ -153,7 +153,7 @@ function LoginFormContent() {
 
   if (loadingInitialCheck) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 text-zinc-400">
+      <div className="flex flex-col items-center justify-center p-8 text-text-secondary">
         <Loader2 size={32} className="animate-spin text-accent mb-3" />
         <p className="text-sm">Connecting to Private Gallery...</p>
       </div>
@@ -167,10 +167,10 @@ function LoginFormContent() {
         <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-accent/20 to-accent/10 border border-accent/30 shadow-lg shadow-accent/10 mb-4">
           <ImageIcon size={28} className="text-accent" />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary">
           {isFirstRun ? "Setup Administrator" : "Welcome to Private Gallery"}
         </h1>
-        <p className="mt-1.5 text-sm text-zinc-400">
+        <p className="mt-1.5 text-sm text-text-secondary">
           {isFirstRun
             ? "Create your initial master administrator account to get started."
             : "Sign in with your credentials to access your media library."}
@@ -203,11 +203,11 @@ function LoginFormContent() {
       {isFirstRun ? (
         <form onSubmit={handleFirstRunSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Username
             </label>
             <div className="relative">
-              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="text"
                 required
@@ -215,33 +215,33 @@ function LoginFormContent() {
                 placeholder="admin"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Display Name (Optional)
             </label>
             <div className="relative">
-              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="text"
                 placeholder="Primary Admin"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Password (min. 6 characters)
             </label>
             <div className="relative">
-              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="password"
                 required
@@ -249,17 +249,17 @@ function LoginFormContent() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Confirm Password
             </label>
             <div className="relative">
-              <KeyRound size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <KeyRound size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="password"
                 required
@@ -267,7 +267,7 @@ function LoginFormContent() {
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -290,11 +290,11 @@ function LoginFormContent() {
       ) : (
         <form onSubmit={handleLoginSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Username
             </label>
             <div className="relative">
-              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="text"
                 required
@@ -302,24 +302,24 @@ function LoginFormContent() {
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary mb-1.5">
               Password
             </label>
             <div className="relative">
-              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 type="password"
                 required
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-zinc-100 placeholder-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+                className="w-full rounded-2xl border border-border-strong bg-bg-hover py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
               />
             </div>
           </div>
@@ -352,7 +352,7 @@ export default function LoginPage() {
 
       <Suspense
         fallback={
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-text-secondary">
             <Loader2 size={24} className="animate-spin text-accent" />
             <span>Loading...</span>
           </div>

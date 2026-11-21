@@ -316,13 +316,13 @@ export function AlbumDetailView({
         <div className="flex items-center gap-3">
           <Link
             href="/albums"
-            className="rounded-xl p-2 text-zinc-400 transition hover:bg-bg-input hover:text-zinc-200 cursor-pointer"
+            className="rounded-xl p-2 text-text-secondary transition hover:bg-bg-input hover:text-foreground cursor-pointer"
           >
             <ArrowLeft size={20} />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold tracking-tight text-zinc-100 sm:text-2xl">
+              <h1 className="text-xl font-bold tracking-tight text-text-primary sm:text-2xl">
                 {albumTitle}
               </h1>
               {albumDetail?.albumId && (
@@ -333,13 +333,13 @@ export function AlbumDetailView({
                     setRenameInput(albumTitle);
                     setRenameModalOpen(true);
                   }}
-                  className="rounded-lg p-1 text-zinc-400 transition hover:bg-bg-input hover:text-accent cursor-pointer"
+                  className="rounded-lg p-1 text-text-secondary transition hover:bg-bg-input hover:text-accent cursor-pointer"
                 >
                   <Pencil size={15} />
                 </button>
               )}
             </div>
-            <div className="mt-1 flex items-center gap-2 text-xs text-zinc-400">
+            <div className="mt-1 flex items-center gap-2 text-xs text-text-secondary">
               <span>{albumDetail?.totalCount ?? 0} photos</span>
               {albumDetail?.kind === "custom" && (
                 <>
@@ -421,7 +421,7 @@ export function AlbumDetailView({
           </div>
         </>
       ) : (
-        <div className="py-20 text-center text-sm text-zinc-400">
+        <div className="py-20 text-center text-sm text-text-secondary">
           This album has no photos yet.
         </div>
       )}
@@ -450,7 +450,7 @@ export function AlbumDetailView({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
         >
           <div className="w-full max-w-sm rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <h3 className="text-base font-bold text-zinc-100">Rename Album</h3>
+            <h3 className="text-base font-bold text-text-primary">Rename Album</h3>
             <form onSubmit={handleRename} className="mt-4">
               <input
                 type="text"
@@ -458,14 +458,14 @@ export function AlbumDetailView({
                 value={renameInput}
                 onChange={(e) => setRenameInput(e.target.value)}
                 placeholder="Album name"
-                className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-zinc-100 outline-none transition focus:border-accent focus:bg-bg-hover"
+                className="w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs font-medium text-text-primary outline-none transition focus:border-accent focus:bg-bg-hover"
               />
               <div className="mt-5 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   disabled={renaming}
                   onClick={() => setRenameModalOpen(false)}
-                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-bg-hover cursor-pointer"
+                  className="rounded-xl px-3.5 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover cursor-pointer"
                 >
                   Cancel
                 </button>

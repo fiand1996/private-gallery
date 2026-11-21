@@ -183,7 +183,7 @@ export function GallerySidebar() {
               key={href}
               href={href}
               className={`flex flex-col items-center gap-1 rounded-xl p-2 text-xs font-medium transition ${
-                active ? "text-accent" : "text-zinc-400 hover:text-zinc-100"
+                active ? "text-accent" : "text-text-secondary hover:text-text-primary"
               }`}
             >
               <Icon size={19} strokeWidth={active ? 2.3 : 1.8} />
@@ -197,7 +197,7 @@ export function GallerySidebar() {
             className={`flex flex-col items-center gap-1 rounded-xl p-2 text-xs font-medium transition ${
               pathname.startsWith("/settings")
                 ? "text-accent"
-                : "text-zinc-400 hover:text-zinc-100"
+                : "text-text-secondary hover:text-text-primary"
             }`}
           >
             <Settings size={19} strokeWidth={1.8} />

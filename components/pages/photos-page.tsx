@@ -245,18 +245,18 @@ function PhotosList({
   if (timeline.items.length === 0) {
     return (
       <div className="mx-auto mt-16 max-w-md text-center">
-        <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-zinc-200/60 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+        <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-bg-hover text-text-muted">
           <ImageIcon size={32} />
         </div>
-        <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        <h2 className="mt-4 text-xl font-bold tracking-tight text-text-primary">
           No Indexed Photos Yet
         </h2>
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-text-secondary">
           Folder &ldquo;{libraryName}&rdquo; has no photos indexed into the database yet.
         </p>
         <Link
           href="/settings"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-text-primary px-5 py-2.5 text-sm font-semibold text-bg-app transition hover:bg-text-secondary"
         >
           Run Library Scan
         </Link>
@@ -330,8 +330,8 @@ function PhotosList({
       {/* Floating Action Bar (When items are selected) */}
       {selectedPaths.size > 0 && (
         <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
-          <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-zinc-100">
-            <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-zinc-950">
+          <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-text-primary">
+            <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">
               {selectedPaths.size}
             </span>
             <span>Selected</span>
@@ -347,7 +347,7 @@ function PhotosList({
           <button
             type="button"
             onClick={handleBatchFavorite}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <Heart size={14} className="text-rose-400" />
             <span>Favorite</span>
@@ -356,7 +356,7 @@ function PhotosList({
           <button
             type="button"
             onClick={() => setAddToAlbumOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <FolderArchive size={14} className="text-accent" />
             <span>Add to Album</span>
@@ -365,7 +365,7 @@ function PhotosList({
           <button
             type="button"
             onClick={() => setAddTagOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <Tag size={14} className="text-accent" />
             <span>Tag</span>
@@ -374,7 +374,7 @@ function PhotosList({
           <button
             type="button"
             onClick={() => setAddPersonOpen(true)}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-foreground transition hover:bg-bg-hover cursor-pointer"
           >
             <Users size={14} className="text-accent" />
             <span>Person</span>
@@ -384,7 +384,7 @@ function PhotosList({
             type="button"
             onClick={() => setSelectedPaths(new Set())}
             title="Deselect all"
-            className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+            className="ml-1 rounded-xl p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-foreground cursor-pointer"
           >
             <X size={15} />
           </button>
@@ -476,10 +476,10 @@ export function PhotosView() {
             <div className="mx-auto flex size-16 items-center justify-center rounded-3xl bg-accent/10 text-accent">
               <FolderPlus size={32} />
             </div>
-            <h2 className="mt-4 text-xl font-bold tracking-tight text-zinc-100">
+            <h2 className="mt-4 text-xl font-bold tracking-tight text-text-primary">
               No Libraries Configured
             </h2>
-            <p className="mt-2 text-sm text-zinc-400">
+            <p className="mt-2 text-sm text-text-secondary">
               Add a media directory in Settings to start indexing and browsing your gallery.
             </p>
             <Link

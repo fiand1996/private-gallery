@@ -373,7 +373,7 @@ export function LibrariesView() {
             <button
               type="button"
               onClick={() => setRefreshKey((k) => k + 1)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-border-subtle transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-2 text-xs font-medium text-foreground hover:bg-border-subtle transition cursor-pointer"
             >
               <RefreshCw size={13} />
               Refresh
@@ -394,12 +394,12 @@ export function LibrariesView() {
             <Loader2 className="size-6 animate-spin text-accent" />
           </div>
         ) : libraries.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-zinc-400">
+          <div className="rounded-2xl border border-dashed border-border-subtle p-8 text-center text-sm text-text-secondary">
             <p>No libraries registered yet.</p>
             <button
               type="button"
               onClick={() => setAddModalOpen(true)}
-              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-accent-hover transition cursor-pointer shadow-sm"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-accent-foreground hover:bg-accent-hover transition cursor-pointer shadow-sm"
             >
               <FolderPlus size={14} />
               Add Your First Library
@@ -420,7 +420,7 @@ export function LibrariesView() {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">
-                      <h3 className="truncate text-base font-bold text-zinc-100">
+                      <h3 className="truncate text-base font-bold text-text-primary">
                         {lib.name}
                       </h3>
                       {lib.isDefault && (
@@ -439,12 +439,12 @@ export function LibrariesView() {
                           Scan Failed
                         </span>
                       ) : (
-                        <span className="rounded-full bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-zinc-300">
+                        <span className="rounded-full bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-foreground">
                           Ready
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 font-mono text-xs text-zinc-400 truncate">
+                    <p className="mt-1 font-mono text-xs text-text-secondary truncate">
                       {lib.rootPath}
                     </p>
                     {isFailed && lib.activeTask?.error && (
@@ -452,7 +452,7 @@ export function LibrariesView() {
                         {lib.activeTask.error}
                       </p>
                     )}
-                    <div className="mt-2.5 flex flex-wrap gap-4 text-xs text-zinc-400">
+                    <div className="mt-2.5 flex flex-wrap gap-4 text-xs text-text-secondary">
                       <span>{lib.imageCount.toLocaleString()} photos</span>
                       <span>·</span>
                       <span>{lib.folderCount.toLocaleString()} folders</span>
@@ -534,11 +534,11 @@ export function LibrariesView() {
                 <div>
                   <h2
                     id="add-library-title"
-                    className="text-base font-bold text-zinc-100"
+                    className="text-base font-bold text-text-primary"
                   >
                     Add New Media Library
                   </h2>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-text-secondary">
                     Point to a local folder on your computer.
                   </p>
                 </div>
@@ -547,7 +547,7 @@ export function LibrariesView() {
                 type="button"
                 disabled={submitting}
                 onClick={() => setAddModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
+                className="rounded-lg p-1 text-text-secondary hover:bg-border-subtle hover:text-foreground transition cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -555,7 +555,7 @@ export function LibrariesView() {
 
             <form onSubmit={addLibrary} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-xs font-semibold text-foreground mb-1.5">
                   Library Display Name
                 </label>
                 <input
@@ -564,12 +564,12 @@ export function LibrariesView() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Vacation Photos, Main Camera, etc."
-                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-xs font-semibold text-foreground mb-1.5">
                   Absolute Root Directory Path
                 </label>
                 <input
@@ -578,7 +578,7 @@ export function LibrariesView() {
                   value={rootPath}
                   onChange={(e) => setRootPath(e.target.value)}
                   placeholder="e.g. /Users/vian/Pictures/Gallery or /Volumes/Storage/Photos"
-                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -634,11 +634,11 @@ export function LibrariesView() {
                 <div>
                   <h2
                     id="edit-library-title"
-                    className="text-base font-bold text-zinc-100"
+                    className="text-base font-bold text-text-primary"
                   >
                     Edit Library
                   </h2>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-text-secondary">
                     Update the display name or underlying directory.
                   </p>
                 </div>
@@ -650,7 +650,7 @@ export function LibrariesView() {
                   setEditModalOpen(false);
                   setEditingLibrary(null);
                 }}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-zinc-200 transition cursor-pointer"
+                className="rounded-lg p-1 text-text-secondary hover:bg-border-subtle hover:text-foreground transition cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -658,7 +658,7 @@ export function LibrariesView() {
 
             <form onSubmit={handleUpdateLibrary} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-xs font-semibold text-foreground mb-1.5">
                   Library Display Name
                 </label>
                 <input
@@ -667,12 +667,12 @@ export function LibrariesView() {
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   placeholder="e.g. Vacation Photos"
-                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                <label className="block text-xs font-semibold text-foreground mb-1.5">
                   Absolute Root Directory Path
                 </label>
                 <input
@@ -681,7 +681,7 @@ export function LibrariesView() {
                   value={editRootPath}
                   onChange={(e) => setEditRootPath(e.target.value)}
                   placeholder="/Volumes/Storage/Photos"
-                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
+                  className="h-10 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 font-mono text-xs text-text-primary placeholder:text-text-muted outline-none transition focus:border-accent focus:bg-bg-input focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -749,11 +749,11 @@ export function LibrariesView() {
               <div>
                 <h2
                   id="delete-library-title"
-                  className="text-base font-bold text-zinc-100"
+                  className="text-base font-bold text-text-primary"
                 >
                   Delete Library?
                 </h2>
-                <p className="text-xs text-zinc-400">
+                <p className="text-xs text-text-secondary">
                   {deletingLibrary.name}
                 </p>
               </div>
