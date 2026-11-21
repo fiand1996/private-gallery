@@ -1,5 +1,6 @@
 import { count, desc, sql } from "drizzle-orm";
 import { getDatabase } from "./client";
+import { getAllPeople } from "./people";
 import * as schema from "../schema";
 
 export interface ExploreSummary {
@@ -11,7 +12,7 @@ export interface ExploreSummary {
   people: {
     id: number;
     name: string;
-    tagName: string;
+    tagName?: string;
     count: number;
     coverPath: string | null;
   }[];
@@ -29,6 +30,7 @@ export interface ExploreSummary {
 export interface ExploreFilter {
   collection?: "favorites" | "top-rated" | "places";
   tag?: string;
+  person?: string;
   camera?: string;
   year?: string;
 }
@@ -104,49 +106,23 @@ export function getExploreSummary(libraryId: number): ExploreSummary {
     ORDER BY count DESC, t.name ASC
   `);
 
-  const peopleMap = new Map<
-    string,
-    {
-      id: number;
-      name: string;
-      tagName: string;
-      count: number;
-      coverPath: string | null;
-    }
-  >();
+  const people = getAllPeople(libraryId).map((p) => ({
+    id: p.id,
+    name: p.name,
+    tagName: p.name,
+    count: p.count,
+    coverPath: p.coverPath,
+  }));
 
-  for (const t of tagRows) {
-    const isPeople = /^(people|person)[/|:]/i.test(t.name.trim());
-    if (isPeople) {
-      const cleanName = t.name.trim().replace(/^(people|person)[/|:]\s*/i, "");
-      if (!cleanName) continue;
-      const key = cleanName.toLowerCase();
-      const existing = peopleMap.get(key);
-      if (!existing || existing.count < t.count) {
-        peopleMap.set(key, {
-          id: t.id,
-          name: cleanName,
-          tagName: t.name,
-          count: Math.max(t.count, existing?.count ?? 0),
-          coverPath: t.cover_path || existing?.coverPath || null,
-        });
-      }
-    }
-  }
-
-  const personNamesSet = new Set(Array.from(peopleMap.keys()));
+  const personNamesSet = new Set(people.map((p) => p.name.toLowerCase()));
 
   const filteredTagRows = tagRows.filter((t) => {
     const isPeoplePrefix = /^(people|person)[/|:]/i.test(t.name.trim());
     if (isPeoplePrefix) return false;
-    // Exclude flat tag identical to person name (e.g. "fitaz" vs "people/fitaz") to avoid duplicates
+    // Exclude flat tag identical to person name (e.g. "fitaz" vs person "fitaz") to avoid duplicates
     if (personNamesSet.has(t.name.trim().toLowerCase())) return false;
     return true;
   });
-
-  const people = Array.from(peopleMap.values()).sort(
-    (a, b) => b.count - a.count || a.name.localeCompare(b.name),
-  );
 
   const cameraRows = db.all<{
     camera_make: string | null;
@@ -263,6 +239,23 @@ export function getExplorePhotos(
     filterLabel = "Places";
     conditions.push(
       sql`EXISTS (SELECT 1 FROM photo_metadata pm WHERE pm.library_id = ${libraryId} AND pm.entry_path = ${schema.libraryEntries.path} AND pm.latitude IS NOT NULL)`,
+    );
+  } else if (filter.person) {
+    const rawPerson = filter.person.trim();
+    const capitalized = rawPerson
+      .split(" ")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+    filterLabel = `People: ${capitalized}`;
+
+    conditions.push(
+      sql`EXISTS (
+        SELECT 1 FROM photo_people pp
+        JOIN people p ON p.id = pp.person_id
+        WHERE pp.library_id = ${libraryId}
+          AND pp.entry_path = ${schema.libraryEntries.path}
+          AND lower(p.name) = ${rawPerson.toLowerCase()}
+      )`,
     );
   } else if (filter.tag) {
     const rawTag = filter.tag.trim();

@@ -170,6 +170,7 @@ export const photoUserMetadata = sqliteTable(
     isCaptionEdited: integer("is_caption_edited").notNull().default(0),
     isRatingEdited: integer("is_rating_edited").notNull().default(0),
     isTagsEdited: integer("is_tags_edited").notNull().default(0),
+    isPeopleEdited: integer("is_people_edited").notNull().default(0),
     updatedAt: text("updated_at").notNull(),
   },
   (table) => [
@@ -231,5 +232,45 @@ export const users = sqliteTable(
   },
   (table) => [uniqueIndex("users_username_idx").on(table.username)],
 );
+
+export const people = sqliteTable(
+  "people",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    coverEntryPath: text("cover_entry_path"),
+    createdAt: text("created_at").notNull(),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (table) => [uniqueIndex("people_name_idx").on(table.name)],
+);
+
+export const photoPeople = sqliteTable(
+  "photo_people",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    libraryId: integer("library_id")
+      .notNull()
+      .references(() => libraries.id, { onDelete: "cascade" }),
+    entryPath: text("entry_path").notNull(),
+    personId: integer("person_id")
+      .notNull()
+      .references(() => people.id, { onDelete: "cascade" }),
+    createdAt: text("created_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("photo_people_entry_person_idx").on(
+      table.libraryId,
+      table.entryPath,
+      table.personId,
+    ),
+    index("photo_people_library_entry_idx").on(
+      table.libraryId,
+      table.entryPath,
+    ),
+    index("photo_people_person_idx").on(table.personId),
+  ],
+);
+
 
 

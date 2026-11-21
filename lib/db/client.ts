@@ -29,5 +29,14 @@ export function getDatabase() {
   orm = drizzle(database, { schema });
   migrate(orm, { migrationsFolder: MIGRATIONS_FOLDER });
 
+  try {
+    // Dynamically import or run one-time legacy people tags migration
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { migrateLegacyPeopleTags } = require("./people");
+    migrateLegacyPeopleTags();
+  } catch (err) {
+    console.warn("[Database] Could not run migrateLegacyPeopleTags:", err);
+  }
+
   return orm;
 }

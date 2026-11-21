@@ -1,5 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { getDatabase } from "./client";
+import { getPhotoPeople } from "./people";
 import { extractEmbeddedPhotoData } from "../gallery-metadata";
 import * as schema from "../schema";
 
@@ -164,9 +165,11 @@ export interface PhotoUserMetadataResult {
   caption: string | null;
   rating: number;
   tags: { id: number; name: string }[];
+  people?: { id: number; name: string }[];
   isCaptionEdited: boolean;
   isRatingEdited: boolean;
   isTagsEdited: boolean;
+  isPeopleEdited: boolean;
 }
 
 export function getPhotoUserMetadata(
@@ -185,15 +188,18 @@ export function getPhotoUserMetadata(
     .get();
 
   const tags = getPhotoTags(libraryId, normalized);
+  const people = getPhotoPeople(libraryId, normalized);
 
   return {
     isFavorite: Boolean(row?.isFavorite),
     caption: row?.caption ?? null,
     rating: row?.rating ?? 0,
     tags,
+    people,
     isCaptionEdited: Boolean(row?.isCaptionEdited),
     isRatingEdited: Boolean(row?.isRatingEdited),
     isTagsEdited: Boolean(row?.isTagsEdited),
+    isPeopleEdited: Boolean(row?.isPeopleEdited),
   };
 }
 
@@ -232,6 +238,7 @@ export function setPhotoUserMetadata(
   const isRatingEdited =
     updates.rating !== undefined ? 1 : (existing?.isRatingEdited ?? 0);
   const isTagsEdited = existing?.isTagsEdited ?? 0;
+  const isPeopleEdited = existing?.isPeopleEdited ?? 0;
 
   db.insert(schema.photoUserMetadata)
     .values({
@@ -243,6 +250,7 @@ export function setPhotoUserMetadata(
       isCaptionEdited,
       isRatingEdited,
       isTagsEdited,
+      isPeopleEdited,
       updatedAt: now,
     })
     .onConflictDoUpdate({
@@ -257,6 +265,7 @@ export function setPhotoUserMetadata(
         isCaptionEdited,
         isRatingEdited,
         isTagsEdited,
+        isPeopleEdited,
         updatedAt: now,
       },
     })
@@ -434,6 +443,47 @@ export async function syncScannedImageMetadataBatch(
                 .run();
             }
           }
+
+          // Only sync embedded people if NOT user-edited
+          if (
+            !existingUserMeta.isPeopleEdited &&
+            data.embeddedPeople &&
+            data.embeddedPeople.length > 0
+          ) {
+            tx.delete(schema.photoPeople)
+              .where(
+                sql`${schema.photoPeople.libraryId} = ${libraryId} AND ${schema.photoPeople.entryPath} = ${item.relativePath}`,
+              )
+              .run();
+
+            for (const personName of data.embeddedPeople) {
+              const clean = personName.trim();
+              if (!clean) continue;
+              let personRow = tx
+                .select({ id: schema.people.id })
+                .from(schema.people)
+                .where(sql`lower(${schema.people.name}) = ${clean.toLowerCase()}`)
+                .get();
+
+              if (!personRow) {
+                personRow = tx
+                  .insert(schema.people)
+                  .values({ name: clean, createdAt: now, updatedAt: now })
+                  .returning({ id: schema.people.id })
+                  .get();
+              }
+
+              tx.insert(schema.photoPeople)
+                .values({
+                  libraryId,
+                  entryPath: item.relativePath,
+                  personId: personRow.id,
+                  createdAt: now,
+                })
+                .onConflictDoNothing()
+                .run();
+            }
+          }
         } else {
           // Brand new photo! Initialize with embedded values
           tx.insert(schema.photoUserMetadata)
@@ -446,6 +496,7 @@ export async function syncScannedImageMetadataBatch(
               isCaptionEdited: 0,
               isRatingEdited: 0,
               isTagsEdited: 0,
+              isPeopleEdited: 0,
               updatedAt: now,
             })
             .run();
@@ -471,6 +522,36 @@ export async function syncScannedImageMetadataBatch(
                   libraryId,
                   entryPath: item.relativePath,
                   tagId: tagRow.id,
+                  createdAt: now,
+                })
+                .onConflictDoNothing()
+                .run();
+            }
+          }
+
+          if (data.embeddedPeople && data.embeddedPeople.length > 0) {
+            for (const personName of data.embeddedPeople) {
+              const clean = personName.trim();
+              if (!clean) continue;
+              let personRow = tx
+                .select({ id: schema.people.id })
+                .from(schema.people)
+                .where(sql`lower(${schema.people.name}) = ${clean.toLowerCase()}`)
+                .get();
+
+              if (!personRow) {
+                personRow = tx
+                  .insert(schema.people)
+                  .values({ name: clean, createdAt: now, updatedAt: now })
+                  .returning({ id: schema.people.id })
+                  .get();
+              }
+
+              tx.insert(schema.photoPeople)
+                .values({
+                  libraryId,
+                  entryPath: item.relativePath,
+                  personId: personRow.id,
                   createdAt: now,
                 })
                 .onConflictDoNothing()

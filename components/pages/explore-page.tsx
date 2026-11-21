@@ -25,11 +25,12 @@ export function ExplorePage() {
 
   const collectionParam = searchParams.get("collection");
   const tagParam = searchParams.get("tag");
+  const personParam = searchParams.get("person");
   const cameraParam = searchParams.get("camera");
   const yearParam = searchParams.get("year");
 
   const hasFilter = Boolean(
-    collectionParam || tagParam || cameraParam || yearParam,
+    collectionParam || tagParam || personParam || cameraParam || yearParam,
   );
 
   // Explore Hub Summary State
@@ -129,6 +130,7 @@ export function ExplorePage() {
             onSortChange={setSort}
             collectionParam={collectionParam}
             tagParam={tagParam}
+            personParam={personParam}
             cameraParam={cameraParam}
             yearParam={yearParam}
             onNotice={setNotice}

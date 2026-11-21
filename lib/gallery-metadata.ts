@@ -57,9 +57,11 @@ export interface FormattedPhotoMetadata {
     caption: string | null;
     rating: number;
     tags: { id: number; name: string }[];
+    people?: { id: number; name: string }[];
     isCaptionEdited?: boolean;
     isRatingEdited?: boolean;
     isTagsEdited?: boolean;
+    isPeopleEdited?: boolean;
   };
 }
 
@@ -138,13 +140,114 @@ function extractKeywords(raw: Record<string, unknown>): string[] {
     if (Array.isArray(candidate)) {
       for (const item of candidate) {
         const str = extractString(item);
-        if (str) results.add(str);
+        if (str) {
+          // Skip if this is actually a people tag (handled by extractPeople)
+          if (!/^(people|person)[/|:]/i.test(str)) {
+            results.add(str);
+          }
+        }
       }
     } else if (typeof candidate === "string") {
       const parts = candidate.split(/[,;]/);
       for (const part of parts) {
         const str = part.trim();
-        if (str) results.add(str);
+        if (str && !/^(people|person)[/|:]/i.test(str)) {
+          results.add(str);
+        }
+      }
+    }
+  }
+
+  return Array.from(results);
+}
+
+function extractPeople(raw: Record<string, unknown>): string[] {
+  const results = new Set<string>();
+
+  const addName = (val: unknown) => {
+    if (!val) return;
+    const str = extractString(val);
+    if (!str) return;
+
+    // Remove any prefix like "people/", "person/", "people|", "people:"
+    const clean = str.replace(/^(people|person)[/|:]\s*/i, "").trim();
+    if (clean && clean.length > 0 && !clean.includes("/")) {
+      results.add(clean);
+    }
+  };
+
+  // 1. Direct IPTC / XMP PersonInImage standard (Lightroom, Adobe Bridge, Photo Mechanic, ExifTool)
+  const personCandidates = [
+    raw.PersonInImage,
+    raw["PersonInImage"],
+    raw["Iptc4xmpExt:PersonInImage"],
+    raw["iptc4xmpExt:PersonInImage"],
+    raw.Persons,
+    raw.People,
+  ];
+
+  for (const candidate of personCandidates) {
+    if (!candidate) continue;
+    if (Array.isArray(candidate)) {
+      for (const item of candidate) addName(item);
+    } else if (typeof candidate === "string") {
+      for (const part of candidate.split(/[,;]/)) addName(part);
+    }
+  }
+
+  // 2. Metadata Working Group (MWG) Face Regions (Picasa, Lightroom, DigiKam, Google Photos, Windows Photo)
+  const regionInfo = (raw.RegionInfo ||
+    raw["mwg-rs:RegionInfo"] ||
+    raw.Regions) as Record<string, unknown> | undefined;
+
+  if (regionInfo && typeof regionInfo === "object") {
+    const list = (regionInfo.RegionList ||
+      regionInfo.Regions ||
+      regionInfo) as unknown;
+    if (Array.isArray(list)) {
+      for (const reg of list) {
+        if (reg && typeof reg === "object") {
+          const name =
+            (reg as { Name?: unknown; PersonDisplayName?: unknown }).Name ||
+            (reg as { Name?: unknown; PersonDisplayName?: unknown })
+              .PersonDisplayName;
+          addName(name);
+        }
+      }
+    }
+  }
+
+  // 3. HierarchicalSubject or CatalogSets (Lightroom/DigiKam: "People|John Doe")
+  const hierarchicalCandidates = [
+    raw.HierarchicalSubject,
+    raw["lr:hierarchicalSubject"],
+    raw.CatalogSets,
+  ];
+
+  for (const candidate of hierarchicalCandidates) {
+    if (!candidate) continue;
+    const items = Array.isArray(candidate) ? candidate : [candidate];
+    for (const item of items) {
+      const str = extractString(item);
+      if (str && /^(people|person)[/|:]/i.test(str)) {
+        addName(str);
+      }
+    }
+  }
+
+  // 4. Keywords or Subject with people/ prefix
+  const keywordCandidates = [raw.Keywords, raw.subject, raw.XPKeywords];
+  for (const candidate of keywordCandidates) {
+    if (!candidate) continue;
+    const items = Array.isArray(candidate)
+      ? candidate
+      : typeof candidate === "string"
+        ? candidate.split(/[,;]/)
+        : [];
+    for (const item of items) {
+      const str = extractString(item);
+      if (str && /^(people|person)[/|:]/i.test(str)) {
+        addName(str);
       }
     }
   }
@@ -377,6 +480,7 @@ export interface ScannedEmbeddedMetadata {
   embeddedCaption: string | null;
   embeddedRating: number | null;
   embeddedKeywords: string[];
+  embeddedPeople: string[];
 }
 
 export async function extractEmbeddedPhotoData(
@@ -479,6 +583,7 @@ export async function extractEmbeddedPhotoData(
   }
 
   const embeddedKeywords = extractKeywords(rawExif);
+  const embeddedPeople = extractPeople(rawExif);
 
   return {
     width,
@@ -498,5 +603,6 @@ export async function extractEmbeddedPhotoData(
     embeddedCaption,
     embeddedRating,
     embeddedKeywords,
+    embeddedPeople,
   };
 }

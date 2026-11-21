@@ -5,5 +5,6 @@ export * from "./albums";
 export * from "./gallery";
 export * from "./settings";
 export * from "./metadata";
+export * from "./people";
 export * from "./explore";
 export * from "./users";

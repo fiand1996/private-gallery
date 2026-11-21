@@ -17,6 +17,8 @@ import {
   Plus,
   Star,
   Tag,
+  User,
+  Users,
   X,
 } from "lucide-react";
 import type { FormattedPhotoMetadata } from "@/lib/gallery-metadata";
@@ -76,6 +78,9 @@ export function PhotoInfoPanel({
   const [tags, setTags] = useState<{ id: number; name: string }[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [allSuggestions, setAllSuggestions] = useState<{ id: number; name: string }[]>([]);
+  const [people, setPeople] = useState<{ id: number; name: string }[]>([]);
+  const [personInput, setPersonInput] = useState("");
+  const [allPersonSuggestions, setAllPersonSuggestions] = useState<{ id: number; name: string }[]>([]);
   const [savingMeta, setSavingMeta] = useState(false);
   const [savedNotice, setSavedNotice] = useState("");
 
@@ -103,6 +108,7 @@ export function PhotoInfoPanel({
           setCaption(data.userMetadata.caption ?? "");
           setRating(data.userMetadata.rating ?? 0);
           setTags(data.userMetadata.tags ?? []);
+          setPeople(data.userMetadata.people ?? []);
         }
       })
       .catch((err) => {
@@ -120,6 +126,16 @@ export function PhotoInfoPanel({
       .then((res) => (res.ok ? res.json() : Promise.reject()))
       .then((data: { tags?: { id: number; name: string }[] }) => {
         setAllSuggestions(data.tags ?? []);
+      })
+      .catch(() => {
+        // ignore suggestions error
+      });
+
+    // Fetch all available people for autocomplete suggestions
+    fetch(`/api/gallery/people?libraryId=${libraryId}`, { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data: { people?: { id: number; name: string }[] }) => {
+        setAllPersonSuggestions(data.people ?? []);
       })
       .catch(() => {
         // ignore suggestions error
@@ -244,6 +260,67 @@ export function PhotoInfoPanel({
     }
   }
 
+  async function handleAddPerson(e?: FormEvent, customName?: string) {
+    if (e) e.preventDefault();
+    const raw = customName || personInput;
+    const clean = raw.trim();
+    if (!clean) return;
+
+    if (people.some((p) => p.name.toLowerCase() === clean.toLowerCase())) {
+      setPersonInput("");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/gallery/people", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          libraryId,
+          path: photo.path,
+          personName: clean,
+          action: "add",
+        }),
+      });
+      const data = (await response.json()) as {
+        person?: { id: number; name: string };
+        people?: { id: number; name: string }[];
+      };
+      if (data.people) {
+        setPeople(data.people);
+      } else if (data.person) {
+        setPeople((prev) => [...prev, data.person!]);
+      }
+      if (data.person) {
+        setAllPersonSuggestions((prev) =>
+          prev.some((s) => s.id === data.person!.id) ? prev : [...prev, data.person!],
+        );
+      }
+      setPersonInput("");
+    } catch {
+      // ignore
+    }
+  }
+
+  async function handleRemovePerson(personId: number) {
+    setPeople((prev) => prev.filter((p) => p.id !== personId));
+
+    try {
+      await fetch("/api/gallery/people", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          libraryId,
+          path: photo.path,
+          personId,
+          action: "remove",
+        }),
+      });
+    } catch {
+      // ignore rollback
+    }
+  }
+
   const hasCameraData =
     metadata &&
     Boolean(
@@ -266,6 +343,10 @@ export function PhotoInfoPanel({
   // Unselected suggestions
   const unusedSuggestions = allSuggestions
     .filter((s) => !tags.some((t) => t.name.toLowerCase() === s.name.toLowerCase()))
+    .slice(0, 5);
+
+  const unusedPersonSuggestions = allPersonSuggestions
+    .filter((s) => !people.some((p) => p.name.toLowerCase() === s.name.toLowerCase()))
     .slice(0, 5);
 
   return (
@@ -463,6 +544,85 @@ export function PhotoInfoPanel({
                     type="button"
                     onClick={() => handleAddTag(undefined, s.name)}
                     className="inline-flex items-center gap-1 rounded-md border border-[#2e2e2e] bg-[#1c1c1c] px-2 py-0.5 text-[11px] text-zinc-400 hover:text-[#8ab4f8] hover:border-[#8ab4f8]/40 transition cursor-pointer"
+                  >
+                    <span>+{s.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Interactive People Section */}
+        <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-3">
+          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-[#262626] pb-2">
+            <Users size={15} className="text-[#8ab4f8]" />
+            <span>People in Photo</span>
+          </div>
+
+          {/* Current people chips */}
+          <div className="flex flex-wrap gap-1.5">
+            {people.map((p) => (
+              <span
+                key={p.id}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-xs font-medium text-emerald-400"
+              >
+                <User size={11} />
+                <span>{p.name}</span>
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemovePerson(p.id)}
+                    title={`Remove ${p.name}`}
+                    className="rounded hover:bg-emerald-500/20 p-0.5 text-emerald-400 hover:text-zinc-100 cursor-pointer"
+                  >
+                    <X size={11} />
+                  </button>
+                )}
+              </span>
+            ))}
+            {people.length === 0 && (
+              <span className="text-xs text-zinc-500 italic">No people tagged yet.</span>
+            )}
+          </div>
+
+          {/* Add Person Form (Admin Only) */}
+          {isAdmin && (
+            <form onSubmit={handleAddPerson} className="flex items-center gap-2 pt-1">
+              <div className="relative flex-1">
+                <User size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <input
+                  type="text"
+                  value={personInput}
+                  onChange={(e) => setPersonInput(e.target.value)}
+                  placeholder="Add person name..."
+                  className="h-8 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] pl-7 pr-2.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8]"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={!personInput.trim()}
+                className="inline-flex h-8 items-center gap-1 rounded-xl bg-[#8ab4f8]/15 border border-[#8ab4f8]/30 px-3 text-xs font-semibold text-[#8ab4f8] hover:bg-[#8ab4f8]/25 transition cursor-pointer disabled:opacity-40"
+              >
+                <Plus size={13} />
+                Add
+              </button>
+            </form>
+          )}
+
+          {/* Quick Suggestions (Admin Only) */}
+          {isAdmin && unusedPersonSuggestions.length > 0 && (
+            <div className="pt-1">
+              <span className="block text-[10px] text-zinc-500 uppercase tracking-wider mb-1.5">
+                Suggested
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {unusedPersonSuggestions.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => handleAddPerson(undefined, s.name)}
+                    className="inline-flex items-center gap-1 rounded-md border border-[#2e2e2e] bg-[#1c1c1c] px-2 py-0.5 text-[11px] text-zinc-400 hover:text-emerald-300 hover:border-emerald-500/40 transition cursor-pointer"
                   >
                     <span>+{s.name}</span>
                   </button>

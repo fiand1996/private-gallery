@@ -25,6 +25,7 @@ import { ConfirmDialog } from "@/components/gallery/confirm-dialog";
 import { FolderPickerModal } from "@/components/gallery/folder-picker-modal";
 import { AddToAlbumModal } from "@/components/gallery/add-to-album-modal";
 import { AddTagModal } from "@/components/gallery/add-tag-modal";
+import { AddPersonModal } from "@/components/gallery/add-person-modal";
 import { FolderBreadcrumbs } from "@/components/folder/folder-breadcrumbs";
 import { FolderGridItem } from "@/components/folder/folder-grid-item";
 import { FolderActionBar } from "@/components/folder/folder-action-bar";
@@ -128,6 +129,7 @@ function FolderContent({
   >(null);
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false);
   const [addTagOpen, setAddTagOpen] = useState(false);
+  const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [createFolderOpen, setCreateFolderOpen] = useState(false);
 
@@ -527,6 +529,7 @@ function FolderContent({
         onFavorite={handleBatchFavorite}
         onAddToAlbum={() => setAddToAlbumOpen(true)}
         onTag={() => setAddTagOpen(true)}
+        onPerson={() => setAddPersonOpen(true)}
         onDelete={() => setConfirmDeleteOpen(true)}
         onClear={() => setSelectedPaths(new Set())}
       />
@@ -650,6 +653,18 @@ function FolderContent({
         onClose={() => setAddTagOpen(false)}
         onSuccess={(tagName, count) => {
           setNotice(`Added tag #${tagName} to ${count} photo(s).`);
+          setSelectedPaths(new Set());
+        }}
+      />
+
+      {/* Add Person Modal */}
+      <AddPersonModal
+        isOpen={addPersonOpen}
+        libraryId={libraryId}
+        entryPaths={Array.from(selectedPaths)}
+        onClose={() => setAddPersonOpen(false)}
+        onSuccess={(personName, count) => {
+          setNotice(`Tagged ${personName} in ${count} photo(s).`);
           setSelectedPaths(new Set());
         }}
       />

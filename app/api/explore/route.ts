@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
     | "places"
     | null;
   const tag = searchParams.get("tag");
+  const person = searchParams.get("person");
   const camera = searchParams.get("camera");
   const year = searchParams.get("year");
   const page = Math.max(1, Number(searchParams.get("page")) || 1);
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
   );
 
   try {
-    const hasFilter = Boolean(collection || tag || camera || year);
+    const hasFilter = Boolean(collection || tag || person || camera || year);
 
     if (hasFilter) {
       const result = getExplorePhotos(
@@ -35,6 +36,7 @@ export async function GET(request: NextRequest) {
         {
           collection: collection || undefined,
           tag: tag || undefined,
+          person: person || undefined,
           camera: camera || undefined,
           year: year || undefined,
         },

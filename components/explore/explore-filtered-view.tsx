@@ -15,6 +15,7 @@ import {
 } from "@/components/gallery/lightbox-modal";
 import { AddToAlbumModal } from "@/components/gallery/add-to-album-modal";
 import { AddTagModal } from "@/components/gallery/add-tag-modal";
+import { AddPersonModal } from "@/components/gallery/add-person-modal";
 import { ConfirmDialog } from "@/components/gallery/confirm-dialog";
 import { FolderPickerModal } from "@/components/gallery/folder-picker-modal";
 import { ExploreActionBar } from "./explore-action-bar";
@@ -47,6 +48,7 @@ interface ExploreFilteredViewProps {
   onSortChange: (sort: GallerySort) => void;
   collectionParam: string | null;
   tagParam: string | null;
+  personParam?: string | null;
   cameraParam: string | null;
   yearParam: string | null;
   onNotice: (msg: string) => void;
@@ -60,6 +62,7 @@ export function ExploreFilteredView({
   onSortChange,
   collectionParam,
   tagParam,
+  personParam,
   cameraParam,
   yearParam,
   onNotice,
@@ -83,6 +86,7 @@ export function ExploreFilteredView({
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false);
   const [addTagOpen, setAddTagOpen] = useState(false);
+  const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [folderPickerAction, setFolderPickerAction] = useState<"copy" | "move" | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
@@ -107,6 +111,7 @@ export function ExploreFilteredView({
 
     if (collectionParam) params.set("collection", collectionParam);
     if (tagParam) params.set("tag", tagParam);
+    if (personParam) params.set("person", personParam);
     if (cameraParam) params.set("camera", cameraParam);
     if (yearParam) params.set("year", yearParam);
 
@@ -133,7 +138,7 @@ export function ExploreFilteredView({
     return () => {
       active = false;
     };
-  }, [libraryId, collectionParam, tagParam, cameraParam, yearParam]);
+  }, [libraryId, collectionParam, tagParam, personParam, cameraParam, yearParam]);
 
   // Infinite scroll loader
   const loadMore = useCallback(async () => {
@@ -149,6 +154,7 @@ export function ExploreFilteredView({
 
     if (collectionParam) params.set("collection", collectionParam);
     if (tagParam) params.set("tag", tagParam);
+    if (personParam) params.set("person", personParam);
     if (cameraParam) params.set("camera", cameraParam);
     if (yearParam) params.set("year", yearParam);
 
@@ -177,6 +183,7 @@ export function ExploreFilteredView({
     photosData.totalCount,
     collectionParam,
     tagParam,
+    personParam,
     cameraParam,
     yearParam,
   ]);
@@ -374,6 +381,7 @@ export function ExploreFilteredView({
         onMove={() => setFolderPickerAction("move")}
         onAddToAlbum={() => setAddToAlbumOpen(true)}
         onTag={() => setAddTagOpen(true)}
+        onPerson={() => setAddPersonOpen(true)}
         onDelete={() => setConfirmDeleteOpen(true)}
         onClear={() => setSelectedPaths(new Set())}
       />
@@ -407,6 +415,18 @@ export function ExploreFilteredView({
         onClose={() => setAddTagOpen(false)}
         onSuccess={(tagName) => {
           onNotice(`Tagged ${selectedPaths.size} photo(s) with #${tagName}.`);
+          setSelectedPaths(new Set());
+        }}
+      />
+
+      {/* Add Person Dialog */}
+      <AddPersonModal
+        isOpen={addPersonOpen}
+        libraryId={libraryId}
+        entryPaths={Array.from(selectedPaths)}
+        onClose={() => setAddPersonOpen(false)}
+        onSuccess={(personName) => {
+          onNotice(`Tagged ${selectedPaths.size} photo(s) with ${personName}.`);
           setSelectedPaths(new Set());
         }}
       />

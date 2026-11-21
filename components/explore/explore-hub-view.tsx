@@ -184,7 +184,7 @@ export function ExploreHubView({
             {summary.people.map((person) => (
               <Link
                 key={person.id}
-                href={`/explore?tag=${encodeURIComponent(person.tagName)}`}
+                href={`/explore?person=${encodeURIComponent(person.name)}`}
                 className="group flex flex-col items-center gap-2.5 text-center"
               >
                 <div className="relative size-20 sm:size-24 overflow-hidden rounded-full border-2 border-[#262626] bg-[#141414] transition duration-300 group-hover:scale-105 group-hover:border-[#8ab4f8] group-hover:shadow-lg group-hover:shadow-[#8ab4f8]/20">

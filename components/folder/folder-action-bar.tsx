@@ -7,6 +7,7 @@ import {
   Heart,
   Tag,
   Trash2,
+  Users,
   X,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ interface FolderActionBarProps {
   onFavorite: () => void;
   onAddToAlbum: () => void;
   onTag: () => void;
+  onPerson?: () => void;
   onDelete: () => void;
   onClear: () => void;
 }
@@ -32,6 +34,7 @@ export function FolderActionBar({
   onFavorite,
   onAddToAlbum,
   onTag,
+  onPerson,
   onDelete,
   onClear,
 }: FolderActionBarProps) {
@@ -94,6 +97,17 @@ export function FolderActionBar({
             <Tag size={14} className="text-[#8ab4f8]" />
             <span>Tag</span>
           </button>
+
+          {onPerson && (
+            <button
+              type="button"
+              onClick={onPerson}
+              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            >
+              <Users size={14} className="text-[#8ab4f8]" />
+              <span>Person</span>
+            </button>
+          )}
 
           <button
             type="button"
