@@ -14,7 +14,9 @@ import {
 interface FolderActionBarProps {
   selectedCount: number;
   isAdmin: boolean;
-  hasPhotos: boolean;
+  hasDirectories?: boolean;
+  isAllSelected?: boolean;
+  onToggleSelectAll?: () => void;
   onCopy: () => void;
   onMove: () => void;
   onFavorite: () => void;
@@ -28,7 +30,9 @@ interface FolderActionBarProps {
 export function FolderActionBar({
   selectedCount,
   isAdmin,
-  hasPhotos,
+  hasDirectories = false,
+  isAllSelected = false,
+  onToggleSelectAll,
   onCopy,
   onMove,
   onFavorite,
@@ -40,6 +44,11 @@ export function FolderActionBar({
 }: FolderActionBarProps) {
   if (selectedCount === 0) return null;
 
+  const disablePhotoActions = hasDirectories;
+  const photoActionTooltip = hasDirectories
+    ? "Action is disabled because one or more folders are selected. Select only photos to proceed."
+    : undefined;
+
   return (
     <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-[#2e2e2e] bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
       <div className="flex items-center gap-2 border-r border-[#262626] pr-3 text-xs font-bold text-zinc-100">
@@ -47,6 +56,15 @@ export function FolderActionBar({
           {selectedCount}
         </span>
         <span>Selected</span>
+        {onToggleSelectAll && (
+          <button
+            type="button"
+            onClick={onToggleSelectAll}
+            className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+          >
+            {isAllSelected ? "Deselect All" : "Select All"}
+          </button>
+        )}
       </div>
 
       {isAdmin && (
@@ -69,21 +87,23 @@ export function FolderActionBar({
             <span>Move</span>
           </button>
 
-          {hasPhotos && (
-            <button
-              type="button"
-              onClick={onFavorite}
-              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
-            >
-              <Heart size={14} className="text-rose-400" />
-              <span>Favorite</span>
-            </button>
-          )}
+          <button
+            type="button"
+            disabled={disablePhotoActions}
+            onClick={onFavorite}
+            title={photoActionTooltip || "Favorite"}
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          >
+            <Heart size={14} className="text-rose-400" />
+            <span>Favorite</span>
+          </button>
 
           <button
             type="button"
+            disabled={disablePhotoActions}
             onClick={onAddToAlbum}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            title={photoActionTooltip || "Add to Album"}
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <FolderArchive size={14} className="text-[#8ab4f8]" />
             <span>Add to Album</span>
@@ -91,8 +111,10 @@ export function FolderActionBar({
 
           <button
             type="button"
+            disabled={disablePhotoActions}
             onClick={onTag}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+            title={photoActionTooltip || "Tag"}
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <Tag size={14} className="text-[#8ab4f8]" />
             <span>Tag</span>
@@ -101,8 +123,10 @@ export function FolderActionBar({
           {onPerson && (
             <button
               type="button"
+              disabled={disablePhotoActions}
               onClick={onPerson}
-              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+              title={photoActionTooltip || "Person"}
+              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
             >
               <Users size={14} className="text-[#8ab4f8]" />
               <span>Person</span>

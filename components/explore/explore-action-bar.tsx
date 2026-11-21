@@ -13,6 +13,8 @@ import {
 
 interface ExploreActionBarProps {
   selectedCount: number;
+  isAllSelected?: boolean;
+  onToggleSelectAll?: () => void;
   onFavorite: () => void;
   onCopy: () => void;
   onMove: () => void;
@@ -25,6 +27,8 @@ interface ExploreActionBarProps {
 
 export function ExploreActionBar({
   selectedCount,
+  isAllSelected = false,
+  onToggleSelectAll,
   onFavorite,
   onCopy,
   onMove,
@@ -43,6 +47,15 @@ export function ExploreActionBar({
           {selectedCount}
         </span>
         <span>Selected</span>
+        {onToggleSelectAll && (
+          <button
+            type="button"
+            onClick={onToggleSelectAll}
+            className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+          >
+            {isAllSelected ? "Deselect All" : "Select All"}
+          </button>
+        )}
       </div>
 
       <button

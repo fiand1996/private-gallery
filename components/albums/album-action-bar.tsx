@@ -1,19 +1,37 @@
 "use client";
 
-import { Heart, Loader2, Trash2, X } from "lucide-react";
+import {
+  FolderArchive,
+  Heart,
+  Loader2,
+  Tag,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
 
 interface AlbumActionBarProps {
   selectedCount: number;
-  actionLoading: boolean;
+  isAllSelected?: boolean;
+  actionLoading?: boolean;
+  onToggleSelectAll?: () => void;
   onFavorite: () => void;
-  onRemoveFromAlbum: () => void;
+  onAddToAlbum?: () => void;
+  onTag?: () => void;
+  onPerson?: () => void;
+  onRemoveFromAlbum?: () => void;
   onClear: () => void;
 }
 
 export function AlbumActionBar({
   selectedCount,
-  actionLoading,
+  isAllSelected = false,
+  actionLoading = false,
+  onToggleSelectAll,
   onFavorite,
+  onAddToAlbum,
+  onTag,
+  onPerson,
   onRemoveFromAlbum,
   onClear,
 }: AlbumActionBarProps) {
@@ -26,6 +44,15 @@ export function AlbumActionBar({
           {selectedCount}
         </span>
         <span>Selected</span>
+        {onToggleSelectAll && (
+          <button
+            type="button"
+            onClick={onToggleSelectAll}
+            className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+          >
+            {isAllSelected ? "Deselect All" : "Select All"}
+          </button>
+        )}
       </div>
 
       <button
@@ -37,15 +64,50 @@ export function AlbumActionBar({
         <span>Favorite</span>
       </button>
 
-      <button
-        type="button"
-        disabled={actionLoading}
-        onClick={onRemoveFromAlbum}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/10 cursor-pointer disabled:opacity-50"
-      >
-        {actionLoading ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-        <span>Remove from Album</span>
-      </button>
+      {onAddToAlbum && (
+        <button
+          type="button"
+          onClick={onAddToAlbum}
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+        >
+          <FolderArchive size={14} className="text-[#8ab4f8]" />
+          <span>Add to Album</span>
+        </button>
+      )}
+
+      {onTag && (
+        <button
+          type="button"
+          onClick={onTag}
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+        >
+          <Tag size={14} className="text-[#8ab4f8]" />
+          <span>Tag</span>
+        </button>
+      )}
+
+      {onPerson && (
+        <button
+          type="button"
+          onClick={onPerson}
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+        >
+          <Users size={14} className="text-[#8ab4f8]" />
+          <span>Person</span>
+        </button>
+      )}
+
+      {onRemoveFromAlbum && (
+        <button
+          type="button"
+          disabled={actionLoading}
+          onClick={onRemoveFromAlbum}
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/10 cursor-pointer disabled:opacity-50"
+        >
+          {actionLoading ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+          <span>Remove from Album</span>
+        </button>
+      )}
 
       <button
         type="button"

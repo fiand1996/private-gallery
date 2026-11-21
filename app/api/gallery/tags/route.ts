@@ -4,6 +4,7 @@ import {
   addTagToPhotos,
   removeTagFromPhoto,
   getPhotoTags,
+  hasDirectoryEntries,
 } from "@/lib/database";
 
 export async function GET(request: NextRequest) {
@@ -42,6 +43,13 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: "Library ID, non-empty entryPaths array, and tag name are required." },
+        { status: 400 },
+      );
+    }
+
+    if (hasDirectoryEntries(body.libraryId, body.entryPaths)) {
+      return NextResponse.json(
+        { error: "Cannot add tags to directories. Please select only photos." },
         { status: 400 },
       );
     }

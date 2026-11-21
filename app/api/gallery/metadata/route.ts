@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GalleryPathError } from "@/lib/gallery";
 import { getPhotoMetadata } from "@/lib/gallery-metadata";
-import { getPhotoUserMetadata, setPhotoUserMetadata } from "@/lib/database";
+import { getPhotoUserMetadata, hasDirectoryEntries, setPhotoUserMetadata } from "@/lib/database";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -62,6 +62,20 @@ export async function POST(request: NextRequest) {
     if (!Number.isSafeInteger(body.libraryId) || body.libraryId < 1) {
       return NextResponse.json(
         { error: "Valid library ID is required." },
+        { status: 400 },
+      );
+    }
+
+    const pathsToCheck =
+      Array.isArray(body.entryPaths) && body.entryPaths.length > 0
+        ? body.entryPaths
+        : body.path
+          ? [body.path]
+          : [];
+
+    if (pathsToCheck.length > 0 && hasDirectoryEntries(body.libraryId, pathsToCheck)) {
+      return NextResponse.json(
+        { error: "Cannot modify metadata or favorite directories. Please select only photos." },
         { status: 400 },
       );
     }

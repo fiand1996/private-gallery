@@ -382,3 +382,20 @@ export function getIndexedGalleryContents(
     search: query,
   };
 }
+
+export function hasDirectoryEntries(libraryId: number, paths: string[]): boolean {
+  if (!paths || paths.length === 0) return false;
+  const db = getDatabase();
+  const dirRow = db
+    .select({ path: schema.libraryEntries.path })
+    .from(schema.libraryEntries)
+    .where(
+      sql`${schema.libraryEntries.libraryId} = ${libraryId}
+        AND ${inArray(schema.libraryEntries.path, paths)}
+        AND ${schema.libraryEntries.kind} = 'directory'`,
+    )
+    .limit(1)
+    .get();
+  return Boolean(dirRow);
+}
+

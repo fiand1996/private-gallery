@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, User } from "lucide-react";
 import { PhotoCard } from "@/components/gallery/photo-card";
@@ -206,6 +206,13 @@ export function ExploreFilteredView({
     return () => observer.disconnect();
   }, [hasMore, photosLoading, loadingMore, loadMore]);
 
+  const allItemPaths = useMemo(
+    () => photosData.items.map((i) => i.path),
+    [photosData.items],
+  );
+  const isAllSelected =
+    allItemPaths.length > 0 && selectedPaths.size === allItemPaths.length;
+
   // Selection toggle
   const toggleSelect = useCallback((path: string) => {
     setSelectedPaths((prev) => {
@@ -215,6 +222,32 @@ export function ExploreFilteredView({
       return next;
     });
   }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    if (isAllSelected) {
+      setSelectedPaths(new Set());
+    } else {
+      setSelectedPaths(new Set(allItemPaths));
+    }
+  }, [allItemPaths, isAllSelected]);
+
+  // Keyboard shortcut Ctrl+A / Cmd+A
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "a") {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+        e.preventDefault();
+        setSelectedPaths(new Set(allItemPaths));
+      } else if (e.key === "Escape") {
+        if (selectedPaths.size > 0) {
+          setSelectedPaths(new Set());
+        }
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [allItemPaths, selectedPaths.size]);
 
   // Batch Favorite handler
   const handleBatchFavorite = async () => {
@@ -376,6 +409,8 @@ export function ExploreFilteredView({
       {/* Floating Action Bar (Multi-Select) */}
       <ExploreActionBar
         selectedCount={selectedPaths.size}
+        isAllSelected={isAllSelected}
+        onToggleSelectAll={toggleSelectAll}
         onFavorite={handleBatchFavorite}
         onCopy={() => setFolderPickerAction("copy")}
         onMove={() => setFolderPickerAction("move")}

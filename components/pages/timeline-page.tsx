@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FolderArchive, FolderPlus, Heart, Image as ImageIcon, Loader2, Tag, X } from "lucide-react";
+import { FolderArchive, FolderPlus, Heart, Image as ImageIcon, Loader2, Tag, Users, X } from "lucide-react";
 import { useLibrary } from "@/components/layout/library-context";
 import { GalleryHeader } from "@/components/layout/gallery-header";
 import { PhotoCard } from "@/components/gallery/photo-card";
 import { AddToAlbumModal } from "@/components/gallery/add-to-album-modal";
 import { AddTagModal } from "@/components/gallery/add-tag-modal";
+import { AddPersonModal } from "@/components/gallery/add-person-modal";
 import {
   LightboxModal,
   type GalleryPhoto,
@@ -60,6 +61,7 @@ function TimelineList({
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false);
   const [addTagOpen, setAddTagOpen] = useState(false);
+  const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [notice, setNotice] = useState("");
   const sentinelRef = useRef<HTMLDivElement>(null);
   const isFetchingRef = useRef(false);
@@ -145,6 +147,13 @@ function TimelineList({
     return () => observer.disconnect();
   }, [error, hasMore, loading, loadingMore]);
 
+  const allItemPaths = useMemo(
+    () => timeline.items.map((i) => i.path),
+    [timeline.items],
+  );
+  const isAllSelected =
+    allItemPaths.length > 0 && selectedPaths.size === allItemPaths.length;
+
   const toggleSelectPhoto = useCallback((path: string) => {
     setSelectedPaths((prev) => {
       const next = new Set(prev);
@@ -153,6 +162,32 @@ function TimelineList({
       return next;
     });
   }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    if (isAllSelected) {
+      setSelectedPaths(new Set());
+    } else {
+      setSelectedPaths(new Set(allItemPaths));
+    }
+  }, [allItemPaths, isAllSelected]);
+
+  // Keyboard shortcut Ctrl+A / Cmd+A
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "a") {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+        e.preventDefault();
+        setSelectedPaths(new Set(allItemPaths));
+      } else if (e.key === "Escape") {
+        if (selectedPaths.size > 0) {
+          setSelectedPaths(new Set());
+        }
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [allItemPaths, selectedPaths.size]);
 
   const activePhoto = externalSelectedPhoto ?? localSelectedPhoto;
 
@@ -292,6 +327,13 @@ function TimelineList({
               {selectedPaths.size}
             </span>
             <span>Selected</span>
+            <button
+              type="button"
+              onClick={toggleSelectAll}
+              className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+            >
+              {isAllSelected ? "Deselect All" : "Select All"}
+            </button>
           </div>
 
           <button
@@ -319,6 +361,15 @@ function TimelineList({
           >
             <Tag size={14} className="text-[#8ab4f8]" />
             <span>Tag</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setAddPersonOpen(true)}
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-[#212121] cursor-pointer"
+          >
+            <Users size={14} className="text-[#8ab4f8]" />
+            <span>Person</span>
           </button>
 
           <button
@@ -352,6 +403,18 @@ function TimelineList({
         onClose={() => setAddTagOpen(false)}
         onSuccess={(tagName, count) => {
           setNotice(`Added tag #${tagName} to ${count} photo(s).`);
+          setSelectedPaths(new Set());
+        }}
+      />
+
+      {/* Add Person Modal */}
+      <AddPersonModal
+        isOpen={addPersonOpen}
+        libraryId={libraryId}
+        entryPaths={Array.from(selectedPaths)}
+        onClose={() => setAddPersonOpen(false)}
+        onSuccess={(personName, count) => {
+          setNotice(`Tagged ${personName} in ${count} photo(s).`);
           setSelectedPaths(new Set());
         }}
       />

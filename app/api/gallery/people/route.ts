@@ -6,6 +6,7 @@ import {
   deletePerson,
   getAllPeople,
   getPhotoPeople,
+  hasDirectoryEntries,
   removePersonFromPhoto,
   setPhotoPeople,
   updatePerson,
@@ -79,6 +80,20 @@ export async function POST(request: NextRequest) {
     if (!Number.isSafeInteger(libraryId) || libraryId < 1) {
       return NextResponse.json(
         { error: "A valid libraryId is required." },
+        { status: 400 },
+      );
+    }
+
+    const pathsToCheck =
+      Array.isArray(entryPaths) && entryPaths.length > 0
+        ? entryPaths
+        : filePath
+          ? [filePath]
+          : [];
+
+    if (pathsToCheck.length > 0 && hasDirectoryEntries(libraryId, pathsToCheck)) {
+      return NextResponse.json(
+        { error: "Cannot add people to directories. Please select only photos." },
         { status: 400 },
       );
     }

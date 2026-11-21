@@ -343,9 +343,10 @@ function FolderContent({
     ? data.items.find((i) => i.path === singleSelectedPath)
     : null;
 
-  const selectedPhotos = data.items.filter(
-    (item) => selectedPaths.has(item.path) && !item.isDirectory,
-  );
+  const selectedItems = data.items.filter((item) => selectedPaths.has(item.path));
+  const selectedHasDirectories = selectedItems.some((item) => item.isDirectory);
+  const selectedPhotos = selectedItems.filter((item) => !item.isDirectory);
+  const onlyPhotosSelected = selectedPhotos.length > 0 && !selectedHasDirectories;
 
   const handleBatchFavorite = async () => {
     if (selectedPhotos.length === 0) return;
@@ -523,7 +524,9 @@ function FolderContent({
       <FolderActionBar
         selectedCount={selectedPaths.size}
         isAdmin={isAdmin}
-        hasPhotos={selectedPhotos.length > 0}
+        hasDirectories={selectedHasDirectories}
+        isAllSelected={isAllSelected}
+        onToggleSelectAll={toggleSelectAll}
         onCopy={() => setFolderPickerAction("copy")}
         onMove={() => setFolderPickerAction("move")}
         onFavorite={handleBatchFavorite}
@@ -569,7 +572,7 @@ function FolderContent({
           }
         }}
         onFavorite={
-          selectedPhotos.length > 0
+          onlyPhotosSelected
             ? async () => {
                 const paths = selectedPhotos.map((p) => p.path);
                 const allFav = selectedPhotos.every((p) => p.isFavorite);
@@ -637,10 +640,10 @@ function FolderContent({
       <AddToAlbumModal
         open={addToAlbumOpen}
         libraryId={libraryId}
-        photoPaths={Array.from(selectedPaths)}
+        photoPaths={selectedPhotos.map((p) => p.path)}
         onClose={() => setAddToAlbumOpen(false)}
         onSuccess={(albumName) => {
-          setNotice(`Added ${selectedPaths.size} photo(s) to "${albumName}".`);
+          setNotice(`Added ${selectedPhotos.length} photo(s) to "${albumName}".`);
           setSelectedPaths(new Set());
         }}
       />
@@ -649,7 +652,7 @@ function FolderContent({
       <AddTagModal
         isOpen={addTagOpen}
         libraryId={libraryId}
-        entryPaths={Array.from(selectedPaths)}
+        entryPaths={selectedPhotos.map((p) => p.path)}
         onClose={() => setAddTagOpen(false)}
         onSuccess={(tagName, count) => {
           setNotice(`Added tag #${tagName} to ${count} photo(s).`);
@@ -661,7 +664,7 @@ function FolderContent({
       <AddPersonModal
         isOpen={addPersonOpen}
         libraryId={libraryId}
-        entryPaths={Array.from(selectedPaths)}
+        entryPaths={selectedPhotos.map((p) => p.path)}
         onClose={() => setAddPersonOpen(false)}
         onSuccess={(personName, count) => {
           setNotice(`Tagged ${personName} in ${count} photo(s).`);

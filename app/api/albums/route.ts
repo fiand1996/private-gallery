@@ -5,6 +5,7 @@ import {
   deleteAlbum,
   getIndexedAlbums,
   getLibrary,
+  hasDirectoryEntries,
   removePhotosFromAlbum,
   renameAlbum,
 } from "@/lib/database";
@@ -67,11 +68,18 @@ export async function POST(request: Request) {
           { status: 400 },
         );
       }
+      const initialPaths = Array.isArray(paths) ? paths : [];
+      if (initialPaths.length > 0 && hasDirectoryEntries(Number(libraryId), initialPaths)) {
+        return NextResponse.json(
+          { error: "Cannot add directories to albums. Please select only photos." },
+          { status: 400 },
+        );
+      }
       const res = createCustomAlbum(
         Number(libraryId),
         String(name),
         description ? String(description) : undefined,
-        Array.isArray(paths) ? paths : [],
+        initialPaths,
       );
       return NextResponse.json(res);
     }
@@ -86,6 +94,12 @@ export async function POST(request: Request) {
       ) {
         return NextResponse.json(
           { error: "albumId, libraryId, and paths are required." },
+          { status: 400 },
+        );
+      }
+      if (hasDirectoryEntries(Number(libraryId), paths)) {
+        return NextResponse.json(
+          { error: "Cannot add directories to albums. Please select only photos." },
           { status: 400 },
         );
       }

@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   Loader2,
   Pencil,
   Trash2,
+  X,
 } from "lucide-react";
 import { PhotoCard } from "@/components/gallery/photo-card";
 import { type GridSize } from "@/components/gallery/grid-controls";
@@ -16,6 +17,9 @@ import {
   type GalleryPhoto,
 } from "@/components/gallery/lightbox-modal";
 import { ConfirmDialog } from "@/components/gallery/confirm-dialog";
+import { AddToAlbumModal } from "@/components/gallery/add-to-album-modal";
+import { AddTagModal } from "@/components/gallery/add-tag-modal";
+import { AddPersonModal } from "@/components/gallery/add-person-modal";
 import { AlbumActionBar } from "./album-action-bar";
 
 interface AlbumPhotosResponse {
@@ -73,9 +77,13 @@ export function AlbumDetailView({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  // Selection state for removing photos
+  // Selection state for photos
   const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
   const [actionLoading, setActionLoading] = useState(false);
+  const [addToAlbumOpen, setAddToAlbumOpen] = useState(false);
+  const [addTagOpen, setAddTagOpen] = useState(false);
+  const [addPersonOpen, setAddPersonOpen] = useState(false);
+  const [notice, setNotice] = useState("");
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isFetchingRef = useRef(false);
@@ -248,6 +256,13 @@ export function AlbumDetailView({
     }
   };
 
+  const allItemPaths = useMemo(
+    () => albumDetail?.items.map((i) => i.path) ?? [],
+    [albumDetail?.items],
+  );
+  const isAllSelected =
+    allItemPaths.length > 0 && selectedPaths.size === allItemPaths.length;
+
   const toggleSelectPhoto = useCallback((path: string) => {
     setSelectedPaths((prev) => {
       const next = new Set(prev);
@@ -256,6 +271,32 @@ export function AlbumDetailView({
       return next;
     });
   }, []);
+
+  const toggleSelectAll = useCallback(() => {
+    if (isAllSelected) {
+      setSelectedPaths(new Set());
+    } else {
+      setSelectedPaths(new Set(allItemPaths));
+    }
+  }, [allItemPaths, isAllSelected]);
+
+  // Keyboard shortcut Ctrl+A / Cmd+A
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "a") {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+        e.preventDefault();
+        setSelectedPaths(new Set(allItemPaths));
+      } else if (e.key === "Escape") {
+        if (selectedPaths.size > 0) {
+          setSelectedPaths(new Set());
+        }
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [allItemPaths, selectedPaths.size]);
 
   const activePhoto = externalSelectedPhoto ?? localSelectedPhoto;
 
@@ -341,6 +382,19 @@ export function AlbumDetailView({
         )}
       </div>
 
+      {notice && (
+        <div className="mb-6 flex items-center justify-between rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-xs font-medium text-emerald-400">
+          <span>{notice}</span>
+          <button
+            type="button"
+            onClick={() => setNotice("")}
+            className="text-emerald-400 hover:text-emerald-300 cursor-pointer"
+          >
+            <X size={15} />
+          </button>
+        </div>
+      )}
+
       {albumDetail?.items && albumDetail.items.length > 0 ? (
         <>
           <div className={getAlbumMasonryClasses(gridSize)}>
@@ -351,7 +405,7 @@ export function AlbumDetailView({
                 libraryId={libraryId}
                 aspectRatio="natural"
                 eager={index < 8}
-                selectable={albumDetail.kind === "custom"}
+                selectable
                 selected={selectedPaths.has(photo.path)}
                 onToggleSelect={() => toggleSelectPhoto(photo.path)}
                 onToggleFavorite={(p, isFav) => {
@@ -390,12 +444,17 @@ export function AlbumDetailView({
       )}
 
       {/* Floating Action Bar */}
-      {selectedPaths.size > 0 && albumDetail?.kind === "custom" && (
+      {selectedPaths.size > 0 && (
         <AlbumActionBar
           selectedCount={selectedPaths.size}
+          isAllSelected={isAllSelected}
           actionLoading={actionLoading}
+          onToggleSelectAll={toggleSelectAll}
           onFavorite={handleBatchFavorite}
-          onRemoveFromAlbum={handleRemoveFromAlbum}
+          onAddToAlbum={() => setAddToAlbumOpen(true)}
+          onTag={() => setAddTagOpen(true)}
+          onPerson={() => setAddPersonOpen(true)}
+          onRemoveFromAlbum={albumDetail?.kind === "custom" ? handleRemoveFromAlbum : undefined}
           onClear={() => setSelectedPaths(new Set())}
         />
       )}
@@ -451,6 +510,42 @@ export function AlbumDetailView({
         loading={deleting}
         onConfirm={handleDeleteAlbum}
         onCancel={() => setDeleteConfirmOpen(false)}
+      />
+
+      {/* Add to Album Modal */}
+      <AddToAlbumModal
+        open={addToAlbumOpen}
+        libraryId={libraryId}
+        photoPaths={Array.from(selectedPaths)}
+        onClose={() => setAddToAlbumOpen(false)}
+        onSuccess={(albumName) => {
+          setNotice(`Added ${selectedPaths.size} photo(s) to "${albumName}".`);
+          setSelectedPaths(new Set());
+        }}
+      />
+
+      {/* Add Tag Modal */}
+      <AddTagModal
+        isOpen={addTagOpen}
+        libraryId={libraryId}
+        entryPaths={Array.from(selectedPaths)}
+        onClose={() => setAddTagOpen(false)}
+        onSuccess={(tagName, count) => {
+          setNotice(`Added tag #${tagName} to ${count} photo(s).`);
+          setSelectedPaths(new Set());
+        }}
+      />
+
+      {/* Add Person Modal */}
+      <AddPersonModal
+        isOpen={addPersonOpen}
+        libraryId={libraryId}
+        entryPaths={Array.from(selectedPaths)}
+        onClose={() => setAddPersonOpen(false)}
+        onSuccess={(personName, count) => {
+          setNotice(`Tagged ${personName} in ${count} photo(s).`);
+          setSelectedPaths(new Set());
+        }}
       />
 
       <LightboxModal
