@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, User } from "lucide-react";
 import { PhotoCard } from "@/components/gallery/photo-card";
 import {
   GridControls,
@@ -293,6 +293,9 @@ export function ExploreFilteredView({
           <div className="h-4 w-px bg-[#2e2e2e]" />
 
           <div className="flex items-center gap-2">
+            {photosData.filterLabel.startsWith("People:") && (
+              <User size={15} className="text-[#8ab4f8]" />
+            )}
             <span className="text-sm font-bold text-zinc-100">
               {photosData.filterLabel}
             </span>

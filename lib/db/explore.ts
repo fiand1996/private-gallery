@@ -8,6 +8,13 @@ export interface ExploreSummary {
     topRated: { count: number; coverPath: string | null };
     places: { count: number; coverPath: string | null };
   };
+  people: {
+    id: number;
+    name: string;
+    tagName: string;
+    count: number;
+    coverPath: string | null;
+  }[];
   tags: { id: number; name: string; count: number; coverPath: string | null }[];
   cameras: {
     cameraMake: string | null;
@@ -97,6 +104,50 @@ export function getExploreSummary(libraryId: number): ExploreSummary {
     ORDER BY count DESC, t.name ASC
   `);
 
+  const peopleMap = new Map<
+    string,
+    {
+      id: number;
+      name: string;
+      tagName: string;
+      count: number;
+      coverPath: string | null;
+    }
+  >();
+
+  for (const t of tagRows) {
+    const isPeople = /^(people|person)[/|:]/i.test(t.name.trim());
+    if (isPeople) {
+      const cleanName = t.name.trim().replace(/^(people|person)[/|:]\s*/i, "");
+      if (!cleanName) continue;
+      const key = cleanName.toLowerCase();
+      const existing = peopleMap.get(key);
+      if (!existing || existing.count < t.count) {
+        peopleMap.set(key, {
+          id: t.id,
+          name: cleanName,
+          tagName: t.name,
+          count: Math.max(t.count, existing?.count ?? 0),
+          coverPath: t.cover_path || existing?.coverPath || null,
+        });
+      }
+    }
+  }
+
+  const personNamesSet = new Set(Array.from(peopleMap.keys()));
+
+  const filteredTagRows = tagRows.filter((t) => {
+    const isPeoplePrefix = /^(people|person)[/|:]/i.test(t.name.trim());
+    if (isPeoplePrefix) return false;
+    // Exclude flat tag identical to person name (e.g. "fitaz" vs "people/fitaz") to avoid duplicates
+    if (personNamesSet.has(t.name.trim().toLowerCase())) return false;
+    return true;
+  });
+
+  const people = Array.from(peopleMap.values()).sort(
+    (a, b) => b.count - a.count || a.name.localeCompare(b.name),
+  );
+
   const cameraRows = db.all<{
     camera_make: string | null;
     camera_model: string | null;
@@ -166,7 +217,8 @@ export function getExploreSummary(libraryId: number): ExploreSummary {
         coverPath: placesRow?.cover_path ?? null,
       },
     },
-    tags: tagRows.map((t) => ({
+    people,
+    tags: filteredTagRows.map((t) => ({
       id: t.id,
       name: t.name,
       count: t.count,
@@ -213,17 +265,44 @@ export function getExplorePhotos(
       sql`EXISTS (SELECT 1 FROM photo_metadata pm WHERE pm.library_id = ${libraryId} AND pm.entry_path = ${schema.libraryEntries.path} AND pm.latitude IS NOT NULL)`,
     );
   } else if (filter.tag) {
-    const cleanedTag = filter.tag.trim().replace(/^#+/, "").toLowerCase();
-    filterLabel = `#${cleanedTag}`;
-    conditions.push(
-      sql`EXISTS (
-        SELECT 1 FROM photo_tags pt
-        JOIN tags t ON t.id = pt.tag_id
-        WHERE pt.library_id = ${libraryId}
-          AND pt.entry_path = ${schema.libraryEntries.path}
-          AND t.name = ${cleanedTag}
-      )`,
-    );
+    const rawTag = filter.tag.trim();
+    const isPeoplePrefix = /^(people|person)[/|:]/i.test(rawTag);
+    const cleanedTag = rawTag.replace(/^#+/, "").toLowerCase();
+
+    if (isPeoplePrefix) {
+      const personName = cleanedTag.replace(/^(people|person)[/|:]\s*/i, "").trim();
+      const capitalized = personName
+        .split(" ")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+      filterLabel = `People: ${capitalized}`;
+
+      conditions.push(
+        sql`EXISTS (
+          SELECT 1 FROM photo_tags pt
+          JOIN tags t ON t.id = pt.tag_id
+          WHERE pt.library_id = ${libraryId}
+            AND pt.entry_path = ${schema.libraryEntries.path}
+            AND (
+              lower(t.name) = ${cleanedTag}
+              OR lower(t.name) = ${personName}
+              OR lower(t.name) = ${"people/" + personName}
+              OR lower(t.name) = ${"person/" + personName}
+            )
+        )`,
+      );
+    } else {
+      filterLabel = `#${cleanedTag}`;
+      conditions.push(
+        sql`EXISTS (
+          SELECT 1 FROM photo_tags pt
+          JOIN tags t ON t.id = pt.tag_id
+          WHERE pt.library_id = ${libraryId}
+            AND pt.entry_path = ${schema.libraryEntries.path}
+            AND lower(t.name) = ${cleanedTag}
+        )`,
+      );
+    }
   } else if (filter.camera) {
     filterLabel = filter.camera;
     conditions.push(

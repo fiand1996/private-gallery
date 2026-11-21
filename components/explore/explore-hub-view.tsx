@@ -10,6 +10,8 @@ import {
   MapPin,
   Star,
   Tag,
+  User,
+  Users,
 } from "lucide-react";
 import { galleryImageUrl } from "@/lib/gallery-image-url";
 import type { ExploreSummary } from "@/lib/database";
@@ -168,7 +170,60 @@ export function ExploreHubView({
         </div>
       </section>
 
-      {/* 2. Tags & Topics */}
+      {/* 2. People (Circular Profile Bubbles) */}
+      {summary.people && summary.people.length > 0 && (
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Users size={16} className="text-[#8ab4f8]" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              People ({summary.people.length})
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
+            {summary.people.map((person) => (
+              <Link
+                key={person.id}
+                href={`/explore?tag=${encodeURIComponent(person.tagName)}`}
+                className="group flex flex-col items-center gap-2.5 text-center"
+              >
+                <div className="relative size-20 sm:size-24 overflow-hidden rounded-full border-2 border-[#262626] bg-[#141414] transition duration-300 group-hover:scale-105 group-hover:border-[#8ab4f8] group-hover:shadow-lg group-hover:shadow-[#8ab4f8]/20">
+                  {person.coverPath ? (
+                    <Image
+                      src={galleryImageUrl(
+                        person.coverPath,
+                        libraryId,
+                        undefined,
+                        undefined,
+                        260,
+                      )}
+                      alt={person.name}
+                      fill
+                      unoptimized
+                      sizes="96px"
+                      className="object-cover transition duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="flex size-full items-center justify-center bg-zinc-800 text-zinc-400">
+                      <User size={32} />
+                    </div>
+                  )}
+                </div>
+                <div className="w-full px-1">
+                  <div className="truncate text-xs font-semibold text-zinc-200 capitalize group-hover:text-[#8ab4f8] transition">
+                    {person.name}
+                  </div>
+                  <div className="text-[11px] text-zinc-500">
+                    {person.count} photo{person.count === 1 ? "" : "s"}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 3. Tags & Topics */}
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <Tag size={16} className="text-[#8ab4f8]" />
