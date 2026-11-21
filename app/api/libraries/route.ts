@@ -2,12 +2,16 @@ import { connection } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import {
   createLibrary,
+  deleteLibrary,
+  enqueueScan,
   findLibraryByRoot,
+  updateLibrary,
 } from "@/lib/database";
 import {
   ensureDefaultLibrary,
   validateLibraryRoot,
 } from "@/lib/library-service";
+import { triggerScanQueue } from "@/lib/scan-runner";
 
 export async function GET() {
   await connection();
@@ -22,6 +26,7 @@ export async function GET() {
       folderCount: library.folderCount,
       totalSizeBytes: library.totalSizeBytes,
       activeTask: library.activeTask,
+      isDefault: library.isDefault,
     }));
     return NextResponse.json({ libraries });
   } catch (error) {
@@ -72,5 +77,56 @@ export async function POST(request: NextRequest) {
       { error: "Library could not be created." },
       { status: 500 },
     );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = (await request.json()) as {
+      id?: unknown;
+      name?: unknown;
+      rootPath?: unknown;
+    };
+    const id = Number(body.id);
+    if (!Number.isSafeInteger(id) || id < 1) {
+      return NextResponse.json({ error: "Invalid library ID." }, { status: 400 });
+    }
+
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const rootPath =
+      typeof body.rootPath === "string" && body.rootPath.trim()
+        ? body.rootPath.trim()
+        : undefined;
+
+    const result = updateLibrary(id, name, rootPath);
+    if (result.pathChanged) {
+      enqueueScan(id);
+      triggerScanQueue();
+    }
+
+    return NextResponse.json({ success: true, ...result });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update library.";
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = request.nextUrl;
+    const idParam = searchParams.get("id");
+    const id = idParam ? Number(idParam) : null;
+    if (!id || !Number.isSafeInteger(id) || id < 1) {
+      return NextResponse.json(
+        { error: "Valid library ID is required." },
+        { status: 400 },
+      );
+    }
+
+    deleteLibrary(id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete library.";
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }

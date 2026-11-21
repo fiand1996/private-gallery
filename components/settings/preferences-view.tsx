@@ -6,20 +6,90 @@ import {
   CheckCircle2,
   Database,
   Grid2X2,
+  HardDrive,
+  Loader2,
   RotateCcw,
+  Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSettings } from "@/components/layout/settings-context";
 import {
   type GallerySort,
   type GridSize,
 } from "@/components/gallery/grid-controls";
 
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ["KB", "MB", "GB", "TB"];
+  let value = bytes / 1024;
+  let unitIndex = 0;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex++;
+  }
+  return `${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: value < 10 ? 1 : 0,
+  }).format(value)} ${units[unitIndex]}`;
+}
+
 export function PreferencesView() {
   const { settings, updateSetting, updateSettings } = useAppSettings();
   const currentGridSize = settings.defaultGridSize;
   const currentSort = settings.defaultSort;
   const [prefNotice, setPrefNotice] = useState("");
+
+  // Cache storage state
+  const [cacheStats, setCacheStats] = useState<{
+    thumbnailCount: number;
+    totalSizeBytes: number;
+  } | null>(null);
+  const [loadingCacheStats, setLoadingCacheStats] = useState(true);
+  const [purgingCache, setPurgingCache] = useState(false);
+  const [confirmPurgeOpen, setConfirmPurgeOpen] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCacheStats() {
+      try {
+        const res = await fetch("/api/settings/cache", { cache: "no-store" });
+        if (res.ok) {
+          const data = (await res.json()) as {
+            thumbnailCount: number;
+            totalSizeBytes: number;
+          };
+          if (isMounted) setCacheStats(data);
+        }
+      } catch (err) {
+        console.warn("Failed to load thumbnail cache stats:", err);
+      } finally {
+        if (isMounted) setLoadingCacheStats(false);
+      }
+    }
+    loadCacheStats();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  async function handlePurgeCache() {
+    setPurgingCache(true);
+    try {
+      const res = await fetch("/api/settings/cache", { method: "DELETE" });
+      const data = (await res.json()) as { success?: boolean; deletedCount?: number };
+      if (res.ok && data.success) {
+        setCacheStats({ thumbnailCount: 0, totalSizeBytes: 0 });
+        setConfirmPurgeOpen(false);
+        setPrefNotice(
+          `Thumbnail cache cleared successfully (${data.deletedCount ?? 0} files purged).`,
+        );
+        setTimeout(() => setPrefNotice(""), 3500);
+      }
+    } catch (err) {
+      console.error("Failed to purge thumbnail cache:", err);
+    } finally {
+      setPurgingCache(false);
+    }
+  }
 
   function handleSelectGridSize(size: GridSize) {
     void updateSetting("defaultGridSize", size);
@@ -232,6 +302,121 @@ export function PreferencesView() {
           </button>
         </div>
       </section>
+
+      {/* Thumbnail Cache Management */}
+      <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="flex items-start gap-3.5">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 mt-0.5">
+              <HardDrive size={20} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-zinc-100">
+                Thumbnail Cache Storage
+              </h3>
+              <p className="mt-1 text-xs text-zinc-400">
+                Pre-rendered WebP thumbnails stored on server disk for fast justified browsing.
+              </p>
+              <div className="mt-2.5 flex items-center gap-2 text-xs">
+                {loadingCacheStats ? (
+                  <span className="inline-flex items-center gap-1.5 text-zinc-500">
+                    <Loader2 size={12} className="animate-spin" />
+                    Calculating cache size...
+                  </span>
+                ) : (
+                  <span className="font-semibold text-zinc-200">
+                    {formatBytes(cacheStats?.totalSizeBytes ?? 0)}{" "}
+                    <span className="font-normal text-zinc-400">
+                      ({(cacheStats?.thumbnailCount ?? 0).toLocaleString()} cached thumbnails)
+                    </span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <button
+            type="button"
+            disabled={purgingCache || (cacheStats?.thumbnailCount ?? 0) === 0}
+            onClick={() => setConfirmPurgeOpen(true)}
+            className="inline-flex items-center gap-2 self-start rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-2.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/20 hover:text-rose-300 disabled:opacity-50 cursor-pointer sm:self-auto"
+          >
+            {purgingCache ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Trash2 size={14} />
+            )}
+            Purge Thumbnail Cache
+          </button>
+        </div>
+      </section>
+
+      {/* Purge Cache Confirmation Modal */}
+      {confirmPurgeOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !purgingCache) {
+              setConfirmPurgeOpen(false);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="purge-cache-title"
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h2
+                  id="purge-cache-title"
+                  className="text-base font-bold text-zinc-100"
+                >
+                  Clear Thumbnail Cache?
+                </h2>
+                <p className="text-xs text-zinc-400">
+                  {formatBytes(cacheStats?.totalSizeBytes ?? 0)} across{" "}
+                  {(cacheStats?.thumbnailCount ?? 0).toLocaleString()} files
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              This will remove all generated WebP thumbnails from disk and flush memory. Original photos will <strong className="text-white">NOT</strong> be affected.
+            </p>
+            <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
+              Thumbnails will be automatically re-generated on-demand as you browse photos.
+            </p>
+
+            <div className="mt-6 flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                disabled={purgingCache}
+                onClick={() => setConfirmPurgeOpen(false)}
+                className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={purgingCache}
+                onClick={handlePurgeCache}
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-rose-600 disabled:opacity-50 cursor-pointer"
+              >
+                {purgingCache ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Trash2 size={14} />
+                )}
+                Clear All Thumbnails
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* System & Architecture Info */}
       <section className="rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-sm">

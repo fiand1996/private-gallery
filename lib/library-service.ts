@@ -3,6 +3,15 @@ import path from "node:path";
 import { GALLERY_ROOT } from "./gallery";
 import { createLibrary, findLibraryByRoot, getLibraryList } from "./database";
 
+export function getDefaultLibraryRoot(): string | null {
+  try {
+    if (fs.existsSync(GALLERY_ROOT)) {
+      return fs.realpathSync(GALLERY_ROOT);
+    }
+  } catch {}
+  return null;
+}
+
 export function ensureDefaultLibrary() {
   try {
     if (!fs.existsSync(GALLERY_ROOT)) {

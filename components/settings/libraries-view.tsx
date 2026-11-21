@@ -1,13 +1,16 @@
 "use client";
 
 import {
+  AlertTriangle,
   CheckCircle2,
   FolderOpen,
   FolderPlus,
   HardDrive,
   Image as ImageIcon,
   Loader2,
+  Pencil,
   RefreshCw,
+  Trash2,
   X,
   XCircle,
 } from "lucide-react";
@@ -36,6 +39,7 @@ interface LibrarySetting {
   folderCount: number;
   totalSizeBytes: number;
   activeTask: ScanTask | null;
+  isDefault?: boolean;
 }
 
 function formatDate(value: string | null) {
@@ -72,6 +76,16 @@ export function LibrariesView() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+
+  // Edit Library state
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingLibrary, setEditingLibrary] = useState<LibrarySetting | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editRootPath, setEditRootPath] = useState("");
+
+  // Delete Library state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deletingLibrary, setDeletingLibrary] = useState<LibrarySetting | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -166,6 +180,93 @@ export function LibrariesView() {
       void refreshGlobalLibraries();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to start scan.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function openEditModal(lib: LibrarySetting) {
+    setEditingLibrary(lib);
+    setEditName(lib.name);
+    setEditRootPath(lib.rootPath);
+    setEditModalOpen(true);
+  }
+
+  async function handleUpdateLibrary(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!editingLibrary) return;
+
+    setSubmitting(true);
+    setError("");
+    setNotice("");
+
+    try {
+      const response = await fetch("/api/libraries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editingLibrary.id,
+          name: editName,
+          rootPath: editRootPath,
+        }),
+      });
+      const data = (await response.json()) as {
+        success?: boolean;
+        pathChanged?: boolean;
+        error?: string;
+      };
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to update library.");
+      }
+
+      setEditModalOpen(false);
+      setEditingLibrary(null);
+      setNotice(
+        data.pathChanged
+          ? `Library updated! Folder path changed, new scan scheduled.`
+          : `Library “${editName}” updated successfully.`,
+      );
+      setRefreshKey((k) => k + 1);
+      void refreshGlobalLibraries();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update library.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function openDeleteModal(lib: LibrarySetting) {
+    setDeletingLibrary(lib);
+    setDeleteModalOpen(true);
+  }
+
+  async function handleDeleteLibrary() {
+    if (!deletingLibrary) return;
+
+    setSubmitting(true);
+    setError("");
+    setNotice("");
+
+    try {
+      const response = await fetch(
+        `/api/libraries?id=${deletingLibrary.id}`,
+        { method: "DELETE" },
+      );
+      const data = (await response.json()) as { success?: boolean; error?: string };
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to delete library.");
+      }
+
+      setDeleteModalOpen(false);
+      const deletedName = deletingLibrary.name;
+      setDeletingLibrary(null);
+      setNotice(`Library “${deletedName}” removed from Private Gallery.`);
+      setRefreshKey((k) => k + 1);
+      void refreshGlobalLibraries();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete library.");
     } finally {
       setSubmitting(false);
     }
@@ -322,6 +423,11 @@ export function LibrariesView() {
                       <h3 className="truncate text-base font-bold text-zinc-100">
                         {lib.name}
                       </h3>
+                      {lib.isDefault && (
+                        <span className="rounded-full bg-[#8ab4f8]/15 border border-[#8ab4f8]/30 px-2 py-0.5 text-[10px] font-semibold text-[#8ab4f8]">
+                          Default
+                        </span>
+                      )}
                       {isScanning ? (
                         <span className="flex items-center gap-1.5 rounded-full bg-[#8ab4f8]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#8ab4f8]">
                           <Loader2 size={12} className="animate-spin" />
@@ -358,6 +464,26 @@ export function LibrariesView() {
                   </div>
 
                   <div className="flex shrink-0 items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={submitting}
+                      onClick={() => openEditModal(lib)}
+                      title="Edit library name and path"
+                      className="inline-flex size-9 items-center justify-center rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                    >
+                      <Pencil size={14} />
+                    </button>
+                    {!lib.isDefault && (
+                      <button
+                        type="button"
+                        disabled={submitting}
+                        onClick={() => openDeleteModal(lib)}
+                        title="Delete library"
+                        className="inline-flex size-9 items-center justify-center rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:text-rose-300 transition cursor-pointer disabled:opacity-50"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
                     <button
                       type="button"
                       disabled={submitting || isScanning}
@@ -479,6 +605,194 @@ export function LibrariesView() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Library Modal */}
+      {editModalOpen && editingLibrary && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !submitting) {
+              setEditModalOpen(false);
+              setEditingLibrary(null);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-[#262626] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-library-title"
+          >
+            <div className="mb-5 flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/10 text-[#8ab4f8]">
+                  <Pencil size={18} />
+                </div>
+                <div>
+                  <h2
+                    id="edit-library-title"
+                    className="text-base font-bold text-zinc-100"
+                  >
+                    Edit Library
+                  </h2>
+                  <p className="text-xs text-zinc-400">
+                    Update the display name or underlying directory.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={() => {
+                  setEditModalOpen(false);
+                  setEditingLibrary(null);
+                }}
+                className="rounded-lg p-1 text-zinc-400 hover:bg-[#262626] hover:text-zinc-200 transition cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateLibrary} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                  Library Display Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  placeholder="e.g. Vacation Photos"
+                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                  Absolute Root Directory Path
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editRootPath}
+                  onChange={(e) => setEditRootPath(e.target.value)}
+                  placeholder="/Volumes/Storage/Photos"
+                  className="h-10 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 font-mono text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8] focus:bg-[#242424] focus:ring-2 focus:ring-[#8ab4f8]/20"
+                />
+              </div>
+
+              {/* Warning if path is being changed */}
+              {editRootPath.trim() !== editingLibrary.rootPath && (
+                <div className="flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-300">
+                  <AlertTriangle size={16} className="shrink-0 mt-0.5 text-amber-400" />
+                  <span>
+                    Changing the root path will clear existing indexed photos for this library and trigger a new scan on the new folder.
+                  </span>
+                </div>
+              )}
+
+              <div className="mt-6 flex items-center justify-end gap-2.5 pt-2">
+                <button
+                  type="button"
+                  disabled={submitting}
+                  onClick={() => {
+                    setEditModalOpen(false);
+                    setEditingLibrary(null);
+                  }}
+                  className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                >
+                  {submitting ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Pencil size={14} />
+                  )}
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Library Confirmation Modal */}
+      {deleteModalOpen && deletingLibrary && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !submitting) {
+              setDeleteModalOpen(false);
+              setDeletingLibrary(null);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-library-title"
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h2
+                  id="delete-library-title"
+                  className="text-base font-bold text-zinc-100"
+                >
+                  Delete Library?
+                </h2>
+                <p className="text-xs text-zinc-400">
+                  {deletingLibrary.name}
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Are you sure you want to remove <strong className="text-white">“{deletingLibrary.name}”</strong> from Private Gallery?
+            </p>
+            <div className="mt-3 rounded-xl border border-[#2e2e2e] bg-[#1a1a1a] p-3 text-xs text-zinc-400">
+              <span className="font-semibold text-emerald-400">Note: </span>
+              Your physical photo files on disk will <strong className="text-zinc-200">NOT</strong> be deleted. Only the gallery index entries, albums, and tags within this library will be cleared.
+            </div>
+
+            <div className="mt-6 flex items-center justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={() => {
+                  setDeleteModalOpen(false);
+                  setDeletingLibrary(null);
+                }}
+                className="rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-[#262626] hover:text-white transition cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={handleDeleteLibrary}
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-rose-600 disabled:opacity-50 cursor-pointer"
+              >
+                {submitting ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Trash2 size={14} />
+                )}
+                Delete Library
+              </button>
+            </div>
           </div>
         </div>
       )}
