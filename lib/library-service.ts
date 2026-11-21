@@ -4,17 +4,26 @@ import { GALLERY_ROOT } from "./gallery";
 import { createLibrary, findLibraryByRoot, getLibraryList } from "./database";
 
 export function ensureDefaultLibrary() {
-  fs.mkdirSync(GALLERY_ROOT, { recursive: true });
-  const rootPath = fs.realpathSync(GALLERY_ROOT);
-  const existing = findLibraryByRoot(rootPath);
-
-  if (!existing) {
-    try {
-      createLibrary("My Gallery", rootPath);
-    } catch (error) {
-      const racedInsert = findLibraryByRoot(rootPath);
-      if (!racedInsert) throw error;
+  try {
+    if (!fs.existsSync(GALLERY_ROOT)) {
+      fs.mkdirSync(GALLERY_ROOT, { recursive: true });
     }
+    const rootPath = fs.realpathSync(GALLERY_ROOT);
+    const existing = findLibraryByRoot(rootPath);
+
+    if (!existing) {
+      try {
+        createLibrary("My Gallery", rootPath);
+      } catch (error) {
+        const racedInsert = findLibraryByRoot(rootPath);
+        if (!racedInsert) throw error;
+      }
+    }
+  } catch (error) {
+    console.warn(
+      `[Library] Default gallery folder (${GALLERY_ROOT}) could not be initialized:`,
+      error instanceof Error ? error.message : error,
+    );
   }
 
   return getLibraryList();
