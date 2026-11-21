@@ -222,7 +222,7 @@ export function useFolderUpload({
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/jpeg,image/png,image/webp,image/avif,image/gif,image/heic,image/heif"
+        accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
         onChange={handleFilesSelected}
         className="hidden"
       />

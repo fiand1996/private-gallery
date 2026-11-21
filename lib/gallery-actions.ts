@@ -195,6 +195,7 @@ export function moveGalleryItems(
     // Check circular move (cannot move a directory into itself or child)
     if (
       targetRel === srcNorm ||
+      destFolderNormalized === srcNorm ||
       destFolderNormalized.startsWith(srcNorm + "/")
     ) {
       throw new GalleryPathError(
@@ -350,6 +351,17 @@ export function copyGalleryItems(
       : targetName;
 
     const stat = fs.statSync(srcAbs);
+
+    if (
+      stat.isDirectory() &&
+      (destFolderNormalized === srcNorm ||
+        destFolderNormalized.startsWith(srcNorm + "/"))
+    ) {
+      throw new GalleryPathError(
+        `Cannot copy "${originalName}" into itself or its own subfolder.`,
+        400,
+      );
+    }
 
     if (stat.isDirectory()) {
       fs.cpSync(srcAbs, targetAbs, { recursive: true });

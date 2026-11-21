@@ -17,17 +17,17 @@ const BATCH_SIZE = 50;
 
 export async function scanLibrary(taskId: string, libraryId: number) {
   const library = getLibrary(libraryId);
-  if (!library) throw new Error("Library tidak ditemukan di database.");
+  if (!library) throw new Error("Library not found in database.");
 
   let root: string;
   try {
     root = fs.realpathSync(library.rootPath);
     if (!fs.statSync(root).isDirectory()) {
-      throw new Error(`Jalur "${library.rootPath}" bukan sebuah direktori.`);
+      throw new Error(`Path "${library.rootPath}" is not a directory.`);
     }
   } catch (cause) {
     throw new Error(
-      `Direktori library tidak dapat diakses (${cause instanceof Error ? cause.message : String(cause)}). Pastikan folder atau drive penyimpanan terhubung.`,
+      `Library directory is not accessible (${cause instanceof Error ? cause.message : String(cause)}). Ensure the storage folder or drive is connected.`,
     );
   }
 
@@ -55,7 +55,7 @@ export async function scanLibrary(taskId: string, libraryId: number) {
       entries = fs.readdirSync(directory.absolutePath, { withFileTypes: true });
     } catch (readErr) {
       console.warn(
-        `[Scanner] Melewati folder yang tidak dapat dibaca (${directory.relativePath || "Root"}):`,
+        `[Scanner] Skipping unreadable folder (${directory.relativePath || "Root"}):`,
         readErr instanceof Error ? readErr.message : readErr,
       );
       continue;
@@ -105,7 +105,7 @@ export async function scanLibrary(taskId: string, libraryId: number) {
           }
         } catch (statErr) {
           console.warn(
-            `[Scanner] Melewati file yang tidak dapat dibaca (${relativePath}):`,
+            `[Scanner] Skipping unreadable file (${relativePath}):`,
             statErr instanceof Error ? statErr.message : statErr,
           );
           continue;
@@ -145,6 +145,6 @@ export async function scanLibrary(taskId: string, libraryId: number) {
 
 export function recordScanFailure(taskId: string, error: unknown) {
   const message =
-    error instanceof Error ? error.message : "Pemindaian library gagal.";
+    error instanceof Error ? error.message : "Library scan failed.";
   failTask(taskId, message);
 }

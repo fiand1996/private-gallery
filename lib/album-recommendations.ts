@@ -1,4 +1,5 @@
 export function recordAlbumOpen(libraryId: number, albumPath: string) {
+  if (typeof window === "undefined") return;
   const key = `${libraryId}:${albumPath}`;
   let counts: Record<string, number>;
   try {
