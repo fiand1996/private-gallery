@@ -53,8 +53,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/drizzle ./drizzle
 
-# Create persistent directory for SQLite database
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
+# Create persistent directory for SQLite database and default media mount point
+RUN mkdir -p /app/data /media/photos && chown -R nextjs:nodejs /app/data /media
 
 USER nextjs
 

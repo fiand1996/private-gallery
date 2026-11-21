@@ -1,3 +1,4 @@
+name: private-gallery
 services:
   private-gallery:
     build: .
@@ -6,12 +7,12 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - AUTH_SECRET=change_me_to_a_secure_random_string
+      - AUTH_SECRET="your-secure-random-secret-key"
       - GALLERY_ROOT_PATH=/media/photos
     volumes:
       - private_gallery_data:/app/data
       # Mount your host photo directory into the container (change path to your local folder):
-      # - /path/to/your/photos:/media/photos:ro
+      # - path/to/your/local/photos:/media/photos
 
 volumes:
   private_gallery_data:
