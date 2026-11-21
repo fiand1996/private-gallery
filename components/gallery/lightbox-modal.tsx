@@ -18,6 +18,8 @@ export interface GalleryPhoto {
   path: string;
   size: number | null;
   modifiedAt: string | null;
+  width?: number | null;
+  height?: number | null;
   isFavorite?: boolean;
 }
 

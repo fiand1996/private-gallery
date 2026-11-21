@@ -38,6 +38,8 @@ export interface IndexedPhoto {
   path: string;
   size: number | null;
   modifiedAt: string | null;
+  width?: number | null;
+  height?: number | null;
   isFavorite?: boolean;
 }
 
@@ -207,9 +209,15 @@ export function getIndexedTimelinePage(
       path: schema.libraryEntries.path,
       size: schema.libraryEntries.size,
       modifiedAt: schema.libraryEntries.modifiedAt,
+      width: schema.photoMetadata.width,
+      height: schema.photoMetadata.height,
       isFavorite: sql<boolean>`coalesce((SELECT pum.is_favorite FROM photo_user_metadata pum WHERE pum.library_id = ${libraryId} AND pum.entry_path = ${schema.libraryEntries.path}), 0) = 1`,
     })
     .from(schema.libraryEntries)
+    .leftJoin(
+      schema.photoMetadata,
+      sql`${schema.photoMetadata.libraryId} = ${libraryId} AND ${schema.photoMetadata.entryPath} = ${schema.libraryEntries.path}`,
+    )
     .where(conditions)
     .orderBy(
       sql`${schema.libraryEntries.modifiedAt} IS NULL`,

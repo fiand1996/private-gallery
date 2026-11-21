@@ -9,7 +9,9 @@ import type { GalleryPhoto } from "./lightbox-modal";
 interface PhotoCardProps {
   photo: GalleryPhoto;
   libraryId: number;
-  aspectRatio?: "square" | "natural";
+  aspectRatio?: "square" | "natural" | "justified";
+  width?: number;
+  height?: number;
   eager?: boolean;
   selectable?: boolean;
   selected?: boolean;
@@ -31,6 +33,8 @@ export function PhotoCard({
   photo,
   libraryId,
   aspectRatio = "square",
+  width,
+  height,
   eager = false,
   selectable = false,
   selected = false,
@@ -81,18 +85,29 @@ export function PhotoCard({
   };
 
   const isSquare = aspectRatio === "square";
+  const isJustified = aspectRatio === "justified";
 
   return (
     <div
       onContextMenu={onContextMenu}
       style={{
         contentVisibility: "auto",
-        containIntrinsicSize: isSquare ? "180px" : "240px",
+        width: width ? `${width}px` : undefined,
+        height: height ? `${height}px` : undefined,
+        containIntrinsicSize:
+          width && height
+            ? `${width}px ${height}px`
+            : isSquare
+              ? "180px"
+              : "240px",
+        flexShrink: 0,
       }}
       className={`group relative overflow-hidden rounded-xl bg-[#1c1c1c] transition-all select-none ${
-        isSquare
-          ? "aspect-square w-full"
-          : "mb-2.5 block w-full break-inside-avoid"
+        isJustified
+          ? ""
+          : isSquare
+            ? "aspect-square w-full"
+            : "mb-2.5 block w-full break-inside-avoid"
       } ${
         selected
           ? "ring-4 ring-[#8ab4f8] ring-offset-2 ring-offset-black"
@@ -105,22 +120,26 @@ export function PhotoCard({
         title={`${photo.name}${photo.modifiedAt ? ` · ${timeLabel(photo.modifiedAt)}` : ""}`}
         aria-label={`View photo ${photo.name}`}
         className={`relative block w-full cursor-pointer focus-visible:outline-none ${
-          isSquare ? "h-full" : ""
+          isSquare || isJustified ? "h-full" : ""
         }`}
       >
-        {isSquare ? (
+        {isSquare || isJustified ? (
           <Image
             src={galleryImageUrl(
               photo.path,
               libraryId,
               photo.modifiedAt,
               photo.size,
-              360,
+              width ? Math.max(360, Math.round(width * 1.5)) : 360,
             )}
             alt={photo.name}
             fill
             unoptimized
-            sizes="(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 15vw"
+            sizes={
+              width
+                ? `${width}px`
+                : "(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 15vw"
+            }
             quality={80}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={eager ? "high" : "auto"}

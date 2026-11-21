@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, User } from "lucide-react";
-import { PhotoCard } from "@/components/gallery/photo-card";
+import { JustifiedPhotoGrid } from "@/components/gallery/justified-photo-grid";
 import {
   GridControls,
   type GallerySort,
@@ -20,17 +20,6 @@ import { ConfirmDialog } from "@/components/gallery/confirm-dialog";
 import { FolderPickerModal } from "@/components/gallery/folder-picker-modal";
 import { ExploreActionBar } from "./explore-action-bar";
 
-function getMasonryClasses(size: GridSize) {
-  switch (size) {
-    case "small":
-      return "columns-3 gap-2 sm:columns-4 md:columns-6 lg:columns-8";
-    case "large":
-      return "columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4";
-    case "medium":
-    default:
-      return "columns-2 gap-2.5 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6";
-  }
-}
 
 interface FilteredPhotosResponse {
   filterLabel: string;
@@ -366,35 +355,29 @@ export function ExploreFilteredView({
         </div>
       ) : photosData.items.length > 0 ? (
         <>
-          <div className={getMasonryClasses(gridSize)}>
-            {photosData.items.map((photo, index) => (
-              <PhotoCard
-                key={photo.path}
-                photo={photo}
-                libraryId={libraryId}
-                aspectRatio="natural"
-                eager={index < 8}
-                selectable
-                selected={selectedPaths.has(photo.path)}
-                onToggleSelect={() => toggleSelect(photo.path)}
-                onToggleFavorite={(p, isFav) => {
-                  setPhotosData((prev) => ({
-                    ...prev,
-                    items: prev.items.map((item) =>
-                      item.path === p.path ? { ...item, isFavorite: isFav } : item,
-                    ),
-                  }));
-                }}
-                onSelect={(p) => {
-                  if (selectedPaths.size > 0) {
-                    toggleSelect(p.path);
-                  } else {
-                    setSelectedPhoto(p);
-                  }
-                }}
-              />
-            ))}
-          </div>
+          <JustifiedPhotoGrid
+            photos={photosData.items}
+            libraryId={libraryId}
+            gridSize={gridSize}
+            selectable
+            selectedPaths={selectedPaths}
+            onToggleSelect={toggleSelect}
+            onToggleFavorite={(p, isFav) => {
+              setPhotosData((prev) => ({
+                ...prev,
+                items: prev.items.map((item) =>
+                  item.path === p.path ? { ...item, isFavorite: isFav } : item,
+                ),
+              }));
+            }}
+            onSelect={(p) => {
+              if (selectedPaths.size > 0) {
+                toggleSelect(p.path);
+              } else {
+                setSelectedPhoto(p);
+              }
+            }}
+          />
 
           <div ref={sentinelRef} className="h-10 flex items-center justify-center mt-6">
             {loadingMore && <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />}

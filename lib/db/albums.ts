@@ -267,12 +267,18 @@ export function getIndexedAlbumPhotos(
         path: schema.libraryEntries.path,
         size: schema.libraryEntries.size,
         modifiedAt: schema.libraryEntries.modifiedAt,
+        width: schema.photoMetadata.width,
+        height: schema.photoMetadata.height,
         isFavorite: sql<boolean>`coalesce((SELECT pum.is_favorite FROM photo_user_metadata pum WHERE pum.library_id = ${libraryId} AND pum.entry_path = ${schema.libraryEntries.path}), 0) = 1`,
       })
       .from(schema.albumEntries)
       .innerJoin(
         schema.libraryEntries,
         sql`${schema.albumEntries.libraryId} = ${schema.libraryEntries.libraryId} AND ${schema.albumEntries.entryPath} = ${schema.libraryEntries.path}`,
+      )
+      .leftJoin(
+        schema.photoMetadata,
+        sql`${schema.photoMetadata.libraryId} = ${libraryId} AND ${schema.photoMetadata.entryPath} = ${schema.libraryEntries.path}`,
       )
       .where(baseConditions)
       .orderBy(
@@ -355,9 +361,15 @@ export function getIndexedAlbumPhotos(
       path: schema.libraryEntries.path,
       size: schema.libraryEntries.size,
       modifiedAt: schema.libraryEntries.modifiedAt,
+      width: schema.photoMetadata.width,
+      height: schema.photoMetadata.height,
       isFavorite: sql<boolean>`coalesce((SELECT pum.is_favorite FROM photo_user_metadata pum WHERE pum.library_id = ${libraryId} AND pum.entry_path = ${schema.libraryEntries.path}), 0) = 1`,
     })
     .from(schema.libraryEntries)
+    .leftJoin(
+      schema.photoMetadata,
+      sql`${schema.photoMetadata.libraryId} = ${libraryId} AND ${schema.photoMetadata.entryPath} = ${schema.libraryEntries.path}`,
+    )
     .where(conditions)
     .orderBy(
       ...(sort === "name-desc"

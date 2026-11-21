@@ -10,7 +10,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { PhotoCard } from "@/components/gallery/photo-card";
+import { JustifiedPhotoGrid } from "@/components/gallery/justified-photo-grid";
 import { type GridSize } from "@/components/gallery/grid-controls";
 import {
   LightboxModal,
@@ -34,17 +34,6 @@ interface AlbumPhotosResponse {
   pageSize: number;
 }
 
-function getAlbumMasonryClasses(size: GridSize) {
-  switch (size) {
-    case "small":
-      return "columns-3 gap-2 sm:columns-4 md:columns-6 lg:columns-8";
-    case "large":
-      return "columns-1 gap-4 sm:columns-2 md:columns-3 lg:columns-4";
-    case "medium":
-    default:
-      return "columns-2 gap-2.5 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6";
-  }
-}
 
 interface AlbumDetailViewProps {
   albumPath: string;
@@ -397,41 +386,35 @@ export function AlbumDetailView({
 
       {albumDetail?.items && albumDetail.items.length > 0 ? (
         <>
-          <div className={getAlbumMasonryClasses(gridSize)}>
-            {albumDetail.items.map((photo, index) => (
-              <PhotoCard
-                key={photo.path}
-                photo={photo}
-                libraryId={libraryId}
-                aspectRatio="natural"
-                eager={index < 8}
-                selectable
-                selected={selectedPaths.has(photo.path)}
-                onToggleSelect={() => toggleSelectPhoto(photo.path)}
-                onToggleFavorite={(p, isFav) => {
-                  setAlbumDetail((prev) =>
-                    prev
-                      ? {
-                          ...prev,
-                          items: prev.items.map((item) =>
-                            item.path === p.path
-                              ? { ...item, isFavorite: isFav }
-                              : item,
-                          ),
-                        }
-                      : prev,
-                  );
-                }}
-                onSelect={(p) => {
-                  if (selectedPaths.size > 0) {
-                    toggleSelectPhoto(p.path);
-                  } else {
-                    setLocalSelectedPhoto(p);
-                  }
-                }}
-              />
-            ))}
-          </div>
+          <JustifiedPhotoGrid
+            photos={albumDetail.items}
+            libraryId={libraryId}
+            gridSize={gridSize}
+            selectable
+            selectedPaths={selectedPaths}
+            onToggleSelect={toggleSelectPhoto}
+            onToggleFavorite={(p, isFav) => {
+              setAlbumDetail((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      items: prev.items.map((item) =>
+                        item.path === p.path
+                          ? { ...item, isFavorite: isFav }
+                          : item,
+                      ),
+                    }
+                  : prev,
+              );
+            }}
+            onSelect={(p) => {
+              if (selectedPaths.size > 0) {
+                toggleSelectPhoto(p.path);
+              } else {
+                setLocalSelectedPhoto(p);
+              }
+            }}
+          />
 
           <div ref={sentinelRef} className="h-10 flex items-center justify-center mt-6">
             {loadingMore && <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />}

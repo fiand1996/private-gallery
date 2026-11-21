@@ -6,9 +6,9 @@ export type GallerySort = "name-asc" | "name-desc" | "modified-desc";
 export type GridSize = "small" | "medium" | "large";
 
 interface GridControlsProps {
-  sort: GallerySort;
+  sort?: GallerySort;
   gridSize: GridSize;
-  onSortChange: (sort: GallerySort) => void;
+  onSortChange?: (sort: GallerySort) => void;
   onGridSizeChange: (size: GridSize) => void;
 }
 
@@ -21,18 +21,20 @@ export function GridControls({
   return (
     <div className="flex items-center gap-2">
       {/* Sort selection */}
-      <label className="flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200/80 bg-zinc-100/80 px-2.5 text-xs text-zinc-600 transition hover:bg-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
-        <ArrowDownAZ size={14} className="text-zinc-400" />
-        <select
-          value={sort}
-          onChange={(e) => onSortChange(e.target.value as GallerySort)}
-          className="bg-transparent font-medium outline-none cursor-pointer"
-        >
-          <option value="modified-desc" className="dark:bg-zinc-900">Latest</option>
-          <option value="name-asc" className="dark:bg-zinc-900">Name (A–Z)</option>
-          <option value="name-desc" className="dark:bg-zinc-900">Name (Z–A)</option>
-        </select>
-      </label>
+      {sort && onSortChange && (
+        <label className="flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200/80 bg-zinc-100/80 px-2.5 text-xs text-zinc-600 transition hover:bg-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          <ArrowDownAZ size={14} className="text-zinc-400" />
+          <select
+            value={sort}
+            onChange={(e) => onSortChange(e.target.value as GallerySort)}
+            className="bg-transparent font-medium outline-none cursor-pointer"
+          >
+            <option value="modified-desc" className="dark:bg-zinc-900">Latest</option>
+            <option value="name-asc" className="dark:bg-zinc-900">Name (A–Z)</option>
+            <option value="name-desc" className="dark:bg-zinc-900">Name (Z–A)</option>
+          </select>
+        </label>
+      )}
 
       {/* Grid size selection */}
       <label className="flex h-9 items-center gap-1.5 rounded-xl border border-zinc-200/80 bg-zinc-100/80 px-2.5 text-xs text-zinc-600 transition hover:bg-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">

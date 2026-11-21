@@ -335,6 +335,8 @@ export function getExplorePhotos(
       size: schema.libraryEntries.size,
       modifiedAt: schema.libraryEntries.modifiedAt,
       scanId: schema.libraryEntries.scanId,
+      width: sql<number | null>`(SELECT pm.width FROM photo_metadata pm WHERE pm.library_id = ${libraryId} AND pm.entry_path = ${schema.libraryEntries.path})`,
+      height: sql<number | null>`(SELECT pm.height FROM photo_metadata pm WHERE pm.library_id = ${libraryId} AND pm.entry_path = ${schema.libraryEntries.path})`,
       isFavorite: sql<boolean>`coalesce((SELECT pum.is_favorite FROM photo_user_metadata pum WHERE pum.library_id = ${libraryId} AND pum.entry_path = ${schema.libraryEntries.path}), 0) = 1`,
       capturedAt: sql<
         string | null

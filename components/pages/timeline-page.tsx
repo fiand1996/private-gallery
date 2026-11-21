@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FolderArchive, FolderPlus, Heart, Image as ImageIcon, Loader2, Tag, Users, X } from "lucide-react";
 import { useLibrary } from "@/components/layout/library-context";
+import { useAppSettings } from "@/components/layout/settings-context";
 import { GalleryHeader } from "@/components/layout/gallery-header";
-import { PhotoCard } from "@/components/gallery/photo-card";
+import { GridControls, type GridSize } from "@/components/gallery/grid-controls";
+import { JustifiedPhotoGrid } from "@/components/gallery/justified-photo-grid";
 import { AddToAlbumModal } from "@/components/gallery/add-to-album-modal";
 import { AddTagModal } from "@/components/gallery/add-tag-modal";
 import { AddPersonModal } from "@/components/gallery/add-person-modal";
@@ -39,11 +41,13 @@ function dateLabel(key: string) {
 function TimelineList({
   libraryId,
   libraryName,
+  gridSize = "medium",
   externalSelectedPhoto,
   onClearExternalPhoto,
 }: {
   libraryId: number;
   libraryName?: string;
+  gridSize?: GridSize;
   externalSelectedPhoto: GalleryPhoto | null;
   onClearExternalPhoto: () => void;
 }) {
@@ -276,27 +280,31 @@ function TimelineList({
               </div>
             </div>
 
-            <div className="columns-2 gap-2.5 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6">
-              {photos.map((photo, index) => (
-                <PhotoCard
-                  key={photo.path}
-                  photo={photo}
-                  libraryId={libraryId}
-                  aspectRatio="natural"
-                  eager={index < 8}
-                  selectable
-                  selected={selectedPaths.has(photo.path)}
-                  onToggleSelect={() => toggleSelectPhoto(photo.path)}
-                  onSelect={(p) => {
-                    if (selectedPaths.size > 0) {
-                      toggleSelectPhoto(p.path);
-                    } else {
-                      setLocalSelectedPhoto(p);
-                    }
-                  }}
-                />
-              ))}
-            </div>
+            <JustifiedPhotoGrid
+              photos={photos}
+              libraryId={libraryId}
+              gridSize={gridSize}
+              selectable
+              selectedPaths={selectedPaths}
+              onToggleSelect={toggleSelectPhoto}
+              onToggleFavorite={(p, isFav) => {
+                setTimeline((prev) => ({
+                  ...prev,
+                  items: prev.items.map((item) =>
+                    item.path === p.path
+                      ? { ...item, isFavorite: isFav }
+                      : item,
+                  ),
+                }));
+              }}
+              onSelect={(p) => {
+                if (selectedPaths.size > 0) {
+                  toggleSelectPhoto(p.path);
+                } else {
+                  setLocalSelectedPhoto(p);
+                }
+              }}
+            />
           </section>
         ))}
 
@@ -432,6 +440,8 @@ function TimelineList({
 
 export function TimelineView() {
   const { selectedLibraryId, selectedLibrary, loading: libraryLoading } = useLibrary();
+  const { settings } = useAppSettings();
+  const [gridSize, setGridSize] = useState<GridSize>(() => settings.defaultGridSize || "medium");
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
 
   const handleSelectPhoto = useCallback((photo: GalleryPhoto) => {
@@ -444,7 +454,15 @@ export function TimelineView() {
 
   return (
     <div>
-      <GalleryHeader onSelectPhoto={handleSelectPhoto} />
+      <GalleryHeader
+        onSelectPhoto={handleSelectPhoto}
+        actions={
+          <GridControls
+            gridSize={gridSize}
+            onGridSizeChange={setGridSize}
+          />
+        }
+      />
 
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-8">
         {libraryLoading && (
@@ -476,9 +494,10 @@ export function TimelineView() {
 
         {!libraryLoading && selectedLibraryId !== null && (
           <TimelineList
-            key={selectedLibraryId}
+            key={`${selectedLibraryId}:${gridSize}`}
             libraryId={selectedLibraryId}
             libraryName={selectedLibrary?.name}
+            gridSize={gridSize}
             externalSelectedPhoto={selectedPhoto}
             onClearExternalPhoto={handleClearPhoto}
           />
