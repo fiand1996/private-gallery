@@ -473,7 +473,6 @@ function FolderContent({
                     key={photo.path}
                     photo={photo}
                     libraryId={libraryId}
-                    width={gridSize === "large" ? 600 : gridSize === "small" ? 240 : 400}
                     selectable
                     selected={selectedPaths.has(photo.path)}
                     onToggleSelect={() => toggleSelect(photo.path)}

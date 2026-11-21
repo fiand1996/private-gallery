@@ -104,15 +104,15 @@ export function PhotoCard({
       onContextMenu={onContextMenu}
       style={{
         contentVisibility: "auto",
-        width: width ? `${width}px` : undefined,
-        height: height ? `${height}px` : undefined,
+        width: isJustified && width ? `${width}px` : undefined,
+        height: isJustified && height ? `${height}px` : undefined,
         containIntrinsicSize:
-          width && height
+          isJustified && width && height
             ? `${width}px ${height}px`
             : isSquare
-              ? "180px"
+              ? "200px 200px"
               : "240px",
-        flexShrink: 0,
+        flexShrink: isJustified ? 0 : undefined,
       }}
       className={`group relative overflow-hidden rounded-xl bg-[#1c1c1c] transition-all select-none ${
         isJustified
