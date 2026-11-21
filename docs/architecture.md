@@ -52,17 +52,20 @@ Private Gallery is structured around a clear separation of concerns between Next
 - **Behavior**: Recursively traverses registered library roots, extracts file stats and extensions, and performs batched insertions into SQLite without blocking the main event loop.
 
 ### 3. High-Performance Image Caching (`lib/gallery-image-url.ts`, `/api/gallery/image/route.ts`)
-- **Pipeline**: Uses `sharp` to process original media files into responsive WebP thumbnails (`w=160`, `w=260`, `w=360`, `w=600`).
+- **Pipeline**: Uses `sharp` to process original media files into responsive WebP thumbnails with standard server buckets (`w=160`, `w=260`, `w=400`, `w=640`, `w=1200`).
 - **Caching**: Stored on disk in `data/thumbnails/` and served with HTTP `304 Not Modified` response validation using `ETag`.
 
 ### 4. Direct Action Synchronization (`lib/gallery-actions.ts`)
 - **Design**: File operations (`delete`, `move`, `copy`) executed in the UI perform atomic updates on both the physical disk and the SQLite database simultaneously. No manual rescan required.
 
+### 5. Horizontal Justified Layout (`components/gallery/justified-photo-grid.tsx`)
+- **Design**: Implements row-by-row justified layouts (Immich / Google Photos style) that preserve original photo aspect ratios without vertical masonry jumps during pagination. Synchronized row heights correspond directly to Album and Folder square card heights across Small, Medium, and Large grid sizes.
+
 ---
 
 ## 🔄 Request Lifecycle
 
-1. **Client Request**: User navigates to Timeline, Album, or Folder view.
+1. **Client Request**: User navigates to Photos, Album, or Folder view.
 2. **API Dispatch**: Next.js App Router endpoint validates session authentication and queries Drizzle ORM.
 3. **Thumbnail Stream**: Grid components request sized WebP thumbnails through `/api/gallery/image`. The caching engine checks disk cache or generates via `sharp`.
-4. **Metadata Extraction**: On-demand EXIF, camera, lens, and GPS data are extracted via `exifr` during lightbox inspection.
+4. **Metadata Extraction**: On-demand EXIF, camera, lens, and GPS data are extracted via `exifr` with orientation-aware dimension handling.

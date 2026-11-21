@@ -8,10 +8,10 @@ Designed for media enthusiasts, creators, and privacy advocates, Private Gallery
 
 ## ✨ Key Features
 
-- **📂 Media-First Directory Indexing**: Photos remain in their original folder structure on disk. SQLite indexes them for lightning-fast search, timeline timelines, and album views.
+- **📂 Media-First Directory Indexing**: Photos remain in their original folder structure on disk. SQLite indexes them for lightning-fast search, timeline dates, and album views.
 - **⚡ High-Performance WebP Caching**: Automatically generates server-side WebP thumbnails (down from ~15MB raw to ~15KB WebP, a 99% reduction) using `sharp`. Supports HTTP `304 Not Modified` caching via ETag.
-- **🔍 Advanced Search & Metadata**: Extracts EXIF, GPS, camera, lens, and IPTC/XMP metadata on-demand. Global search with multi-filter support.
-- **📁 Dual Navigation Views**: Seamlessly toggle between Timeline view, Custom & Folder-backed Albums, hierarchical Folder browser, and Explore hub.
+- **🔍 Advanced Search & Metadata**: Extracts EXIF, GPS, camera, lens, and IPTC/XMP metadata on-demand with automatic EXIF orientation correction. Global search with multi-filter support.
+- **📁 Rich Gallery Views**: Seamlessly navigate between Photos view with horizontal justified grid (Immich / Google Photos style), Custom & Folder-backed Albums with infinite scroll, hierarchical Folder browser, and Explore hub.
 - **🛡️ Atomic File Operations**: Perform file operations (`delete`, `move`, `copy`) directly from the web interface with instant physical disk and SQLite database synchronization.
 - **🔒 Self-Hosted & Private**: Fully self-contained with authentication (`NextAuth.js`), secure path traversal resolution, and zero external telemetry.
 - **🌙 Sleek Dark Media Theme**: Dark media interface starting with the `dark` class on `<html>` using a neutral zinc/slate palette (`#090b10` / `zinc-950`).

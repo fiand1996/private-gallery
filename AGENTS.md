@@ -29,9 +29,9 @@ Strict separation of concerns MUST be maintained:
 
 - **`components/` (All React Components):**
   - `components/layout/` : AppShell, Sidebar, Header, `LibraryContext`, and `SettingsContext`.
-  - `components/gallery/` : PhotoCard, AlbumCard, LightboxModal, PhotoInfoPanel, GridControls, ContextMenu, dialogs.
+  - `components/gallery/` : PhotoCard, AlbumCard, LightboxModal, PhotoInfoPanel, GridControls, ContextMenu, JustifiedPhotoGrid, dialogs.
   - `components/search/` : Global search popup.
-  - `components/pages/` : Clean page wrappers (`TimelineView`, `AlbumsPage`, `FolderPage`, `ExplorePage`).
+  - `components/pages/` : Clean page wrappers (`PhotosView`, `AlbumsPage`, `FolderPage`, `ExplorePage`).
   - `components/folder/` : Modular folder view components (`FolderActionBar`, `FolderBreadcrumbs`, `FolderGridItem`, `FolderUpload`, `CreateFolderModal`).
   - `components/albums/` : Modular album view components (`AlbumActionBar`, `AlbumsListView`, `AlbumDetailView`, `CreateAlbumModal`).
   - `components/explore/` : Modular explore view components (`ExploreActionBar`, `ExploreHubView`, `ExploreFilteredView`).
@@ -86,10 +86,14 @@ Strict separation of concerns MUST be maintained:
 ## 5. Performance & Image Caching Architecture
 
 - **Server-Side WebP Thumbnails:**
-  - All grid thumbnails (`PhotoCard`, `AlbumCard`, `FolderView`, search results) MUST request sized thumbnails via `galleryImageUrl(..., width)` (`w=160`, `w=260`, `w=360`, `w=600`).
+  - All grid thumbnails (`PhotoCard`, `AlbumCard`, `FolderGridItem`, search results) request sized thumbnails via `galleryImageUrl(..., width)` mapped to normalized server buckets (`w=160`, `w=260`, `w=400`, `w=640`, `w=1200`).
   - `/api/gallery/image/route.ts` generates disk-cached WebP thumbnails in `data/thumbnails/` using `sharp` (down from ~15 MB raw to ~15 KB WebP, a 99% reduction).
   - Lightbox modal views omit `width` to stream the full-resolution original image.
   - Supports HTTP `304 Not Modified` via `ETag` and `If-None-Match`.
 - **Responsive Photo Layouts:**
-  - `PhotoCard` supports `aspectRatio="square"` (fixed tile, used in Folder view where directory folders are present) and `aspectRatio="natural"` (masonry flow preserving original dimensions, used in Timeline and Album Detail).
-  - All views avoid dynamic multi-column height balancing (`[column-fill:_balance]`) and `onLoad` re-renders, relying on native CSS column masonry and `contentVisibility: "auto"` for maximum performance.
+  - `JustifiedPhotoGrid` implements a row-by-row horizontal justified layout (Google Photos / Immich style) that preserves natural image aspect ratios and avoids vertical masonry pagination jumps. Used in Photos, Album Detail, and Explore Filtered views.
+  - `PhotoCard` supports `aspectRatio="justified"` (with dynamic width/height per row) and `aspectRatio="square"` (fixed 1:1 tile, used in Folder view and Album cards).
+  - All views use `contentVisibility: "auto"` for maximum performance with large catalogs.
+- **EXIF Orientation & Metadata Accuracy:**
+  - Dimension extraction in `lib/gallery-metadata.ts` checks EXIF `Orientation` (tags 5, 6, 7, 8) via `isOrientationRotated90`. Rotated images swap `width` and `height` to ensure upright portrait photos are never cropped into landscape slots.
+  - Client-side `onMeasureAspectRatio` in `PhotoCard` provides real-time self-correction upon image load.
