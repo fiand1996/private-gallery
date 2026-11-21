@@ -1,6 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getDatabase, getLibrary } from "./database";
+import {
+  getDatabase,
+  getLibrary,
+  syncFolderAlbums,
+  syncScannedImageMetadataBatch,
+} from "./database";
 import { GalleryPathError, IMAGE_CONTENT_TYPES } from "./gallery";
 import { resolveLibraryPath } from "./gallery-actions";
 import * as schema from "./schema";
@@ -31,6 +36,7 @@ export async function processUploadBatch(
   const db = getDatabase();
   const uploaded: { path: string; name: string }[] = [];
   const skipped: { path: string; reason: string }[] = [];
+  const newlyUploadedImages: Array<{ relativePath: string; absolutePath: string }> = [];
 
   // Track directories to register in DB
   const createdDirectories = new Set<string>();
@@ -148,11 +154,29 @@ export async function processUploadBatch(
       });
 
       uploaded.push({ path: fullRelativePath, name: fileName });
+      newlyUploadedImages.push({
+        relativePath: fullRelativePath,
+        absolutePath: destAbsolute,
+      });
     } catch (err) {
       skipped.push({
         path: item.relativePath,
         reason: err instanceof Error ? err.message : "Failed to write file.",
       });
+    }
+  }
+
+  if (newlyUploadedImages.length > 0) {
+    try {
+      await syncScannedImageMetadataBatch(libraryId, newlyUploadedImages);
+    } catch (metaErr) {
+      console.warn("[Upload] Failed to sync photo metadata:", metaErr);
+    }
+
+    try {
+      syncFolderAlbums(libraryId);
+    } catch (albumErr) {
+      console.warn("[Upload] Failed to sync folder albums:", albumErr);
     }
   }
 
