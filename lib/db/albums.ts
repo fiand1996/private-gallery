@@ -87,24 +87,62 @@ export function getIndexedAlbums(
     .all();
   const albumItems: IndexedAlbum[] = [];
 
+  // Batch aggregate stats for folder albums (eliminates N+1 queries)
+  const folderStatsRows = db
+    .select({
+      parentPath: schema.libraryEntries.parentPath,
+      photoCount: count(),
+      coverName: sql<string>`min(${schema.libraryEntries.name})`,
+      updatedAt: sql<string | null>`max(${schema.libraryEntries.modifiedAt})`,
+    })
+    .from(schema.libraryEntries)
+    .where(
+      sql`${schema.libraryEntries.libraryId} = ${libraryId}
+        AND ${schema.libraryEntries.kind} = 'image'
+        AND ${schema.libraryEntries.parentPath} != ''`,
+    )
+    .groupBy(schema.libraryEntries.parentPath)
+    .all();
+
+  const folderStatsMap = new Map<
+    string,
+    { photoCount: number; coverName: string; updatedAt: string | null }
+  >();
+  for (const row of folderStatsRows) {
+    folderStatsMap.set(row.parentPath, row);
+  }
+
+  // Batch aggregate stats for custom albums (eliminates N+1 queries)
+  const customStatsRows = db
+    .select({
+      albumId: schema.albumEntries.albumId,
+      photoCount: count(),
+      firstEntry: sql<string>`min(${schema.albumEntries.entryPath})`,
+      updatedAt: sql<string | null>`max(${schema.libraryEntries.modifiedAt})`,
+    })
+    .from(schema.albumEntries)
+    .innerJoin(
+      schema.libraryEntries,
+      sql`${schema.albumEntries.libraryId} = ${schema.libraryEntries.libraryId} AND ${schema.albumEntries.entryPath} = ${schema.libraryEntries.path}`,
+    )
+    .where(
+      sql`${schema.albumEntries.libraryId} = ${libraryId}
+        AND ${schema.libraryEntries.kind} = 'image'`,
+    )
+    .groupBy(schema.albumEntries.albumId)
+    .all();
+
+  const customStatsMap = new Map<
+    number,
+    { photoCount: number; firstEntry: string; updatedAt: string | null }
+  >();
+  for (const row of customStatsRows) {
+    customStatsMap.set(row.albumId, row);
+  }
+
   for (const alb of allAlbums) {
     if (alb.kind === "folder" && alb.folderPath) {
-      const stats = db
-        .select({
-          photoCount: count(),
-          coverName: sql<string>`min(${schema.libraryEntries.name})`,
-          updatedAt: sql<
-            string | null
-          >`max(${schema.libraryEntries.modifiedAt})`,
-        })
-        .from(schema.libraryEntries)
-        .where(
-          sql`${schema.libraryEntries.libraryId} = ${libraryId}
-            AND ${schema.libraryEntries.parentPath} = ${alb.folderPath}
-            AND ${schema.libraryEntries.kind} = 'image'`,
-        )
-        .get();
-
+      const stats = folderStatsMap.get(alb.folderPath);
       if (!stats || stats.photoCount === 0) continue;
 
       const coverPath =
@@ -126,22 +164,7 @@ export function getIndexedAlbums(
         updatedAt: alb.updatedAt || stats.updatedAt,
       });
     } else if (alb.kind === "custom") {
-      const stats = db
-        .select({
-          photoCount: count(),
-          firstEntry: sql<string>`min(${schema.albumEntries.entryPath})`,
-          updatedAt: sql<
-            string | null
-          >`max(${schema.libraryEntries.modifiedAt})`,
-        })
-        .from(schema.albumEntries)
-        .innerJoin(
-          schema.libraryEntries,
-          sql`${schema.albumEntries.libraryId} = ${schema.libraryEntries.libraryId} AND ${schema.albumEntries.entryPath} = ${schema.libraryEntries.path}`,
-        )
-        .where(eq(schema.albumEntries.albumId, alb.id))
-        .get();
-
+      const stats = customStatsMap.get(alb.id);
       const photoCount = stats?.photoCount ?? 0;
       const coverPath = alb.coverEntryPath || stats?.firstEntry || "";
 
