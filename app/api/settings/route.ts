@@ -1,7 +1,9 @@
+import { connection } from "next/server";
 import { NextResponse } from "next/server";
 import { getAppSettings, setAppSettings } from "@/lib/database";
 
 export async function GET() {
+  await connection();
   try {
     const settings = getAppSettings();
     return NextResponse.json({ settings });

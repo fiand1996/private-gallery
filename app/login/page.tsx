@@ -37,7 +37,9 @@ function LoginFormContent() {
     let isMounted = true;
     async function checkUserCount() {
       try {
-        const res = await fetch("/api/users/count");
+        const res = await fetch(`/api/users/count?t=${Date.now()}`, {
+          cache: "no-store",
+        });
         if (res.ok) {
           const data = (await res.json()) as { userCount: number };
           if (isMounted) {

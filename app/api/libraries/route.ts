@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import {
   createLibrary,
@@ -9,6 +10,7 @@ import {
 } from "@/lib/library-service";
 
 export async function GET() {
+  await connection();
   try {
     const libraries = ensureDefaultLibrary().map((library) => ({
       id: library.id,

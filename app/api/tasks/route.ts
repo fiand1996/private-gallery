@@ -1,8 +1,10 @@
+import { connection } from "next/server";
 import { NextRequest, NextResponse } from "next/server";
 import { enqueueScan, getRecentTasks } from "@/lib/database";
 import { triggerScanQueue } from "@/lib/scan-runner";
 
 export async function GET() {
+  await connection();
   try {
     const tasks = getRecentTasks();
     const hasPending = tasks.some(
