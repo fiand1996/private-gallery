@@ -62,17 +62,17 @@ export function GallerySidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-[#262626] bg-[#121212] px-3.5 py-4 lg:flex select-none">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border-subtle bg-bg-surface px-3.5 py-4 lg:flex select-none">
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-3 py-2">
-          <div className="flex size-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#1a2333] to-[#1e2a3a] border border-[#2a3a55] shadow-sm shadow-[#8ab4f8]/20">
-            <span className="text-base font-bold text-[#8ab4f8]">PS</span>
+          <div className="flex size-9 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#1a2333] to-[#1e2a3a] border border-[#2a3a55] shadow-sm shadow-accent/20">
+            <span className="text-base font-bold text-accent">PS</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold tracking-tight text-zinc-100">
+            <span className="text-sm font-semibold tracking-tight text-text-primary">
               Private Gallery
             </span>
-            <span className="text-[11px] text-zinc-400">Local Media Gallery</span>
+            <span className="text-[11px] text-text-secondary">Local Media Gallery</span>
           </div>
         </div>
 
@@ -86,8 +86,8 @@ export function GallerySidebar() {
                 href={href}
                 className={`flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition ${
                   active
-                    ? "bg-[#1f2533] text-[#8ab4f8] font-semibold"
-                    : "text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-100"
+                    ? "bg-accent-active-bg text-accent font-semibold"
+                    : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
                 }`}
               >
                 <Icon size={18} strokeWidth={active ? 2.4 : 1.8} />
@@ -98,13 +98,13 @@ export function GallerySidebar() {
         </nav>
 
         {/* Bottom / Library Info, User Profile & Settings */}
-        <div className="mt-auto space-y-2.5 pt-4 border-t border-[#262626]">
+        <div className="mt-auto space-y-2.5 pt-4 border-t border-border-subtle">
           {/* Selected Library Summary Box */}
           {selectedLibrary && (
-            <div className="rounded-2xl border border-[#262626] bg-[#161616] p-3 shadow-inner">
+            <div className="rounded-2xl border border-border-subtle bg-bg-card-subtle p-3 shadow-inner">
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200 truncate">
-                  <HardDrive size={14} className="text-[#8ab4f8] shrink-0" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-text-primary truncate">
+                  <HardDrive size={14} className="text-accent shrink-0" />
                   <span className="truncate">{selectedLibrary.name}</span>
                 </div>
                 <span
@@ -112,7 +112,7 @@ export function GallerySidebar() {
                   title="Online"
                 />
               </div>
-              <div className="mt-1.5 flex items-center justify-between text-[11px] text-zinc-400">
+              <div className="mt-1.5 flex items-center justify-between text-[11px] text-text-secondary">
                 <span>{selectedLibrary.imageCount ?? 0} photos</span>
                 <span>{formatBytes(selectedLibrary.totalSizeBytes ?? 0)}</span>
               </div>

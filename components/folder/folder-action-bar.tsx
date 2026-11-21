@@ -50,9 +50,9 @@ export function FolderActionBar({
     : undefined;
 
   return (
-    <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-[#2e2e2e] bg-[#141414]/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
-      <div className="flex items-center gap-2 border-r border-[#262626] pr-3 text-xs font-bold text-zinc-100">
-        <span className="flex size-5 items-center justify-center rounded-full bg-[#8ab4f8] text-[10px] font-bold text-zinc-950">
+    <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
+      <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-text-primary">
+        <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-zinc-950">
           {selectedCount}
         </span>
         <span>Selected</span>
@@ -60,7 +60,7 @@ export function FolderActionBar({
           <button
             type="button"
             onClick={onToggleSelectAll}
-            className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-[#8ab4f8] transition hover:bg-[#8ab4f8]/10 cursor-pointer"
+            className="ml-1 rounded-lg px-2 py-0.5 text-[11px] font-semibold text-accent transition hover:bg-accent-muted cursor-pointer"
           >
             {isAllSelected ? "Deselect All" : "Select All"}
           </button>

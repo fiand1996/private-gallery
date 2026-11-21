@@ -114,7 +114,7 @@ export function PhotoCard({
               : "240px",
         flexShrink: isJustified ? 0 : undefined,
       }}
-      className={`group relative overflow-hidden rounded-xl bg-[#1c1c1c] transition-all select-none ${
+      className={`group relative overflow-hidden rounded-xl bg-bg-input transition-all select-none ${
         isJustified
           ? ""
           : isSquare
@@ -122,7 +122,7 @@ export function PhotoCard({
             : "mb-2.5 block w-full break-inside-avoid"
       } ${
         selected
-          ? "ring-4 ring-[#8ab4f8] ring-offset-2 ring-offset-black"
+          ? "ring-4 ring-accent ring-offset-2 ring-offset-black"
           : "hover:shadow-lg hover:shadow-black/50"
       }`}
     >
@@ -200,7 +200,7 @@ export function PhotoCard({
           title={selected ? "Deselect photo" : "Select photo"}
           className={`absolute top-2.5 left-2.5 z-10 flex size-6 items-center justify-center rounded-full transition-all cursor-pointer ${
             selected
-              ? "bg-[#8ab4f8] text-zinc-950 shadow-md shadow-[#8ab4f8]/30 scale-100 opacity-100 ring-2 ring-black"
+              ? "bg-accent text-zinc-950 shadow-md shadow-accent/30 scale-100 opacity-100 ring-2 ring-black"
               : "border-2 border-white/70 bg-black/30 text-transparent backdrop-blur hover:scale-110 hover:border-white opacity-0 group-hover:opacity-100"
           }`}
         >

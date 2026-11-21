@@ -358,18 +358,18 @@ export function PhotoInfoPanel({
     .slice(0, 5);
 
   return (
-    <aside className="absolute inset-y-0 right-0 z-30 flex w-96 max-w-[90vw] flex-col border-l border-[#262626] bg-[#141414]/95 shadow-2xl backdrop-blur-2xl animate-in slide-in-from-right duration-200">
+    <aside className="absolute inset-y-0 right-0 z-30 flex w-96 max-w-[90vw] flex-col border-l border-border-subtle bg-bg-card/95 shadow-2xl backdrop-blur-2xl animate-in slide-in-from-right duration-200">
       {/* Panel Header */}
-      <div className="flex h-16 shrink-0 items-center justify-between border-b border-[#262626] px-5">
-        <div className="flex items-center gap-2 text-zinc-100 font-semibold text-sm">
-          <Info size={16} className="text-[#8ab4f8]" />
+      <div className="flex h-16 shrink-0 items-center justify-between border-b border-border-subtle px-5">
+        <div className="flex items-center gap-2 text-text-primary font-semibold text-sm">
+          <Info size={16} className="text-accent" />
           <span>Info & Details</span>
         </div>
         <button
           type="button"
           onClick={onClose}
           title="Close details (Esc / I)"
-          className="rounded-full p-1.5 text-zinc-400 transition hover:bg-[#1f1f1f] hover:text-white cursor-pointer"
+          className="rounded-full p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-white cursor-pointer"
         >
           <X size={16} />
         </button>
@@ -379,7 +379,7 @@ export function PhotoInfoPanel({
       <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs text-zinc-300 scrollbar-thin">
         {loading && !metadata && (
           <div className="flex h-40 items-center justify-center">
-            <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+            <Loader2 className="size-6 animate-spin text-accent" />
           </div>
         )}
 
@@ -390,7 +390,7 @@ export function PhotoInfoPanel({
         )}
 
         {/* Favorite & Rating Quick Bar */}
-        <section className="flex items-center justify-between rounded-2xl border border-[#262626] bg-[#1a1a1a]/80 p-3">
+        <section className="flex items-center justify-between rounded-2xl border border-border-subtle bg-bg-hover/80 p-3">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -408,7 +408,7 @@ export function PhotoInfoPanel({
               } ${
                 isFavorite
                   ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                  : "bg-[#262626] text-zinc-300 hover:text-white"
+                  : "bg-border-subtle text-text-secondary hover:text-white"
               }`}
             >
               <Heart
@@ -448,9 +448,9 @@ export function PhotoInfoPanel({
         </section>
 
         {/* User Notes / Caption Section */}
-        <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-2">
+        <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
               Notes / Caption
             </span>
             <div className="flex items-center gap-2">
@@ -467,7 +467,7 @@ export function PhotoInfoPanel({
                   type="button"
                   disabled={savingMeta}
                   onClick={handleSaveCaption}
-                  className="inline-flex items-center gap-1 rounded-lg bg-[#8ab4f8] px-2 py-0.5 text-[11px] font-medium text-[#090b10] hover:bg-[#8ab4f8]/90 transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-lg bg-accent px-2 py-0.5 text-[11px] font-medium text-[#090b10] hover:bg-accent-hover transition cursor-pointer"
                 >
                   Save
                 </button>
@@ -491,18 +491,18 @@ export function PhotoInfoPanel({
                 ? "Add a description or note about this photo... (Ctrl+Enter to save)"
                 : "No description provided."
             }
-            className={`w-full resize-none rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] p-2.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition ${
+            className={`w-full resize-none rounded-xl border border-border-strong bg-bg-input p-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition ${
               isAdmin
-                ? "focus:border-[#8ab4f8] focus:ring-1 focus:ring-[#8ab4f8]/30"
+                ? "focus:border-accent focus:ring-1 focus:ring-accent-border"
                 : "opacity-80 cursor-default"
             }`}
           />
         </section>
 
         {/* Interactive Tags Section */}
-        <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-3">
-          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-[#262626] pb-2">
-            <Tag size={15} className="text-[#8ab4f8]" />
+        <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
+          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+            <Tag size={15} className="text-accent" />
             <span>Tags & Labels</span>
           </div>
 
@@ -511,7 +511,7 @@ export function PhotoInfoPanel({
             {tags.map((t) => (
               <span
                 key={t.id}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#8ab4f8]/10 border border-[#8ab4f8]/20 px-2.5 py-1 text-xs font-medium text-[#8ab4f8]"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-accent-muted border border-accent-border px-2.5 py-1 text-xs font-medium text-accent"
               >
                 <span>#{t.name}</span>
                 {isAdmin && (
@@ -519,7 +519,7 @@ export function PhotoInfoPanel({
                     type="button"
                     onClick={() => handleRemoveTag(t.id)}
                     title={`Remove #${t.name}`}
-                    className="rounded hover:bg-[#8ab4f8]/20 p-0.5 text-[#8ab4f8] hover:text-zinc-100 cursor-pointer"
+                    className="rounded hover:bg-accent-border p-0.5 text-accent hover:text-zinc-100 cursor-pointer"
                   >
                     <X size={11} />
                   </button>
@@ -543,13 +543,13 @@ export function PhotoInfoPanel({
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   placeholder="Add a tag..."
-                  className="h-8 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] pl-6 pr-2.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8]"
+                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-6 pr-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition focus:border-accent"
                 />
               </div>
               <button
                 type="submit"
                 disabled={!tagInput.trim()}
-                className="inline-flex h-8 items-center gap-1 rounded-xl bg-[#8ab4f8]/15 border border-[#8ab4f8]/30 px-3 text-xs font-semibold text-[#8ab4f8] hover:bg-[#8ab4f8]/25 transition cursor-pointer disabled:opacity-40"
+                className="inline-flex h-8 items-center gap-1 rounded-xl bg-accent-muted border border-accent-border px-3 text-xs font-semibold text-accent hover:bg-accent-border transition cursor-pointer disabled:opacity-40"
               >
                 <Plus size={13} />
                 Add
@@ -569,7 +569,7 @@ export function PhotoInfoPanel({
                     key={s.id}
                     type="button"
                     onClick={() => handleAddTag(undefined, s.name)}
-                    className="inline-flex items-center gap-1 rounded-md border border-[#2e2e2e] bg-[#1c1c1c] px-2 py-0.5 text-[11px] text-zinc-400 hover:text-[#8ab4f8] hover:border-[#8ab4f8]/40 transition cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded-md border border-border-strong bg-bg-input px-2 py-0.5 text-[11px] text-zinc-400 hover:text-accent hover:border-accent-border transition cursor-pointer"
                   >
                     <span>+{s.name}</span>
                   </button>
@@ -580,9 +580,9 @@ export function PhotoInfoPanel({
         </section>
 
         {/* Interactive People Section */}
-        <section className="rounded-2xl border border-[#262626] bg-[#1a1a1a]/60 p-3.5 space-y-3">
-          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-[#262626] pb-2">
-            <Users size={15} className="text-[#8ab4f8]" />
+        <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
+          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+            <Users size={15} className="text-accent" />
             <span>People in Photo</span>
           </div>
 
@@ -622,13 +622,13 @@ export function PhotoInfoPanel({
                   value={personInput}
                   onChange={(e) => setPersonInput(e.target.value)}
                   placeholder="Add person name..."
-                  className="h-8 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] pl-7 pr-2.5 text-xs text-zinc-100 placeholder-zinc-500 outline-none transition focus:border-[#8ab4f8]"
+                  className="h-8 w-full rounded-xl border border-border-strong bg-bg-input pl-7 pr-2.5 text-xs text-text-primary placeholder-zinc-500 outline-none transition focus:border-accent"
                 />
               </div>
               <button
                 type="submit"
                 disabled={!personInput.trim()}
-                className="inline-flex h-8 items-center gap-1 rounded-xl bg-[#8ab4f8]/15 border border-[#8ab4f8]/30 px-3 text-xs font-semibold text-[#8ab4f8] hover:bg-[#8ab4f8]/25 transition cursor-pointer disabled:opacity-40"
+                className="inline-flex h-8 items-center gap-1 rounded-xl bg-accent-muted border border-accent-border px-3 text-xs font-semibold text-accent hover:bg-accent-border transition cursor-pointer disabled:opacity-40"
               >
                 <Plus size={13} />
                 Add

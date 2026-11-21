@@ -48,11 +48,11 @@ export function AlbumCard({
   }, [menuOpen]);
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#262626] bg-[#141414] transition-all duration-300 hover:-translate-y-1 hover:border-[#8ab4f8]/50 hover:shadow-2xl hover:shadow-black/80">
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-border-subtle bg-bg-card transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-2xl hover:shadow-black/80">
       <Link
         href={`/albums?path=${encodeURIComponent(album.path)}`}
         onClick={() => recordAlbumOpen(libraryId, album.path)}
-        className="block relative aspect-square w-full overflow-hidden bg-[#1c1c1c]"
+        className="block relative aspect-square w-full overflow-hidden bg-bg-input"
       >
         {/* Background Cover Image */}
         {album.coverPath ? (
@@ -78,21 +78,21 @@ export function AlbumCard({
 
         {/* Top-Left: Badge for Virtual Album */}
         {album.kind === "custom" && (
-          <span className="absolute top-2.5 left-2.5 z-20 rounded-full border border-[#8ab4f8]/40 bg-black/60 px-2.5 py-0.5 text-[10px] font-bold text-[#8ab4f8] backdrop-blur-md shadow-md">
+          <span className="absolute top-2.5 left-2.5 z-20 rounded-full border border-accent/40 bg-black/60 px-2.5 py-0.5 text-[10px] font-bold text-accent backdrop-blur-md shadow-md">
             Virtual
           </span>
         )}
 
         {/* Crisp Bottom Gradient Overlay without blur */}
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/45 to-transparent pt-14 pb-3.5 px-3.5 pointer-events-none">
-          <h3 className="text-sm sm:text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] line-clamp-1 group-hover:text-[#8ab4f8] transition-colors">
+          <h3 className="text-sm sm:text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] line-clamp-1 group-hover:text-accent transition-colors">
             {album.name}
           </h3>
           <p className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
             {album.photoCount} {album.photoCount === 1 ? "photo" : "photos"}
           </p>
           {album.description && (
-            <p className="mt-0.5 text-[11px] text-zinc-400 line-clamp-1 drop-shadow">
+            <p className="mt-0.5 text-[11px] text-text-secondary line-clamp-1 drop-shadow">
               {album.description}
             </p>
           )}

@@ -45,13 +45,13 @@ export function SettingsNav() {
       </div>
 
       {/* Navigation Tab Pills */}
-      <div className="mb-8 flex flex-wrap items-center gap-2 border-b border-[#262626] pb-3">
+      <div className="mb-8 flex flex-wrap items-center gap-2 border-b border-border-subtle pb-3">
         <Link
           href="/settings/libraries"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isLibraries
-              ? "bg-[#8ab4f8] text-zinc-950 shadow-sm"
-              : "text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-200"
+              ? "bg-accent text-zinc-950 shadow-sm"
+              : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
           <HardDrive size={15} />
@@ -61,7 +61,7 @@ export function SettingsNav() {
               className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
                 isLibraries
                   ? "bg-zinc-950/20 text-zinc-950"
-                  : "bg-[#262626] text-zinc-400"
+                  : "bg-border-subtle text-text-secondary"
               }`}
             >
               {libraries.length}
@@ -73,8 +73,8 @@ export function SettingsNav() {
           href="/settings/preferences"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isPreferences
-              ? "bg-[#8ab4f8] text-zinc-950 shadow-sm"
-              : "text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-200"
+              ? "bg-accent text-zinc-950 shadow-sm"
+              : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
           <SlidersHorizontal size={15} />
@@ -85,8 +85,8 @@ export function SettingsNav() {
           href="/settings/tasks"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isTasks
-              ? "bg-[#8ab4f8] text-zinc-950 shadow-sm"
-              : "text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-200"
+              ? "bg-accent text-zinc-950 shadow-sm"
+              : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
           <Activity size={15} />
@@ -98,8 +98,8 @@ export function SettingsNav() {
             href="/settings/users"
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
               isUsers
-                ? "bg-[#8ab4f8] text-zinc-950 shadow-sm"
-                : "text-zinc-400 hover:bg-[#1a1a1a] hover:text-zinc-200"
+                ? "bg-accent text-zinc-950 shadow-sm"
+                : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
             }`}
           >
             <Users size={15} />

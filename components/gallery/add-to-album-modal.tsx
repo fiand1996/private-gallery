@@ -112,15 +112,15 @@ function AddToAlbumDialogContent({
       aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-in fade-in duration-150"
     >
-      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#2e2e2e] bg-[#141414] p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+      <div className="w-full max-w-md overflow-hidden rounded-2xl border border-border-strong bg-bg-card p-6 shadow-2xl animate-in zoom-in-95 duration-150">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-[#8ab4f8]/15 text-[#8ab4f8]">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-accent-muted text-accent">
               <FolderArchive size={18} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-zinc-100">Add to Album</h3>
-              <p className="text-xs text-zinc-400">
+              <h3 className="text-base font-bold text-text-primary">Add to Album</h3>
+              <p className="text-xs text-text-secondary">
                 {photoPaths.length} photo(s) selected
               </p>
             </div>
@@ -128,7 +128,7 @@ function AddToAlbumDialogContent({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-1.5 text-zinc-400 transition hover:bg-[#212121] hover:text-zinc-200 cursor-pointer"
+            className="rounded-xl p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -143,7 +143,7 @@ function AddToAlbumDialogContent({
         {creatingNew ? (
           <form onSubmit={handleCreateAndAdd} className="mt-5 space-y-4">
             <div>
-              <label className="block text-xs font-medium text-zinc-300">
+              <label className="block text-xs font-medium text-text-secondary">
                 New Album Name
               </label>
               <input
@@ -152,7 +152,7 @@ function AddToAlbumDialogContent({
                 value={newAlbumName}
                 onChange={(e) => setNewAlbumName(e.target.value)}
                 placeholder="e.g. Summer Vacation, Highlights"
-                className="mt-1.5 w-full rounded-xl border border-[#2e2e2e] bg-[#1c1c1c] px-3.5 py-2.5 text-xs text-zinc-100 outline-none transition focus:border-[#8ab4f8] focus:bg-[#212121]"
+                className="mt-1.5 w-full rounded-xl border border-border-strong bg-bg-input px-3.5 py-2.5 text-xs text-text-primary outline-none transition focus:border-accent focus:bg-bg-hover"
               />
             </div>
 
@@ -161,14 +161,14 @@ function AddToAlbumDialogContent({
                 type="button"
                 disabled={submitting}
                 onClick={() => setCreatingNew(false)}
-                className="rounded-xl px-4 py-2 text-xs font-semibold text-zinc-400 transition hover:bg-[#212121] cursor-pointer"
+                className="rounded-xl px-4 py-2 text-xs font-semibold text-text-secondary transition hover:bg-bg-hover cursor-pointer"
               >
                 Back
               </button>
               <button
                 type="submit"
                 disabled={submitting || !newAlbumName.trim()}
-                className="inline-flex items-center gap-2 rounded-xl bg-[#8ab4f8] px-4 py-2 text-xs font-semibold text-zinc-950 shadow-md shadow-[#8ab4f8]/20 transition hover:bg-[#aecbfa] disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-md shadow-accent/20 transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
               >
                 {submitting && <Loader2 size={13} className="animate-spin" />}
                 Create & Add
@@ -180,12 +180,12 @@ function AddToAlbumDialogContent({
             <button
               type="button"
               onClick={() => setCreatingNew(true)}
-              className="flex w-full items-center gap-3 rounded-xl border border-dashed border-[#2e2e2e] p-3 text-left transition hover:border-[#8ab4f8] hover:bg-[#8ab4f8]/5 cursor-pointer group"
+              className="flex w-full items-center gap-3 rounded-xl border border-dashed border-border-strong p-3 text-left transition hover:border-accent hover:bg-accent-muted cursor-pointer group"
             >
-              <div className="flex size-8 items-center justify-center rounded-lg bg-[#212121] text-[#8ab4f8] transition group-hover:bg-[#8ab4f8] group-hover:text-zinc-950">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-bg-input text-accent transition group-hover:bg-accent group-hover:text-zinc-950">
                 <Plus size={16} />
               </div>
-              <span className="text-xs font-semibold text-zinc-200 group-hover:text-[#8ab4f8]">
+              <span className="text-xs font-semibold text-text-primary group-hover:text-accent">
                 Create New Virtual Album
               </span>
             </button>
@@ -193,12 +193,12 @@ function AddToAlbumDialogContent({
             <div className="max-h-60 overflow-y-auto space-y-1.5 pr-1">
               {loading && (
                 <div className="flex h-32 items-center justify-center">
-                  <Loader2 size={24} className="animate-spin text-[#8ab4f8]" />
+                  <Loader2 size={24} className="animate-spin text-accent" />
                 </div>
               )}
 
               {!loading && albums.length === 0 && (
-                <p className="py-6 text-center text-xs text-zinc-500">
+                <p className="py-6 text-center text-xs text-text-muted">
                   No albums found yet.
                 </p>
               )}
@@ -210,11 +210,11 @@ function AddToAlbumDialogContent({
                     type="button"
                     disabled={submitting || !album.id}
                     onClick={() => handleAddToExisting(album)}
-                    className="flex w-full items-center justify-between rounded-xl p-2.5 text-left transition hover:bg-[#212121] cursor-pointer disabled:opacity-50"
+                    className="flex w-full items-center justify-between rounded-xl p-2.5 text-left transition hover:bg-bg-hover cursor-pointer disabled:opacity-50"
                   >
                     <div className="flex items-center gap-2.5 truncate">
-                      <FolderArchive size={15} className="text-[#8ab4f8] shrink-0" />
-                      <span className="truncate text-xs font-medium text-zinc-200">
+                      <FolderArchive size={15} className="text-accent shrink-0" />
+                      <span className="truncate text-xs font-medium text-text-primary">
                         {album.name}
                       </span>
                     </div>
