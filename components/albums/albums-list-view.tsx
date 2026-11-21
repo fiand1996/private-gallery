@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FolderArchive, Loader2, Plus } from "lucide-react";
 import {
   AlbumCard,
@@ -36,12 +36,17 @@ export function AlbumsListView({
     items: [],
     totalCount: 0,
     page: 1,
-    pageSize: 36,
+    pageSize: 48,
   });
+  const [page, setPage] = useState(1);
   const [kindFilter, setKindFilter] = useState<"all" | "folder" | "custom">("all");
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const isFetchingRef = useRef(false);
 
   // Modals state
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -57,7 +62,7 @@ export function AlbumsListView({
     fetch(
       `/api/albums?${new URLSearchParams({
         libraryId: String(libraryId),
-        page: "1",
+        page: String(page),
         sort,
         kind: kindFilter,
       })}`,
@@ -66,7 +71,19 @@ export function AlbumsListView({
       .then(async (res) => {
         const data = (await res.json()) as AlbumsResponse & { error?: string };
         if (!res.ok) throw new Error(data.error || "Failed to load albums.");
-        setAlbums(data);
+        setAlbums((current) => {
+          if (page === 1) return data;
+          const existingKeys = new Set(
+            current.items.map((item) => item.path || String(item.id)),
+          );
+          const newItems = data.items.filter(
+            (item) => !existingKeys.has(item.path || String(item.id)),
+          );
+          return {
+            ...data,
+            items: [...current.items, ...newItems],
+          };
+        });
         setError("");
       })
       .catch((err) => {
@@ -74,11 +91,42 @@ export function AlbumsListView({
         setError(err instanceof Error ? err.message : "Failed to load albums.");
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        if (!controller.signal.aborted) {
+          isFetchingRef.current = false;
+          setLoading(false);
+          setLoadingMore(false);
+        }
       });
 
     return () => controller.abort();
-  }, [libraryId, sort, kindFilter, refreshKey]);
+  }, [libraryId, sort, kindFilter, page, refreshKey]);
+
+  const hasMore = albums.page * albums.pageSize < albums.totalCount;
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore || loading || loadingMore || error) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || isFetchingRef.current) return;
+        isFetchingRef.current = true;
+        setLoadingMore(true);
+        setPage((p) => p + 1);
+      },
+      { rootMargin: "600px 0px" },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, error]);
+
+  const handleKindFilterChange = (filter: "all" | "folder" | "custom") => {
+    if (filter === kindFilter) return;
+    setKindFilter(filter);
+    setPage(1);
+    setLoading(true);
+  };
 
   const handleRenameAlbum = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,6 +147,7 @@ export function AlbumsListView({
       if (!res.ok) throw new Error(json.error || "Failed to rename album.");
 
       setRenameTarget(null);
+      setPage(1);
       setRefreshKey((k) => k + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to rename album.");
@@ -117,6 +166,7 @@ export function AlbumsListView({
       });
       if (!res.ok) throw new Error("Failed to delete album.");
       setDeleteTarget(null);
+      setPage(1);
       setRefreshKey((k) => k + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete album.");
@@ -151,7 +201,7 @@ export function AlbumsListView({
           <div className="flex items-center rounded-xl border border-[#262626] bg-[#141414] p-1 text-xs font-semibold">
             <button
               type="button"
-              onClick={() => setKindFilter("all")}
+              onClick={() => handleKindFilterChange("all")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "all"
                   ? "bg-[#8ab4f8] text-zinc-950 font-bold"
@@ -162,7 +212,7 @@ export function AlbumsListView({
             </button>
             <button
               type="button"
-              onClick={() => setKindFilter("folder")}
+              onClick={() => handleKindFilterChange("folder")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "folder"
                   ? "bg-[#8ab4f8] text-zinc-950 font-bold"
@@ -173,7 +223,7 @@ export function AlbumsListView({
             </button>
             <button
               type="button"
-              onClick={() => setKindFilter("custom")}
+              onClick={() => handleKindFilterChange("custom")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "custom"
                   ? "bg-[#8ab4f8] text-zinc-950 font-bold"
@@ -221,20 +271,31 @@ export function AlbumsListView({
           </button>
         </div>
       ) : (
-        <div className={getGridClasses(gridSize)}>
-          {albums.items.map((album) => (
-            <AlbumCard
-              key={album.path || album.id}
-              album={album}
-              libraryId={libraryId}
-              onRename={(alb) => {
-                setRenameTarget(alb);
-                setRenameInput(alb.name);
-              }}
-              onDelete={album.kind === "custom" ? (alb) => setDeleteTarget(alb) : undefined}
-            />
-          ))}
-        </div>
+        <>
+          <div className={getGridClasses(gridSize)}>
+            {albums.items.map((album) => (
+              <AlbumCard
+                key={album.path || album.id}
+                album={album}
+                libraryId={libraryId}
+                onRename={(alb) => {
+                  setRenameTarget(alb);
+                  setRenameInput(alb.name);
+                }}
+                onDelete={album.kind === "custom" ? (alb) => setDeleteTarget(alb) : undefined}
+              />
+            ))}
+          </div>
+
+          {/* Infinite Scroll Sentinel */}
+          <div ref={sentinelRef} className="h-10 w-full" />
+
+          {loadingMore && (
+            <div className="flex justify-center py-6">
+              <Loader2 className="size-6 animate-spin text-[#8ab4f8]" />
+            </div>
+          )}
+        </>
       )}
 
       {/* Create Album Modal */}
@@ -242,7 +303,10 @@ export function AlbumsListView({
         open={createModalOpen}
         libraryId={libraryId}
         onClose={() => setCreateModalOpen(false)}
-        onSuccess={() => setRefreshKey((k) => k + 1)}
+        onSuccess={() => {
+          setPage(1);
+          setRefreshKey((k) => k + 1);
+        }}
         onError={(err) => setError(err)}
       />
 

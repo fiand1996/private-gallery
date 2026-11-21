@@ -8,6 +8,7 @@ import { GalleryHeader } from "@/components/layout/gallery-header";
 import { useLibrary } from "@/components/layout/library-context";
 import { useAppSettings } from "@/components/layout/settings-context";
 import {
+  getGridClasses,
   GridControls,
   type GallerySort,
   type GridSize,
@@ -61,17 +62,6 @@ interface GalleryResponse {
   pageSize: number;
 }
 
-function getGridClasses(size: GridSize) {
-  switch (size) {
-    case "small":
-      return "grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8";
-    case "large":
-      return "grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-    case "medium":
-    default:
-      return "grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6";
-  }
-}
 
 function FolderContent({
   libraryId,

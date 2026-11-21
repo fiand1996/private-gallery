@@ -52,7 +52,7 @@ export function AlbumCard({
       <Link
         href={`/albums?path=${encodeURIComponent(album.path)}`}
         onClick={() => recordAlbumOpen(libraryId, album.path)}
-        className="block relative aspect-[16/10] w-full overflow-hidden bg-[#1c1c1c]"
+        className="block relative aspect-square w-full overflow-hidden bg-[#1c1c1c]"
       >
         {/* Background Cover Image */}
         {album.coverPath ? (
@@ -62,38 +62,37 @@ export function AlbumCard({
               libraryId,
               album.coverModifiedAt,
               album.coverSize,
-              600,
+              1200,
             )}
             alt={album.name}
             fill
             unoptimized
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-zinc-600 bg-gradient-to-br from-[#181818] to-[#121212]">
-            <Folder size={44} />
+            <Folder size={48} />
           </div>
         )}
 
-        {/* Cinematic Dark Overlay with subtle blur */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/35 backdrop-blur-[1px] transition-opacity duration-300 group-hover:via-black/40" />
+        {/* Top-Left: Badge for Virtual Album */}
+        {album.kind === "custom" && (
+          <span className="absolute top-2.5 left-2.5 z-20 rounded-full border border-[#8ab4f8]/40 bg-black/60 px-2.5 py-0.5 text-[10px] font-bold text-[#8ab4f8] backdrop-blur-md shadow-md">
+            Virtual
+          </span>
+        )}
 
-        {/* Center Content: Album Title, Info & Badge */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-3 text-center z-10">
-          {album.kind === "custom" && (
-            <span className="mb-1 rounded-full border border-[#8ab4f8]/40 bg-[#8ab4f8]/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#8ab4f8] backdrop-blur-md shadow-sm">
-              Virtual Album
-            </span>
-          )}
-          <h3 className="text-xs sm:text-sm md:text-base font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] transition-transform duration-300 group-hover:scale-105 line-clamp-2 px-1">
+        {/* Crisp Bottom Gradient Overlay without blur */}
+        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/45 to-transparent pt-14 pb-3.5 px-3.5 pointer-events-none">
+          <h3 className="text-sm sm:text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] line-clamp-1 group-hover:text-[#8ab4f8] transition-colors">
             {album.name}
           </h3>
-          <p className="mt-0.5 text-[10px] sm:text-xs font-medium text-zinc-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <p className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
             {album.photoCount} {album.photoCount === 1 ? "photo" : "photos"}
           </p>
           {album.description && (
-            <p className="mt-0.5 text-[10px] sm:text-[11px] text-zinc-400 line-clamp-1 max-w-[85%] drop-shadow">
+            <p className="mt-0.5 text-[11px] text-zinc-400 line-clamp-1 drop-shadow">
               {album.description}
             </p>
           )}
