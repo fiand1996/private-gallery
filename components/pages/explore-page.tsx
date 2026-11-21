@@ -87,7 +87,7 @@ export function ExplorePage() {
     <div>
       <GalleryHeader />
 
-      <div className="space-y-6 px-4 sm:px-8 py-6 pb-24">
+      <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 pb-24 sm:px-8">
         {/* Page Title & Subtitle */}
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
