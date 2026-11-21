@@ -77,7 +77,7 @@ export function ContextMenu({
       style={{ left: `${left}px`, top: `${top}px` }}
       className="fixed z-50 w-48 overflow-hidden rounded-2xl border border-border-strong bg-bg-card-subtle/95 p-1.5 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100"
     >
-      <div className="px-2.5 py-1.5 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
+      <div className="px-2.5 py-1.5 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
         {selectedCount} item(s) selected
       </div>
 
@@ -90,9 +90,9 @@ export function ContextMenu({
             onOpen();
             onClose();
           }}
-          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
-          <Eye size={15} className="text-zinc-400" />
+          <Eye size={15} className="text-text-muted" />
           <span>Open</span>
         </button>
       )}
@@ -104,9 +104,9 @@ export function ContextMenu({
             onDownload();
             onClose();
           }}
-          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
-          <Download size={15} className="text-zinc-400" />
+          <Download size={15} className="text-text-muted" />
           <span>Download</span>
         </button>
       )}
@@ -131,7 +131,7 @@ export function ContextMenu({
           onCopy();
           onClose();
         }}
-        className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+        className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <Copy size={15} className="text-accent" />
         <span>Copy</span>
@@ -143,7 +143,7 @@ export function ContextMenu({
           onMove();
           onClose();
         }}
-        className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-zinc-200 transition hover:bg-bg-hover cursor-pointer"
+        className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <FolderInput size={15} className="text-accent" />
         <span>Move</span>

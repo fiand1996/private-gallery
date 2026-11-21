@@ -351,10 +351,10 @@ export function PreferencesView() {
             <Grid2X2 size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-zinc-100">
+            <h2 className="text-base font-bold text-text-primary">
               Default Gallery Grid Size
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-secondary">
               Select your preferred photo tile density across Photos, Folder, and Albums.
             </p>
           </div>
@@ -393,7 +393,7 @@ export function PreferencesView() {
                 className={`flex flex-col text-left rounded-2xl border p-4 transition cursor-pointer ${
                   isSelected
                     ? "border-accent bg-accent/10 shadow-sm"
-                    : "border-border-subtle bg-bg-input hover:border-zinc-700"
+                    : "border-border-subtle bg-bg-input hover:border-border-strong"
                 }`}
               >
                 <div
@@ -403,14 +403,14 @@ export function PreferencesView() {
                     <div
                       key={i}
                       className={`size-full rounded ${
-                        isSelected ? "bg-accent/40" : "bg-zinc-700/40"
+                        isSelected ? "bg-accent/40" : "bg-border-strong"
                       }`}
                     />
                   ))}
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-zinc-100">
+                  <span className="text-sm font-bold text-text-primary">
                     {item.label}
                   </span>
                   {isSelected && (
@@ -419,7 +419,7 @@ export function PreferencesView() {
                     </span>
                   )}
                 </div>
-                <span className="mt-1 text-xs text-zinc-400">
+                <span className="mt-1 text-xs text-text-secondary">
                   {item.desc}
                 </span>
               </button>
@@ -435,10 +435,10 @@ export function PreferencesView() {
             <ArrowDownAZ size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-zinc-100">
+            <h2 className="text-base font-bold text-text-primary">
               Default Sort Order
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-secondary">
               Initial sorting applied when viewing directories and albums.
             </p>
           </div>
@@ -471,11 +471,11 @@ export function PreferencesView() {
                 className={`flex flex-col text-left rounded-2xl border p-4 transition cursor-pointer ${
                   isSelected
                     ? "border-purple-400/80 bg-purple-500/10 shadow-sm"
-                    : "border-border-subtle bg-bg-input hover:border-zinc-700"
+                    : "border-border-subtle bg-bg-input hover:border-border-strong"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-zinc-100">
+                  <span className="text-sm font-bold text-text-primary">
                     {opt.title}
                   </span>
                   {isSelected && (
@@ -484,7 +484,7 @@ export function PreferencesView() {
                     </span>
                   )}
                 </div>
-                <span className="mt-1 text-xs text-zinc-400">
+                <span className="mt-1 text-xs text-text-secondary">
                   {opt.desc}
                 </span>
               </button>
@@ -497,17 +497,17 @@ export function PreferencesView() {
       <section className="rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-sm">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h3 className="text-sm font-bold text-zinc-100">
+            <h3 className="text-sm font-bold text-text-primary">
               Reset Client Preferences
             </h3>
-            <p className="mt-1 text-xs text-zinc-400">
-              Clears local preferences (grid sizes, sort order, and active selected library) from browser storage.
+            <p className="mt-1 text-xs text-text-secondary">
+              Clears local preferences (theme, accent, grid sizes, sort order, and active library) from browser storage.
             </p>
           </div>
           <button
             type="button"
             onClick={handleResetPreferences}
-            className="inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-bg-input px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-border-subtle hover:text-white cursor-pointer sm:self-auto"
+            className="inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-bg-input px-4 py-2.5 text-xs font-semibold text-text-primary transition hover:bg-border-subtle hover:text-text-primary cursor-pointer sm:self-auto"
           >
             <RotateCcw size={14} />
             Reset Defaults
@@ -523,22 +523,22 @@ export function PreferencesView() {
               <HardDrive size={20} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-zinc-100">
+              <h3 className="text-sm font-bold text-text-primary">
                 Thumbnail Cache Storage
               </h3>
-              <p className="mt-1 text-xs text-zinc-400">
+              <p className="mt-1 text-xs text-text-secondary">
                 Pre-rendered WebP thumbnails stored on server disk for fast justified browsing.
               </p>
               <div className="mt-2.5 flex items-center gap-2 text-xs">
                 {loadingCacheStats ? (
-                  <span className="inline-flex items-center gap-1.5 text-zinc-500">
+                  <span className="inline-flex items-center gap-1.5 text-text-muted">
                     <Loader2 size={12} className="animate-spin" />
                     Calculating cache size...
                   </span>
                 ) : (
-                  <span className="font-semibold text-zinc-200">
+                  <span className="font-semibold text-text-primary">
                     {formatBytes(cacheStats?.totalSizeBytes ?? 0)}{" "}
-                    <span className="font-normal text-zinc-400">
+                    <span className="font-normal text-text-secondary">
                       ({(cacheStats?.thumbnailCount ?? 0).toLocaleString()} cached thumbnails)
                     </span>
                   </span>
@@ -585,21 +585,21 @@ export function PreferencesView() {
               <div>
                 <h2
                   id="purge-cache-title"
-                  className="text-base font-bold text-zinc-100"
+                  className="text-base font-bold text-text-primary"
                 >
                   Clear Thumbnail Cache?
                 </h2>
-                <p className="text-xs text-zinc-400">
+                <p className="text-xs text-text-secondary">
                   {formatBytes(cacheStats?.totalSizeBytes ?? 0)} across{" "}
                   {(cacheStats?.thumbnailCount ?? 0).toLocaleString()} files
                 </p>
               </div>
             </div>
 
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              This will remove all generated WebP thumbnails from disk and flush memory. Original photos will <strong className="text-white">NOT</strong> be affected.
+            <p className="text-xs text-text-secondary leading-relaxed">
+              This will remove all generated WebP thumbnails from disk and flush memory. Original photos will <strong className="text-text-primary">NOT</strong> be affected.
             </p>
-            <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
+            <p className="mt-2 text-xs text-text-muted leading-relaxed">
               Thumbnails will be automatically re-generated on-demand as you browse photos.
             </p>
 
@@ -608,7 +608,7 @@ export function PreferencesView() {
                 type="button"
                 disabled={purgingCache}
                 onClick={() => setConfirmPurgeOpen(false)}
-                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -637,10 +637,10 @@ export function PreferencesView() {
             <Database size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-zinc-100">
+            <h2 className="text-base font-bold text-text-primary">
               System Architecture & Database
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-secondary">
               Directory-first SQLite photo gallery system.
             </p>
           </div>
@@ -648,20 +648,20 @@ export function PreferencesView() {
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
           <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
-            <span className="text-zinc-500 font-medium">Database Path</span>
-            <p className="font-mono text-zinc-200 mt-1">data/gallery.sqlite</p>
+            <span className="text-text-muted font-medium">Database Path</span>
+            <p className="font-mono text-text-primary mt-1">data/gallery.sqlite</p>
           </div>
           <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
-            <span className="text-zinc-500 font-medium">Thumbnail Cache</span>
-            <p className="font-mono text-zinc-200 mt-1">data/thumbnails/ (Sharp WebP)</p>
+            <span className="text-text-muted font-medium">Thumbnail Cache</span>
+            <p className="font-mono text-text-primary mt-1">data/thumbnails/ (Sharp WebP)</p>
           </div>
           <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
-            <span className="text-zinc-500 font-medium">UI Theme</span>
-            <p className="text-zinc-200 mt-1">Immich Dark Media Theme</p>
+            <span className="text-text-muted font-medium">UI Theme</span>
+            <p className="text-text-primary mt-1">{settings.theme ?? "sleek-dark"}</p>
           </div>
           <div className="rounded-xl border border-border-subtle bg-bg-input p-3.5">
-            <span className="text-zinc-500 font-medium">Version</span>
-            <p className="text-zinc-200 mt-1">Private Gallery v1.0.0</p>
+            <span className="text-text-muted font-medium">Version</span>
+            <p className="text-text-primary mt-1">Private Gallery v1.0.0</p>
           </div>
         </div>
       </section>

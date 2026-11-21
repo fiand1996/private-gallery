@@ -171,14 +171,14 @@ function AddTagDialogContent({
               type="button"
               disabled={submitting}
               onClick={onClose}
-              className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+              className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !tagName.trim()}
-              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
             >
               {submitting ? (
                 <Loader2 size={14} className="animate-spin" />

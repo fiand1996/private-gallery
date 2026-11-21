@@ -42,7 +42,7 @@ export function ExploreActionBar({
 
   return (
     <div className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-2 rounded-2xl border border-border-strong bg-bg-card/95 px-4 py-2.5 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-200">
-      <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-zinc-100">
+      <div className="flex items-center gap-2 border-r border-border-subtle pr-3 text-xs font-bold text-text-primary">
         <span className="flex size-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-zinc-950">
           {selectedCount}
         </span>
@@ -61,7 +61,7 @@ export function ExploreActionBar({
       <button
         type="button"
         onClick={onFavorite}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <Heart size={14} className="text-rose-400" />
         <span>Favorite</span>
@@ -70,7 +70,7 @@ export function ExploreActionBar({
       <button
         type="button"
         onClick={onCopy}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <Copy size={14} className="text-accent" />
         <span>Copy</span>
@@ -79,7 +79,7 @@ export function ExploreActionBar({
       <button
         type="button"
         onClick={onMove}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <FolderInput size={14} className="text-accent" />
         <span>Move</span>
@@ -88,7 +88,7 @@ export function ExploreActionBar({
       <button
         type="button"
         onClick={onAddToAlbum}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <FolderArchive size={14} className="text-accent" />
         <span>Add to Album</span>
@@ -97,7 +97,7 @@ export function ExploreActionBar({
       <button
         type="button"
         onClick={onTag}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <Tag size={14} className="text-accent" />
         <span>Tag</span>
@@ -107,7 +107,7 @@ export function ExploreActionBar({
         <button
           type="button"
           onClick={onPerson}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
           <Users size={14} className="text-accent" />
           <span>Person</span>
@@ -127,7 +127,7 @@ export function ExploreActionBar({
         type="button"
         onClick={onClear}
         title="Deselect all"
-        className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+        className="ml-1 rounded-xl p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
       >
         <X size={15} />
       </button>

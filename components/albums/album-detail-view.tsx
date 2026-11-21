@@ -472,9 +472,9 @@ export function AlbumDetailView({
                 <button
                   type="submit"
                   disabled={renaming || !renameInput.trim()}
-                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
-                  {renaming && <Loader2 size={13} className="animate-spin text-zinc-950" />}
+                  {renaming && <Loader2 size={13} className="animate-spin text-accent-foreground" />}
                   Save
                 </button>
               </div>

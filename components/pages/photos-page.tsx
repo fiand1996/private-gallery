@@ -269,12 +269,12 @@ function PhotosList({
       <div className="space-y-8">
         {groups.map(([dateKeyString, photos]) => (
           <section key={dateKeyString}>
-            <div className="sticky top-16 z-10 -mx-4 mb-3.5 flex items-center justify-between bg-black/90 px-4 py-2.5 backdrop-blur-md sm:-mx-8 sm:px-8">
+            <div className="sticky top-16 z-10 -mx-4 mb-3.5 flex items-center justify-between bg-bg-app/90 px-4 py-2.5 backdrop-blur-md sm:-mx-8 sm:px-8">
               <div className="flex items-center gap-3">
-                <h2 className="text-sm font-semibold tracking-tight text-zinc-200">
+                <h2 className="text-sm font-semibold tracking-tight text-text-primary">
                   {dateLabel(dateKeyString)}
                 </h2>
-                <span className="rounded-full border border-border-strong bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-zinc-400">
+                <span className="rounded-full border border-border-strong bg-bg-input px-2.5 py-0.5 text-[11px] font-medium text-text-secondary">
                   {photos.length} {photos.length === 1 ? "photo" : "photos"}
                 </span>
               </div>
@@ -484,7 +484,7 @@ export function PhotosView() {
             </p>
             <Link
               href="/settings"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover"
             >
               <FolderPlus size={16} />
               Setup First Library

@@ -88,7 +88,7 @@ export function ExploreHubView({
               <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-rose-300 transition">
                 Favorites
               </div>
-              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+              <div className="mt-0.5 text-xs font-medium text-white/85 drop-shadow">
                 {summary.smartCollections.favorites.count} photo
                 {summary.smartCollections.favorites.count === 1 ? "" : "s"}
               </div>
@@ -126,7 +126,7 @@ export function ExploreHubView({
               <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
                 Top Rated
               </div>
-              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+              <div className="mt-0.5 text-xs font-medium text-white/85 drop-shadow">
                 {summary.smartCollections.topRated.count} photo
                 {summary.smartCollections.topRated.count === 1 ? "" : "s"} (4–5 stars)
               </div>
@@ -164,7 +164,7 @@ export function ExploreHubView({
               <div className="text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition">
                 Places & GPS
               </div>
-              <div className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow">
+              <div className="mt-0.5 text-xs font-medium text-white/85 drop-shadow">
                 {summary.smartCollections.places.count} geotagged photo
                 {summary.smartCollections.places.count === 1 ? "" : "s"}
               </div>
@@ -267,7 +267,7 @@ export function ExploreHubView({
                   <div className="truncate text-sm font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-accent transition">
                     #{tag.name}
                   </div>
-                  <div className="text-[11px] font-medium text-zinc-300 drop-shadow">
+                  <div className="text-[11px] font-medium text-white/85 drop-shadow">
                     {tag.count} photo{tag.count === 1 ? "" : "s"}
                   </div>
                 </div>
@@ -373,7 +373,7 @@ export function ExploreHubView({
                   <div className="text-lg font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] group-hover:text-amber-300 transition">
                     {y.year}
                   </div>
-                  <div className="text-[11px] font-medium text-zinc-300 drop-shadow">
+                  <div className="text-[11px] font-medium text-white/85 drop-shadow">
                     {y.count} photo{y.count === 1 ? "" : "s"}
                   </div>
                 </div>

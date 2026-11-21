@@ -315,10 +315,10 @@ export function LibrariesView() {
               <ImageIcon size={20} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
                 Total Photos
               </p>
-              <p className="text-xl font-bold text-zinc-100">
+              <p className="text-xl font-bold text-text-primary">
                 {totalStats.images.toLocaleString()}
               </p>
             </div>
@@ -331,10 +331,10 @@ export function LibrariesView() {
               <FolderOpen size={20} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
                 Total Folders
               </p>
-              <p className="text-xl font-bold text-zinc-100">
+              <p className="text-xl font-bold text-text-primary">
                 {totalStats.folders.toLocaleString()}
               </p>
             </div>
@@ -347,10 +347,10 @@ export function LibrariesView() {
               <HardDrive size={20} />
             </div>
             <div>
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
                 Total Size
               </p>
-              <p className="text-xl font-bold text-zinc-100">
+              <p className="text-xl font-bold text-text-primary">
                 {formatBytes(totalStats.bytes)}
               </p>
             </div>
@@ -362,10 +362,10 @@ export function LibrariesView() {
       <section>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-base font-bold text-zinc-100">
+            <h2 className="text-base font-bold text-text-primary">
               Configured Media Directories
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-text-secondary">
               Root folders indexed by Private Gallery.
             </p>
           </div>
@@ -381,7 +381,7 @@ export function LibrariesView() {
             <button
               type="button"
               onClick={() => setAddModalOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-zinc-950 hover:bg-accent-hover transition cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-semibold text-accent-foreground hover:bg-accent-hover transition cursor-pointer shadow-sm"
             >
               <FolderPlus size={14} />
               Add Library
@@ -469,7 +469,7 @@ export function LibrariesView() {
                       disabled={submitting}
                       onClick={() => openEditModal(lib)}
                       title="Edit library name and path"
-                      className="inline-flex size-9 items-center justify-center rounded-xl border border-border-strong bg-bg-input text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+                      className="inline-flex size-9 items-center justify-center rounded-xl border border-border-strong bg-bg-input text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
                     >
                       <Pencil size={14} />
                     </button>
@@ -488,7 +488,7 @@ export function LibrariesView() {
                       type="button"
                       disabled={submitting || isScanning}
                       onClick={() => scanLibrary(lib)}
-                      className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+                      className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                     >
                       {isScanning ? (
                         <>
@@ -587,14 +587,14 @@ export function LibrariesView() {
                   type="button"
                   disabled={submitting}
                   onClick={() => setAddModalOpen(false)}
-                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -703,14 +703,14 @@ export function LibrariesView() {
                     setEditModalOpen(false);
                     setEditingLibrary(null);
                   }}
-                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+                  className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
                   {submitting ? (
                     <Loader2 size={14} className="animate-spin" />
@@ -759,12 +759,12 @@ export function LibrariesView() {
               </div>
             </div>
 
-            <p className="text-xs text-zinc-300 leading-relaxed">
-              Are you sure you want to remove <strong className="text-white">“{deletingLibrary.name}”</strong> from Private Gallery?
+            <p className="text-xs text-text-secondary leading-relaxed">
+              Are you sure you want to remove <strong className="text-text-primary">“{deletingLibrary.name}”</strong> from Private Gallery?
             </p>
-            <div className="mt-3 rounded-xl border border-border-strong bg-bg-hover p-3 text-xs text-zinc-400">
+            <div className="mt-3 rounded-xl border border-border-strong bg-bg-hover p-3 text-xs text-text-secondary">
               <span className="font-semibold text-emerald-400">Note: </span>
-              Your physical photo files on disk will <strong className="text-zinc-200">NOT</strong> be deleted. Only the gallery index entries, albums, and tags within this library will be cleared.
+              Your physical photo files on disk will <strong className="text-text-primary">NOT</strong> be deleted. Only the gallery index entries, albums, and tags within this library will be cleared.
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-2.5 pt-2">
@@ -775,7 +775,7 @@ export function LibrariesView() {
                   setDeleteModalOpen(false);
                   setDeletingLibrary(null);
                 }}
-                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-border-subtle hover:text-white transition cursor-pointer disabled:opacity-50"
+                className="rounded-xl border border-border-strong bg-bg-input px-4 py-2 text-xs font-semibold text-text-secondary hover:bg-border-subtle hover:text-text-primary transition cursor-pointer disabled:opacity-50"
               >
                 Cancel
               </button>

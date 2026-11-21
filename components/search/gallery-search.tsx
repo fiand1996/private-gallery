@@ -188,7 +188,7 @@ export function GallerySearch({
           onFocus={() => setFocused(true)}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search your photos, albums, or dates..."
-          className="h-11 w-full rounded-full border border-border-strong bg-bg-input pl-11 pr-16 text-sm text-zinc-100 placeholder-zinc-400 transition-all outline-none focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
+          className="h-11 w-full rounded-full border border-border-strong bg-bg-input pl-11 pr-16 text-sm text-text-primary placeholder:text-text-muted transition-all outline-none focus:border-accent focus:bg-bg-hover focus:ring-2 focus:ring-accent/20"
         />
         {query ? (
           <button
@@ -236,7 +236,7 @@ export function GallerySearch({
                       if (libraryId) recordAlbumOpen(libraryId, album.path);
                       setFocused(false);
                     }}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-zinc-200 hover:bg-bg-hover transition"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-text-primary hover:bg-bg-hover transition"
                   >
                     <div className="relative size-10 shrink-0 overflow-hidden rounded-xl bg-bg-hover">
                       {album.coverPath ? (

@@ -48,7 +48,7 @@ export function GalleryHeader({ onSelectPhoto, actions }: GalleryHeaderProps) {
           ) : (
             <Link
               href="/settings"
-              className="flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover"
+              className="flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover"
             >
               <FolderPlus size={15} />
               <span>Add Library</span>

@@ -204,7 +204,7 @@ export function AlbumsListView({
               onClick={() => handleKindFilterChange("all")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "all"
-                  ? "bg-accent text-zinc-950 font-bold"
+                  ? "bg-accent text-accent-foreground font-bold"
                   : "text-zinc-400 hover:text-zinc-200"
               }`}
             >
@@ -215,7 +215,7 @@ export function AlbumsListView({
               onClick={() => handleKindFilterChange("folder")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "folder"
-                  ? "bg-accent text-zinc-950 font-bold"
+                  ? "bg-accent text-accent-foreground font-bold"
                   : "text-zinc-400 hover:text-zinc-200"
               }`}
             >
@@ -226,7 +226,7 @@ export function AlbumsListView({
               onClick={() => handleKindFilterChange("custom")}
               className={`rounded-lg px-3 py-1 transition cursor-pointer ${
                 kindFilter === "custom"
-                  ? "bg-accent text-zinc-950 font-bold"
+                  ? "bg-accent text-accent-foreground font-bold"
                   : "text-zinc-400 hover:text-zinc-200"
               }`}
             >
@@ -238,7 +238,7 @@ export function AlbumsListView({
           <button
             type="button"
             onClick={() => setCreateModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover cursor-pointer"
+            className="flex items-center gap-2 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover cursor-pointer"
           >
             <Plus size={14} />
             <span>Create Album</span>
@@ -264,7 +264,7 @@ export function AlbumsListView({
           <button
             type="button"
             onClick={() => setCreateModalOpen(true)}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover cursor-pointer"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover cursor-pointer"
           >
             <Plus size={15} />
             <span>Create New Album</span>
@@ -345,9 +345,9 @@ export function AlbumsListView({
                 <button
                   type="submit"
                   disabled={renaming || !renameInput.trim()}
-                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
                 >
-                  {renaming && <Loader2 size={13} className="animate-spin text-zinc-950" />}
+                  {renaming && <Loader2 size={13} className="animate-spin text-accent-foreground" />}
                   Save
                 </button>
               </div>

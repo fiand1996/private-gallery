@@ -175,7 +175,7 @@ export function UsersView() {
             setUserModalError("");
             setAddUserModalOpen(true);
           }}
-          className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-accent-foreground transition hover:bg-accent-hover active:scale-[0.99] cursor-pointer"
         >
           <UserPlus size={15} />
           <span>Add User</span>
@@ -284,12 +284,12 @@ export function UsersView() {
                 <div className="flex size-8 items-center justify-center rounded-xl bg-accent/15 text-accent">
                   <UserPlus size={16} />
                 </div>
-                <h3 className="text-base font-bold text-white">Add New User</h3>
+                <h3 className="text-base font-bold text-text-primary">Add New User</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setAddUserModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-border-subtle hover:text-white"
+                className="rounded-lg p-1 text-text-secondary hover:bg-border-subtle hover:text-text-primary"
               >
                 <X size={16} />
               </button>
@@ -393,7 +393,7 @@ export function UsersView() {
                 <button
                   type="submit"
                   disabled={userSubmitting}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-accent px-4 py-2.5 text-xs font-semibold text-accent-foreground transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 cursor-pointer"
                 >
                   {userSubmitting ? (
                     <>

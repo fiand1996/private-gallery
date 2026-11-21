@@ -67,17 +67,17 @@ export function TasksView() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-base font-bold text-zinc-100">
+          <h2 className="text-base font-bold text-text-primary">
             Background Indexing Tasks
           </h2>
-          <p className="text-xs text-zinc-400">
+          <p className="text-xs text-text-secondary">
             Real-time queue and execution log for directory indexing.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setRefreshKey((k) => k + 1)}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-border-subtle transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-border-subtle transition cursor-pointer"
         >
           <RefreshCw size={13} />
           Refresh

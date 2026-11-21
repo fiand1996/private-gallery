@@ -48,7 +48,7 @@ export function FolderBreadcrumbs({
         >
           <Link
             href="/folder"
-            className="flex items-center gap-1 rounded-lg px-2 py-1 text-zinc-300 transition hover:bg-zinc-800"
+            className="flex items-center gap-1 rounded-lg px-2 py-1 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary"
           >
             <Home size={14} />
             <span>Root</span>
@@ -58,15 +58,15 @@ export function FolderBreadcrumbs({
             const isLast = idx === breadcrumbs.length - 1;
             return (
               <div key={crumb.path} className="flex items-center gap-1.5">
-                <ChevronRight size={13} className="text-zinc-500" />
+                <ChevronRight size={13} className="text-text-muted" />
                 {isLast ? (
-                  <span className="font-semibold text-zinc-100 px-2 py-1">
+                  <span className="font-semibold text-text-primary px-2 py-1">
                     {crumb.name}
                   </span>
                 ) : (
                   <Link
                     href={`/folder?path=${encodeURIComponent(crumb.path)}`}
-                    className="rounded-lg px-2 py-1 text-zinc-400 hover:bg-bg-hover hover:text-zinc-200 transition"
+                    className="rounded-lg px-2 py-1 text-text-secondary hover:bg-bg-hover hover:text-text-primary transition"
                   >
                     {crumb.name}
                   </Link>

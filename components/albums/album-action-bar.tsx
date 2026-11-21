@@ -58,7 +58,7 @@ export function AlbumActionBar({
       <button
         type="button"
         onClick={onFavorite}
-        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
       >
         <Heart size={14} className="text-rose-400" />
         <span>Favorite</span>
@@ -68,7 +68,7 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onAddToAlbum}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
           <FolderArchive size={14} className="text-accent" />
           <span>Add to Album</span>
@@ -79,7 +79,7 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onTag}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
           <Tag size={14} className="text-accent" />
           <span>Tag</span>
@@ -90,7 +90,7 @@ export function AlbumActionBar({
         <button
           type="button"
           onClick={onPerson}
-          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
         >
           <Users size={14} className="text-accent" />
           <span>Person</span>

@@ -94,7 +94,7 @@ function AddPersonDialogContent({
         <button
           type="button"
           onClick={onClose}
-          className="rounded-full p-1 text-zinc-400 hover:bg-bg-hover hover:text-white transition cursor-pointer"
+          className="rounded-full p-1 text-text-secondary hover:bg-bg-hover hover:text-text-primary transition cursor-pointer"
         >
           <X size={15} />
         </button>
@@ -148,7 +148,7 @@ function AddPersonDialogContent({
                   className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-medium transition cursor-pointer ${
                     personName.toLowerCase() === s.name.toLowerCase()
                       ? "border-accent bg-accent/15 text-accent"
-                      : "border-border-subtle bg-bg-hover text-zinc-300 hover:border-zinc-500 hover:text-white"
+                      : "border-border-subtle bg-bg-hover text-text-secondary hover:border-accent hover:text-text-primary"
                   }`}
                 >
                   <Plus size={11} />
@@ -170,7 +170,7 @@ function AddPersonDialogContent({
           <button
             type="submit"
             disabled={submitting || !personName.trim()}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 transition hover:bg-accent-hover disabled:opacity-40 cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground transition hover:bg-accent-hover disabled:opacity-40 cursor-pointer"
           >
             {submitting ? (
               <Loader2 size={13} className="animate-spin" />

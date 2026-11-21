@@ -28,16 +28,16 @@ export function SettingsNav() {
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
             Settings
           </h1>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-text-secondary">
             Manage your gallery preferences, media directories, and background tasks.
           </p>
         </div>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 self-start rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800 cursor-pointer sm:self-auto"
+          className="inline-flex items-center gap-2 self-start rounded-xl border border-border-strong bg-bg-card px-3.5 py-2 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer sm:self-auto shadow-sm"
         >
           <ArrowLeft size={14} />
           Back to Gallery
@@ -50,7 +50,7 @@ export function SettingsNav() {
           href="/settings/libraries"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isLibraries
-              ? "bg-accent text-zinc-950 shadow-sm"
+              ? "bg-accent text-accent-foreground shadow-sm"
               : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
@@ -60,7 +60,7 @@ export function SettingsNav() {
             <span
               className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
                 isLibraries
-                  ? "bg-zinc-950/20 text-zinc-950"
+                  ? "bg-black/20 text-accent-foreground"
                   : "bg-border-subtle text-text-secondary"
               }`}
             >
@@ -73,7 +73,7 @@ export function SettingsNav() {
           href="/settings/preferences"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isPreferences
-              ? "bg-accent text-zinc-950 shadow-sm"
+              ? "bg-accent text-accent-foreground shadow-sm"
               : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
@@ -85,7 +85,7 @@ export function SettingsNav() {
           href="/settings/tasks"
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
             isTasks
-              ? "bg-accent text-zinc-950 shadow-sm"
+              ? "bg-accent text-accent-foreground shadow-sm"
               : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
           }`}
         >
@@ -98,7 +98,7 @@ export function SettingsNav() {
             href="/settings/users"
             className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition cursor-pointer ${
               isUsers
-                ? "bg-accent text-zinc-950 shadow-sm"
+                ? "bg-accent text-accent-foreground shadow-sm"
                 : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
             }`}
           >

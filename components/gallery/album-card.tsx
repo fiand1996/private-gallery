@@ -88,11 +88,11 @@ export function AlbumCard({
           <h3 className="text-sm sm:text-base font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] line-clamp-1 group-hover:text-accent transition-colors">
             {album.name}
           </h3>
-          <p className="mt-0.5 text-xs font-medium text-zinc-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+          <p className="mt-0.5 text-xs font-medium text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
             {album.photoCount} {album.photoCount === 1 ? "photo" : "photos"}
           </p>
           {album.description && (
-            <p className="mt-0.5 text-[11px] text-text-secondary line-clamp-1 drop-shadow">
+            <p className="mt-0.5 text-[11px] text-white/80 line-clamp-1 drop-shadow">
               {album.description}
             </p>
           )}

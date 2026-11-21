@@ -92,7 +92,7 @@ export function FolderGridItem({
         <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-3 pt-8">
           <div className="flex items-center gap-1.5 truncate">
             <Folder size={14} className="text-accent shrink-0 fill-accent/30" />
-            <span className="truncate text-xs font-semibold text-zinc-100 group-hover:text-accent transition">
+            <span className="truncate text-xs font-semibold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] group-hover:text-accent transition">
               {folder.name}
             </span>
           </div>

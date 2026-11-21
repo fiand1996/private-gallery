@@ -107,9 +107,9 @@ export function CreateAlbumModal({
             <button
               type="submit"
               disabled={creating || !name.trim()}
-              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-zinc-950 shadow-md shadow-accent/20 transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-4 py-2 text-xs font-semibold text-accent-foreground shadow-md shadow-accent/20 transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
             >
-              {creating && <Loader2 size={13} className="animate-spin text-zinc-950" />}
+              {creating && <Loader2 size={13} className="animate-spin text-accent-foreground" />}
               Create Album
             </button>
           </div>

@@ -369,14 +369,14 @@ export function PhotoInfoPanel({
           type="button"
           onClick={onClose}
           title="Close details (Esc / I)"
-          className="rounded-full p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-white cursor-pointer"
+          className="rounded-full p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
         >
           <X size={16} />
         </button>
       </div>
 
       {/* Content scroll area */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs text-zinc-300 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs text-text-primary scrollbar-thin">
         {loading && !metadata && (
           <div className="flex h-40 items-center justify-center">
             <Loader2 className="size-6 animate-spin text-accent" />
@@ -408,7 +408,7 @@ export function PhotoInfoPanel({
               } ${
                 isFavorite
                   ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                  : "bg-border-subtle text-text-secondary hover:text-white"
+                  : "bg-border-subtle text-text-secondary hover:text-text-primary"
               }`}
             >
               <Heart
@@ -467,7 +467,7 @@ export function PhotoInfoPanel({
                   type="button"
                   disabled={savingMeta}
                   onClick={handleSaveCaption}
-                  className="inline-flex items-center gap-1 rounded-lg bg-accent px-2 py-0.5 text-[11px] font-medium text-zinc-950 hover:bg-accent-hover transition cursor-pointer"
+                  className="inline-flex items-center gap-1 rounded-lg bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground hover:bg-accent-hover transition cursor-pointer"
                 >
                   Save
                 </button>
@@ -501,7 +501,7 @@ export function PhotoInfoPanel({
 
         {/* Interactive Tags Section */}
         <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
-          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+          <div className="flex items-center gap-2 text-text-primary font-semibold text-xs border-b border-border-subtle pb-2">
             <Tag size={15} className="text-accent" />
             <span>Tags & Labels</span>
           </div>
@@ -581,7 +581,7 @@ export function PhotoInfoPanel({
 
         {/* Interactive People Section */}
         <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
-          <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+          <div className="flex items-center gap-2 text-text-primary font-semibold text-xs border-b border-border-subtle pb-2">
             <Users size={15} className="text-accent" />
             <span>People in Photo</span>
           </div>
@@ -664,7 +664,7 @@ export function PhotoInfoPanel({
             <span className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
               File Name
             </span>
-            <span className="mt-0.5 block break-all font-mono text-xs text-zinc-200">
+            <span className="mt-0.5 block break-all font-mono text-xs text-text-primary">
               {photo.name}
             </span>
           </div>
@@ -673,16 +673,16 @@ export function PhotoInfoPanel({
             <span className="block text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
               Folder Path
             </span>
-            <span className="mt-0.5 block break-all font-mono text-[11px] text-zinc-400">
+            <span className="mt-0.5 block break-all font-mono text-[11px] text-text-secondary">
               {photo.path}
             </span>
           </div>
 
           {displayDate && (
             <div className="flex items-start gap-2.5 pt-1">
-              <Calendar size={15} className="mt-0.5 text-zinc-400 shrink-0" />
+              <Calendar size={15} className="mt-0.5 text-text-secondary shrink-0" />
               <div>
-                <span className="text-zinc-200 font-medium block">
+                <span className="text-text-primary font-medium block">
                   {formatDateTime(displayDate)}
                 </span>
                 <span className="text-[10px] text-zinc-500">
@@ -695,31 +695,31 @@ export function PhotoInfoPanel({
           {/* Dimension & File Specs */}
           <div className="grid grid-cols-2 gap-2 pt-2">
             <div className="rounded-xl bg-bg-input p-2.5 border border-border-subtle">
-              <div className="flex items-center gap-1.5 text-zinc-400">
+              <div className="flex items-center gap-1.5 text-text-secondary">
                 <Layers size={13} />
                 <span className="text-[10px] font-medium uppercase">Resolution</span>
               </div>
-              <p className="mt-1 font-semibold text-zinc-200">
+              <p className="mt-1 font-semibold text-text-primary">
                 {metadata?.width && metadata?.height
                   ? `${metadata.width} × ${metadata.height}`
                   : "-"}
               </p>
               {metadata?.megapixels && (
-                <p className="text-[10px] text-zinc-400">
+                <p className="text-[10px] text-text-secondary">
                   {metadata.megapixels} {metadata.aspectRatio ? `· ${metadata.aspectRatio}` : ""}
                 </p>
               )}
             </div>
 
             <div className="rounded-xl bg-bg-input p-2.5 border border-border-subtle">
-              <div className="flex items-center gap-1.5 text-zinc-400">
+              <div className="flex items-center gap-1.5 text-text-secondary">
                 <HardDrive size={13} />
                 <span className="text-[10px] font-medium uppercase">Size & Format</span>
               </div>
-              <p className="mt-1 font-semibold text-zinc-200">
+              <p className="mt-1 font-semibold text-text-primary">
                 {formatBytes(metadata?.fileSizeBytes ?? photo.size)}
               </p>
-              <p className="text-[10px] text-zinc-400 uppercase">
+              <p className="text-[10px] text-text-secondary uppercase">
                 {metadata?.mimeType ? metadata.mimeType.replace("image/", "") : "Image"}
                 {metadata?.colorSpace ? ` · ${metadata.colorSpace}` : ""}
               </p>
@@ -730,7 +730,7 @@ export function PhotoInfoPanel({
         {/* Camera & Lens Section */}
         {hasCameraData && (
           <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-3">
-            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+            <div className="flex items-center gap-2 text-text-primary font-semibold text-xs border-b border-border-subtle pb-2">
               <Camera size={15} className="text-accent" />
               <span>Camera & Lens</span>
             </div>
@@ -738,7 +738,7 @@ export function PhotoInfoPanel({
             {/* Camera Model */}
             {metadata.cameraModel && (
               <div>
-                <p className="text-zinc-100 font-medium">
+                <p className="text-text-primary font-medium">
                   {metadata.cameraMake ? `${metadata.cameraMake} ` : ""}
                   {metadata.cameraModel}
                 </p>
@@ -749,9 +749,9 @@ export function PhotoInfoPanel({
             {/* Lens Model */}
             {metadata.lensModel && (
               <div className="flex items-start gap-2 pt-1">
-                <Aperture size={14} className="mt-0.5 text-zinc-400 shrink-0" />
+                <Aperture size={14} className="mt-0.5 text-text-secondary shrink-0" />
                 <div>
-                  <p className="text-zinc-200 font-medium">{metadata.lensModel}</p>
+                  <p className="text-text-primary font-medium">{metadata.lensModel}</p>
                   <p className="text-[10px] text-zinc-500">Lens</p>
                 </div>
               </div>
@@ -761,25 +761,25 @@ export function PhotoInfoPanel({
             <div className="grid grid-cols-4 gap-2 pt-1 text-center font-mono">
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Focal</span>
-                <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
+                <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.focalLength || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Aperture</span>
-                <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
+                <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.aperture || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">Shutter</span>
-                <span className="text-xs text-zinc-200 font-semibold mt-0.5 block truncate">
+                <span className="text-xs text-text-primary font-semibold mt-0.5 block truncate">
                   {metadata.shutterSpeed || "-"}
                 </span>
               </div>
               <div className="rounded-lg bg-bg-card p-2 border border-border-subtle">
                 <span className="text-[10px] text-zinc-500 block">ISO</span>
-                <span className="text-xs text-zinc-200 font-semibold mt-0.5 block">
+                <span className="text-xs text-text-primary font-semibold mt-0.5 block">
                   {metadata.iso ? `${metadata.iso}` : "-"}
                 </span>
               </div>
@@ -790,12 +790,12 @@ export function PhotoInfoPanel({
         {/* GPS Location Section */}
         {hasGpsData && (
           <section className="rounded-2xl border border-border-subtle bg-bg-hover/60 p-3.5 space-y-2.5">
-            <div className="flex items-center gap-2 text-zinc-200 font-semibold text-xs border-b border-border-subtle pb-2">
+            <div className="flex items-center gap-2 text-text-primary font-semibold text-xs border-b border-border-subtle pb-2">
               <MapPin size={15} className="text-rose-400" />
               <span>Location (GPS)</span>
             </div>
 
-            <p className="font-mono text-xs text-zinc-300">
+            <p className="font-mono text-xs text-text-secondary">
               {metadata.latitude?.toFixed(5)}°, {metadata.longitude?.toFixed(5)}°
               {metadata.altitude ? ` · ${metadata.altitude.toFixed(0)}m` : ""}
             </p>
@@ -806,7 +806,7 @@ export function PhotoInfoPanel({
                   href={metadata.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-zinc-300 hover:bg-border-subtle hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-text-secondary hover:bg-border-subtle hover:text-text-primary transition"
                 >
                   <span>Google Maps</span>
                   <ExternalLink size={12} />
@@ -817,7 +817,7 @@ export function PhotoInfoPanel({
                   href={metadata.openStreetMapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-zinc-300 hover:bg-border-subtle hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border-strong bg-bg-input px-3 py-1.5 text-xs text-text-secondary hover:bg-border-subtle hover:text-text-primary transition"
                 >
                   <span>OpenStreetMap</span>
                   <ExternalLink size={12} />

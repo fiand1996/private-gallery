@@ -183,7 +183,7 @@ export function useFolderUpload({
         type="button"
         disabled={isUploading}
         onClick={() => setUploadMenuOpen((prev) => !prev)}
-        className="flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-1.5 text-xs font-semibold text-accent-foreground shadow-sm transition hover:bg-accent-hover disabled:opacity-50 cursor-pointer"
       >
         <Upload size={14} />
         <span>Upload</span>

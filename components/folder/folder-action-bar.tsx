@@ -72,7 +72,7 @@ export function FolderActionBar({
           <button
             type="button"
             onClick={onCopy}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
           >
             <Copy size={14} className="text-accent" />
             <span>Copy</span>
@@ -81,7 +81,7 @@ export function FolderActionBar({
           <button
             type="button"
             onClick={onMove}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
           >
             <FolderInput size={14} className="text-accent" />
             <span>Move</span>
@@ -92,7 +92,7 @@ export function FolderActionBar({
             disabled={disablePhotoActions}
             onClick={onFavorite}
             title={photoActionTooltip || "Favorite"}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <Heart size={14} className="text-rose-400" />
             <span>Favorite</span>
@@ -103,7 +103,7 @@ export function FolderActionBar({
             disabled={disablePhotoActions}
             onClick={onAddToAlbum}
             title={photoActionTooltip || "Add to Album"}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <FolderArchive size={14} className="text-accent" />
             <span>Add to Album</span>
@@ -114,7 +114,7 @@ export function FolderActionBar({
             disabled={disablePhotoActions}
             onClick={onTag}
             title={photoActionTooltip || "Tag"}
-            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+            className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <Tag size={14} className="text-accent" />
             <span>Tag</span>
@@ -126,7 +126,7 @@ export function FolderActionBar({
               disabled={disablePhotoActions}
               onClick={onPerson}
               title={photoActionTooltip || "Person"}
-              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-zinc-300 transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer disabled:opacity-35 disabled:cursor-not-allowed disabled:hover:bg-transparent"
             >
               <Users size={14} className="text-accent" />
               <span>Person</span>
@@ -148,7 +148,7 @@ export function FolderActionBar({
         type="button"
         onClick={onClear}
         title="Deselect all"
-        className="ml-1 rounded-xl p-1.5 text-zinc-400 transition hover:bg-bg-hover hover:text-zinc-200 cursor-pointer"
+        className="ml-1 rounded-xl p-1.5 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
       >
         <X size={15} />
       </button>

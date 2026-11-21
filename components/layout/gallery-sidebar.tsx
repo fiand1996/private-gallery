@@ -125,8 +125,8 @@ export function GallerySidebar() {
               href="/settings"
               className={`flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm font-medium transition ${
                 pathname.startsWith("/settings")
-                  ? "bg-bg-input text-zinc-100"
-                  : "text-zinc-400 hover:bg-bg-input hover:text-zinc-100"
+                  ? "bg-bg-input text-text-primary"
+                  : "text-text-secondary hover:bg-bg-input hover:text-text-primary"
               }`}
             >
               <Settings size={18} strokeWidth={1.8} />
@@ -142,16 +142,16 @@ export function GallerySidebar() {
                   {userInitial}
                 </div>
                 <div className="min-w-0">
-                  <div className="truncate text-xs font-semibold text-zinc-200">
+                  <div className="truncate text-xs font-semibold text-text-primary">
                     {userDisplayName}
                   </div>
-                  <div className="flex items-center gap-1 text-[10px] text-zinc-400">
+                  <div className="flex items-center gap-1 text-[10px] text-text-secondary">
                     {isAdmin ? (
                       <span className="inline-flex items-center gap-1 text-accent">
                         <Shield size={10} /> Admin
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-zinc-400">
+                      <span className="inline-flex items-center gap-1 text-text-secondary">
                         <User size={10} /> Viewer
                       </span>
                     )}
@@ -162,7 +162,7 @@ export function GallerySidebar() {
                 type="button"
                 onClick={() => signOut({ callbackUrl: "/login" })}
                 title="Sign Out"
-                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-zinc-400 hover:bg-border-subtle hover:text-rose-400 transition"
+                className="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-secondary hover:bg-border-subtle hover:text-rose-400 transition"
               >
                 <LogOut size={14} />
               </button>

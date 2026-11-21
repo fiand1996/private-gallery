@@ -275,7 +275,7 @@ function LoginFormContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-accent-foreground transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
           >
             {submitting ? (
               <>
@@ -327,7 +327,7 @@ function LoginFormContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-zinc-950 transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-accent py-3 text-sm font-semibold text-accent-foreground transition hover:bg-accent-hover active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none"
           >
             {submitting ? (
               <>

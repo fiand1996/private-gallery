@@ -135,16 +135,16 @@ export function LightboxModal({
       role="dialog"
       aria-modal="true"
       aria-label={photo.name}
-      className="fixed inset-0 z-50 flex flex-col bg-black/95 text-white backdrop-blur-2xl transition-opacity animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex flex-col bg-bg-app/95 text-text-primary backdrop-blur-2xl transition-opacity animate-in fade-in duration-200"
     >
       {/* Top action bar */}
       <div className="flex h-16 shrink-0 items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3 truncate pr-4">
-          <span className="truncate text-sm font-medium text-zinc-200 sm:text-base">
+          <span className="truncate text-sm font-medium text-text-primary sm:text-base">
             {photo.name}
           </span>
           {currentIndex >= 0 && items.length > 0 && (
-            <span className="rounded-full bg-zinc-800/80 px-2.5 py-0.5 text-xs text-zinc-400">
+            <span className="rounded-full border border-border-subtle bg-bg-card px-2.5 py-0.5 text-xs text-text-secondary">
               {currentIndex + 1} / {items.length}
             </span>
           )}
@@ -158,7 +158,7 @@ export function LightboxModal({
             className={`rounded-full p-2 transition cursor-pointer ${
               isFavorite
                 ? "text-rose-500 hover:bg-rose-500/20"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
             }`}
           >
             <Heart size={19} className={isFavorite ? "fill-rose-500" : ""} />
@@ -169,7 +169,7 @@ export function LightboxModal({
             rel="noreferrer"
             download={photo.name}
             title="Download photo"
-            className="rounded-full p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+            className="rounded-full p-2 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
           >
             <Download size={19} />
           </a>
@@ -177,10 +177,10 @@ export function LightboxModal({
             type="button"
             onClick={() => setShowInfo((prev) => !prev)}
             title="Info & Details (I)"
-            className={`rounded-full p-2 transition ${
+            className={`rounded-full p-2 transition cursor-pointer ${
               showInfo
-                ? "bg-accent text-zinc-950 shadow-sm"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                ? "bg-accent text-accent-foreground shadow-sm"
+                : "text-text-secondary hover:bg-bg-hover hover:text-text-primary"
             }`}
           >
             <Info size={19} />
@@ -189,7 +189,7 @@ export function LightboxModal({
             type="button"
             onClick={onClose}
             title="Close (Esc)"
-            className="rounded-full p-2 text-zinc-400 transition hover:bg-zinc-800 hover:text-white"
+            className="rounded-full p-2 text-text-secondary transition hover:bg-bg-hover hover:text-text-primary cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -203,7 +203,7 @@ export function LightboxModal({
             type="button"
             onClick={handlePrevious}
             title="Previous (Left Arrow)"
-            className="absolute left-4 z-20 rounded-full bg-black/50 p-3 text-white backdrop-blur transition hover:bg-black/80 hover:scale-105"
+            className="absolute left-4 z-20 rounded-full border border-border-subtle bg-bg-card/80 p-3 text-text-primary backdrop-blur-md transition hover:bg-bg-card hover:scale-105 cursor-pointer shadow-lg"
           >
             <ChevronLeft size={24} />
           </button>
@@ -227,7 +227,7 @@ export function LightboxModal({
             type="button"
             onClick={handleNext}
             title="Next (Right Arrow)"
-            className="absolute right-4 z-20 rounded-full bg-black/50 p-3 text-white backdrop-blur transition hover:bg-black/80 hover:scale-105"
+            className="absolute right-4 z-20 rounded-full border border-border-subtle bg-bg-card/80 p-3 text-text-primary backdrop-blur-md transition hover:bg-bg-card hover:scale-105 cursor-pointer shadow-lg"
           >
             <ChevronRight size={24} />
           </button>
