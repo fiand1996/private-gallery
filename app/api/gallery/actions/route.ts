@@ -3,6 +3,7 @@ import {
   deleteGalleryItems,
   moveGalleryItems,
   copyGalleryItems,
+  renameGalleryItem,
 } from "@/lib/gallery-actions";
 import { GalleryPathError } from "@/lib/gallery";
 
@@ -10,15 +11,35 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       libraryId?: number;
-      action?: "delete" | "move" | "copy";
+      action?: "delete" | "move" | "copy" | "rename";
+      path?: string;
       paths?: string[];
       destinationFolder?: string;
+      newName?: string;
     };
 
-    const { libraryId, action, paths, destinationFolder = "" } = body;
+    const { libraryId, action, path, paths, destinationFolder = "", newName } = body;
 
     if (!libraryId || !Number.isSafeInteger(libraryId) || libraryId < 1) {
       return NextResponse.json({ error: "Invalid library ID." }, { status: 400 });
+    }
+
+    if (action === "rename") {
+      const targetPath = path || (Array.isArray(paths) && paths[0]) || "";
+      if (!targetPath) {
+        return NextResponse.json(
+          { error: "No target item specified to rename." },
+          { status: 400 },
+        );
+      }
+      if (!newName || typeof newName !== "string" || !newName.trim()) {
+        return NextResponse.json(
+          { error: "A valid new name is required." },
+          { status: 400 },
+        );
+      }
+      const result = renameGalleryItem(libraryId, targetPath, newName);
+      return NextResponse.json(result);
     }
 
     if (!Array.isArray(paths) || paths.length === 0) {
@@ -44,7 +65,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "Invalid action. Supported: delete, move, copy" },
+      { error: "Invalid action. Supported: delete, move, copy, rename" },
       { status: 400 },
     );
   } catch (error) {

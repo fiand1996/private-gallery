@@ -522,3 +522,162 @@ export function createGalleryFolder(
 
   return { success: true, path: newRelPath };
 }
+
+export function renameGalleryItem(
+  libraryId: number,
+  relativePath: string,
+  rawNewName: string,
+) {
+  const library = getLibrary(libraryId);
+  if (!library) throw new GalleryPathError("Library not found.", 404);
+
+  const { absolutePath: srcAbs, normalizedRelative: srcNorm } =
+    resolveLibraryPath(library.rootPath, relativePath, true);
+
+  if (srcNorm === "") {
+    throw new GalleryPathError("Cannot rename library root directory.", 400);
+  }
+
+  const sanitizedNewName = rawNewName.trim();
+  if (
+    !sanitizedNewName ||
+    sanitizedNewName === "." ||
+    sanitizedNewName === ".." ||
+    sanitizedNewName.includes("/") ||
+    sanitizedNewName.includes("\\") ||
+    sanitizedNewName.includes("\0")
+  ) {
+    throw new GalleryPathError("Invalid file or folder name.", 400);
+  }
+
+  const parentRel = path.posix.dirname(srcNorm);
+  const parentNorm = parentRel === "." ? "" : parentRel;
+  const currentName = path.posix.basename(srcNorm);
+
+  const stat = fs.statSync(srcAbs);
+  const isDir = stat.isDirectory();
+
+  // If renaming a file, ensure extension integrity
+  let finalNewName = sanitizedNewName;
+  if (!isDir) {
+    const currentExt = path.posix.extname(currentName);
+    const newExt = path.posix.extname(sanitizedNewName);
+    // If user provided a name without extension, preserve original extension
+    if (!newExt && currentExt) {
+      finalNewName = `${sanitizedNewName}${currentExt}`;
+    }
+  }
+
+  if (finalNewName === currentName) {
+    return {
+      success: true,
+      oldPath: srcNorm,
+      newPath: srcNorm,
+      newName: currentName,
+    };
+  }
+
+  const newRelPath = parentNorm
+    ? `${parentNorm}/${finalNewName}`
+    : finalNewName;
+
+  const targetAbs = path.join(path.dirname(srcAbs), finalNewName);
+
+  if (fs.existsSync(targetAbs)) {
+    throw new GalleryPathError(
+      `An item named "${finalNewName}" already exists in this folder.`,
+      400,
+    );
+  }
+
+  // Rename in filesystem
+  fs.renameSync(srcAbs, targetAbs);
+
+  const childSrcPattern = `${escapeLikePattern(srcNorm)}/%`;
+
+  // Update in database atomically
+  const db = getDatabase();
+  db.transaction((tx) => {
+    // Find all affected entries (the item itself and its descendants if directory)
+    const rows = tx
+      .select({
+        path: schema.libraryEntries.path,
+        kind: schema.libraryEntries.kind,
+      })
+      .from(schema.libraryEntries)
+      .where(
+        sql`${schema.libraryEntries.libraryId} = ${libraryId}
+          AND (${schema.libraryEntries.path} = ${srcNorm}
+            OR ${schema.libraryEntries.path} LIKE ${childSrcPattern} ESCAPE '\\')`,
+      )
+      .all();
+
+    for (const row of rows) {
+      const suffix = row.path.slice(srcNorm.length);
+      const newEntryPath = newRelPath + suffix;
+      const newParent = path.posix.dirname(newEntryPath);
+      const parentPathVal = newParent === "." ? "" : newParent;
+      const nameVal = path.posix.basename(newEntryPath);
+      const extVal =
+        row.kind === "directory"
+          ? null
+          : path.posix.extname(nameVal).toLowerCase() || null;
+
+      tx.update(schema.libraryEntries)
+        .set({
+          path: newEntryPath,
+          parentPath: parentPathVal,
+          name: nameVal,
+          extension: extVal,
+        })
+        .where(
+          sql`${schema.libraryEntries.libraryId} = ${libraryId} AND ${schema.libraryEntries.path} = ${row.path}`,
+        )
+        .run();
+
+      tx.update(schema.albumEntries)
+        .set({ entryPath: newEntryPath })
+        .where(
+          sql`${schema.albumEntries.libraryId} = ${libraryId} AND ${schema.albumEntries.entryPath} = ${row.path}`,
+        )
+        .run();
+
+      tx.update(schema.photoTags)
+        .set({ entryPath: newEntryPath })
+        .where(
+          sql`${schema.photoTags.libraryId} = ${libraryId} AND ${schema.photoTags.entryPath} = ${row.path}`,
+        )
+        .run();
+
+      tx.update(schema.photoUserMetadata)
+        .set({ entryPath: newEntryPath })
+        .where(
+          sql`${schema.photoUserMetadata.libraryId} = ${libraryId} AND ${schema.photoUserMetadata.entryPath} = ${row.path}`,
+        )
+        .run();
+
+      tx.update(schema.photoMetadata)
+        .set({ entryPath: newEntryPath })
+        .where(
+          sql`${schema.photoMetadata.libraryId} = ${libraryId} AND ${schema.photoMetadata.entryPath} = ${row.path}`,
+        )
+        .run();
+
+      if (row.kind === "directory") {
+        tx.update(schema.albums)
+          .set({ folderPath: newEntryPath })
+          .where(
+            sql`${schema.albums.libraryId} = ${libraryId} AND ${schema.albums.folderPath} = ${row.path}`,
+          )
+          .run();
+      }
+    }
+  });
+
+  return {
+    success: true,
+    oldPath: srcNorm,
+    newPath: newRelPath,
+    newName: finalNewName,
+  };
+}

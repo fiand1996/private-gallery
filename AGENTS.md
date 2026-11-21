@@ -67,7 +67,7 @@ Strict separation of concerns MUST be maintained:
   - When a user triggers "Scan Now" via `POST /api/tasks`, `triggerScanQueue()` from `lib/scan-runner.ts` executes the scan in the background within the server process.
   - **Do NOT** require users to run a separate terminal worker command.
 - **Direct Action Synchronization:**
-  - File operations (`delete`, `move`, `copy`) executed in Folder view update the physical disk AND mutate the SQLite database atomically in `lib/gallery-actions.ts`.
+  - File operations (`delete`, `move`, `copy`, `rename`) executed in Folder view update the physical disk AND mutate the SQLite database atomically in `lib/gallery-actions.ts`.
   - No manual rescan is needed for actions performed within the web interface.
 
 ---

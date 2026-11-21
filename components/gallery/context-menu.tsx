@@ -7,6 +7,7 @@ import {
   Eye,
   FolderInput,
   Heart,
+  Pencil,
   Trash2,
 } from "lucide-react";
 
@@ -20,9 +21,11 @@ interface ContextMenuProps {
   selectedCount: number;
   canOpen?: boolean;
   canDownload?: boolean;
+  canRename?: boolean;
   onOpen?: () => void;
   onDownload?: () => void;
   onFavorite?: () => void;
+  onRename?: () => void;
   onCopy: () => void;
   onMove: () => void;
   onDelete: () => void;
@@ -34,9 +37,11 @@ export function ContextMenu({
   selectedCount,
   canOpen = false,
   canDownload = false,
+  canRename = false,
   onOpen,
   onDownload,
   onFavorite,
+  onRename,
   onCopy,
   onMove,
   onDelete,
@@ -122,6 +127,20 @@ export function ContextMenu({
         >
           <Heart size={15} className="text-rose-400" />
           <span>Toggle Favorite</span>
+        </button>
+      )}
+
+      {canRename && onRename && (
+        <button
+          type="button"
+          onClick={() => {
+            onRename();
+            onClose();
+          }}
+          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-xs font-medium text-text-primary transition hover:bg-bg-hover cursor-pointer"
+        >
+          <Pencil size={15} className="text-accent" />
+          <span>Rename</span>
         </button>
       )}
 

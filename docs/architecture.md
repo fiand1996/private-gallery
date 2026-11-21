@@ -56,7 +56,7 @@ Private Gallery is structured around a clear separation of concerns between Next
 - **Caching**: Stored on disk in `data/thumbnails/` and served with HTTP `304 Not Modified` response validation using `ETag`.
 
 ### 4. Direct Action Synchronization (`lib/gallery-actions.ts`)
-- **Design**: File operations (`delete`, `move`, `copy`) executed in the UI perform atomic updates on both the physical disk and the SQLite database simultaneously. No manual rescan required.
+- **Design**: File operations (`delete`, `move`, `copy`, `rename`) executed in the UI perform atomic updates on both the physical disk and the SQLite database simultaneously. No manual rescan required.
 
 ### 5. Horizontal Justified Layout (`components/gallery/justified-photo-grid.tsx`)
 - **Design**: Implements row-by-row justified layouts (Immich / Google Photos style) that preserve original photo aspect ratios without vertical masonry jumps during pagination. Synchronized row heights correspond directly to Album and Folder square card heights across Small, Medium, and Large grid sizes.

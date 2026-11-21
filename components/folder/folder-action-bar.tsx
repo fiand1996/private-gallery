@@ -5,6 +5,7 @@ import {
   FolderArchive,
   FolderInput,
   Heart,
+  Pencil,
   Tag,
   Trash2,
   Users,
@@ -17,6 +18,7 @@ interface FolderActionBarProps {
   hasDirectories?: boolean;
   isAllSelected?: boolean;
   onToggleSelectAll?: () => void;
+  onRename?: () => void;
   onCopy: () => void;
   onMove: () => void;
   onFavorite: () => void;
@@ -33,6 +35,7 @@ export function FolderActionBar({
   hasDirectories = false,
   isAllSelected = false,
   onToggleSelectAll,
+  onRename,
   onCopy,
   onMove,
   onFavorite,
@@ -69,6 +72,17 @@ export function FolderActionBar({
 
       {isAdmin && (
         <>
+          {selectedCount === 1 && onRename && (
+            <button
+              type="button"
+              onClick={onRename}
+              className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold text-text-primary transition hover:bg-bg-hover cursor-pointer"
+            >
+              <Pencil size={14} className="text-accent" />
+              <span>Rename</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={onCopy}

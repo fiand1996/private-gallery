@@ -31,6 +31,7 @@ import { FolderBreadcrumbs } from "@/components/folder/folder-breadcrumbs";
 import { FolderGridItem } from "@/components/folder/folder-grid-item";
 import { FolderActionBar } from "@/components/folder/folder-action-bar";
 import { CreateFolderModal } from "@/components/folder/create-folder-modal";
+import { RenameModal } from "@/components/folder/rename-modal";
 import { useFolderUpload } from "@/components/folder/folder-upload";
 import { useUpload } from "@/components/layout/upload-context";
 
@@ -127,6 +128,11 @@ function FolderContent({
   const [addPersonOpen, setAddPersonOpen] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [createFolderOpen, setCreateFolderOpen] = useState(false);
+  const [renameTarget, setRenameTarget] = useState<{
+    path: string;
+    name: string;
+    isDirectory: boolean;
+  } | null>(null);
 
   // Global Upload Listener: auto-refresh when files complete uploading in this folder
   const { lastCompletedFolder } = useUpload();
@@ -273,6 +279,11 @@ function FolderContent({
   const allItemPaths = data.items.map((i) => i.path);
   const isAllSelected =
     data.items.length > 0 && selectedPaths.size === data.items.length;
+  const singleSelectedPath =
+    selectedPaths.size === 1 ? Array.from(selectedPaths)[0] : null;
+  const singleSelectedItem = singleSelectedPath
+    ? data.items.find((i) => i.path === singleSelectedPath)
+    : null;
 
   // Toggle selection for a single path
   const toggleSelect = useCallback((path: string) => {
@@ -296,7 +307,7 @@ function FolderContent({
     }
   }, [allItemPaths, isAllSelected]);
 
-  // Keyboard shortcut Ctrl+A / Cmd+A
+  // Keyboard shortcut Ctrl+A / Cmd+A, Escape, and F2 (Rename)
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "a") {
@@ -308,11 +319,22 @@ function FolderContent({
         if (selectedPaths.size > 0) {
           setSelectedPaths(new Set());
         }
+      } else if (e.key === "F2") {
+        const target = e.target as HTMLElement;
+        if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+        if (isAdmin && singleSelectedItem) {
+          e.preventDefault();
+          setRenameTarget({
+            path: singleSelectedItem.path,
+            name: singleSelectedItem.name,
+            isDirectory: singleSelectedItem.isDirectory,
+          });
+        }
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [allItemPaths, selectedPaths.size]);
+  }, [allItemPaths, isAdmin, selectedPaths.size, singleSelectedItem]);
 
   // Context Menu handler
   const handleItemContextMenu = (e: React.MouseEvent, itemPath: string) => {
@@ -379,11 +401,43 @@ function FolderContent({
   };
 
   const activePhoto = externalSelectedPhoto ?? localSelectedPhoto;
-  const singleSelectedPath =
-    selectedPaths.size === 1 ? Array.from(selectedPaths)[0] : null;
-  const singleSelectedItem = singleSelectedPath
-    ? data.items.find((i) => i.path === singleSelectedPath)
-    : null;
+
+  const handleRenameSuccess = (
+    oldPath: string,
+    newPath: string,
+    newName: string,
+  ) => {
+    setData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) => {
+        if (item.path === oldPath) {
+          return {
+            ...item,
+            path: newPath,
+            name: newName,
+          };
+        }
+        if (item.path.startsWith(oldPath + "/")) {
+          const suffix = item.path.slice(oldPath.length);
+          return {
+            ...item,
+            path: newPath + suffix,
+          };
+        }
+        return item;
+      }),
+    }));
+    setSelectedPaths((prev) => {
+      if (prev.has(oldPath)) {
+        const next = new Set(prev);
+        next.delete(oldPath);
+        next.add(newPath);
+        return next;
+      }
+      return prev;
+    });
+    setNotice(`Renamed to "${newName}" successfully.`);
+  };
 
   const selectedItems = data.items.filter((item) => selectedPaths.has(item.path));
   const selectedHasDirectories = selectedItems.some((item) => item.isDirectory);
@@ -569,6 +623,16 @@ function FolderContent({
         hasDirectories={selectedHasDirectories}
         isAllSelected={isAllSelected}
         onToggleSelectAll={toggleSelectAll}
+        onRename={
+          isAdmin && singleSelectedItem
+            ? () =>
+                setRenameTarget({
+                  path: singleSelectedItem.path,
+                  name: singleSelectedItem.name,
+                  isDirectory: singleSelectedItem.isDirectory,
+                })
+            : undefined
+        }
         onCopy={() => setFolderPickerAction("copy")}
         onMove={() => setFolderPickerAction("move")}
         onFavorite={handleBatchFavorite}
@@ -588,6 +652,16 @@ function FolderContent({
           selectedPaths.size === 1 &&
           Boolean(singleSelectedItem && !singleSelectedItem.isDirectory)
         }
+        canRename={isAdmin && Boolean(singleSelectedItem)}
+        onRename={() => {
+          if (singleSelectedItem) {
+            setRenameTarget({
+              path: singleSelectedItem.path,
+              name: singleSelectedItem.name,
+              isDirectory: singleSelectedItem.isDirectory,
+            });
+          }
+        }}
         onOpen={() => {
           if (singleSelectedItem) {
             if (singleSelectedItem.isDirectory) {
@@ -724,6 +798,17 @@ function FolderContent({
           setNotice(`Successfully created folder "${folderName}".`);
           setRefreshKey((k) => k + 1);
         }}
+        onError={(err) => setError(err)}
+      />
+
+      {/* Rename Item Modal */}
+      <RenameModal
+        key={renameTarget ? renameTarget.path : "closed"}
+        open={renameTarget !== null}
+        libraryId={libraryId}
+        item={renameTarget}
+        onClose={() => setRenameTarget(null)}
+        onSuccess={handleRenameSuccess}
         onError={(err) => setError(err)}
       />
 
