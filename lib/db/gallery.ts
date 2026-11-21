@@ -8,6 +8,7 @@ import * as schema from "../schema";
 
 export const GALLERY_PAGE_SIZE = 48;
 export const TIMELINE_PAGE_SIZE = 24;
+export const PHOTOS_PAGE_SIZE = 24;
 
 export interface IndexedGalleryItem {
   name: string;
@@ -230,6 +231,9 @@ export function getIndexedTimelinePage(
 
   return { items: rows, totalCount, page, pageSize };
 }
+
+export const getIndexedPhotosPage = getIndexedTimelinePage;
+export type IndexedPhotosPage = IndexedTimelinePage;
 
 export function getIndexedGalleryContents(
   libraryId: number,

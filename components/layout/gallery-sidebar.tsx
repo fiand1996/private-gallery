@@ -17,7 +17,7 @@ import {
 import { useLibrary } from "./library-context";
 
 const navItems = [
-  { href: "/", label: "Timeline", icon: Images },
+  { href: "/photos", label: "Photos", icon: Images },
   { href: "/albums", label: "Albums", icon: FolderArchive },
   { href: "/explore", label: "Explore", icon: Compass },
   { href: "/folder", label: "Folder", icon: Folder },
@@ -44,8 +44,13 @@ export function GallerySidebar() {
   const { data: session } = useSession();
 
   const isCurrent = (href: string) => {
-    if (href === "/") {
-      return pathname === "/" || pathname.startsWith("/timeline");
+    if (href === "/photos") {
+      return (
+        pathname === "/photos" ||
+        pathname === "/" ||
+        pathname.startsWith("/photos") ||
+        pathname.startsWith("/timeline")
+      );
     }
     return pathname.startsWith(href);
   };

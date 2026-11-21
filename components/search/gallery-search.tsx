@@ -84,7 +84,7 @@ export function GallerySearch({
     const controller = new AbortController();
     void Promise.all([
       fetch(
-        `/api/timeline?${new URLSearchParams({ libraryId: String(libraryId), page: "1" })}`,
+        `/api/photos?${new URLSearchParams({ libraryId: String(libraryId), page: "1" })}`,
         { signal: controller.signal, cache: "no-store" },
       ),
       fetch(

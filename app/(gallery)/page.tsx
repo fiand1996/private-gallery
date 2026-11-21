@@ -1,5 +1,5 @@
-import { TimelineView } from "@/components/pages/timeline-page";
+import { redirect } from "next/navigation";
 
-export default function Page() {
-  return <TimelineView />;
+export default function RootPage() {
+  redirect("/photos");
 }

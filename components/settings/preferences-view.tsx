@@ -73,7 +73,7 @@ export function PreferencesView() {
               Default Gallery Grid Size
             </h2>
             <p className="text-xs text-zinc-400">
-              Select your preferred photo tile density across Timeline, Folder, and Albums.
+              Select your preferred photo tile density across Photos, Folder, and Albums.
             </p>
           </div>
         </div>
